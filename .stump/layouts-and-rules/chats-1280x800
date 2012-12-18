@@ -1,0 +1,28 @@
+#S(GDUMP
+   :NUMBER 2
+   :NAME "chats"
+   :TREE ((#S(FDUMP
+              :NUMBER 0
+              :X 0
+              :Y 0
+              :WIDTH 640
+              :HEIGHT 800
+              :WINDOWS (18895518)
+              :CURRENT 18895518)
+           #S(FDUMP
+              :NUMBER 1
+              :X 640
+              :Y 0
+              :WIDTH 320
+              :HEIGHT 800
+              :WINDOWS NIL
+              :CURRENT NIL)
+           #S(FDUMP
+              :NUMBER 2
+              :X 960
+              :Y 0
+              :WIDTH 320
+              :HEIGHT 800
+              :WINDOWS (18874454)
+              :CURRENT 18874454)))
+   :CURRENT 0)

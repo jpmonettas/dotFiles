@@ -1,0 +1,183 @@
+;; -*-lisp-*-
+(in-package :stumpwm)
+
+(set-prefix-key (kbd "C-q"))
+
+
+;; pacmd set-source-port 1 input-microphone-1
+;; sleep 0.1
+;; pacmd set-source-port 1 input-microphone-2
+;; echo "mic fixed"
+
+
+(defun load-file (file)
+  (load (concatenate 'string "/home/jmonetta/.stump/" file ".lisp")))
+
+
+(run-shell-command "/home/jmonetta/bin/notify.py &")
+(run-shell-command "feh --bg-scale /home/jmonetta/Wallpapers/Debian_Steel__Dark_Mesh_by_monkeymagico.jpg &")
+
+(load-file "stump-colors-wombat")
+(load-file "swank")
+(load-file "utils")
+(load-file "menus")
+
+(load-module "notify")
+(load-module "cpu")
+;;(load-module "disk")
+(load-module "mem")
+;;(load-module "net")
+
+(setf *time-modeline-string* "%a %e ^4*^B%k:%M^b^n %p")
+
+(setf *screen-mode-line-format* (list 
+				 "%c" ; cpu
+				 "%t "
+				 "%M" ; mem
+				 "^>"
+				 '(:eval (get-services-status-string)) " "
+				 "%n"
+				 "%d"))
+
+(setq *startup-message* "^1*^BStumpWM^b: not powered by bee-ant AI yet."
+      *suppress-frame-indicator* nil
+      *mouse-focus-policy* :click)
+      ;; *debug-level* 0
+      ;; *input-completion-type* :fuzzy
+      ;; :sloppy is broken I think, causes windows to lose focus when moving
+       ; click, ignore, sloppy)
+
+
+(set-font "-xos4-terminus-bold-r-normal--14-140-72-72-c-80-iso8859-7")
+
+(dolist (head
+          (list (first (screen-heads (current-screen)))) ; first
+         ;; (screen-heads (current-screen)) ; all
+         )
+  (enable-mode-line (current-screen) head
+                    t *screen-mode-line-format*))
+
+
+
+(gnew "development")
+
+(gnew "browsers")
+
+(gnew "chats")
+(load-group-layout "chats")
+
+(gnew "terminals")
+
+(load-desktop-rules "desktop-rules")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Commands and commands-keys
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-key *root-map* (kbd "C-c") "gselect chats")
+(define-key *root-map* (kbd "C-t") "gselect terminals")
+
+(defcommand emacs () ()  ;! redefining emacs command
+  "Start Emacs or switch to it, if it is already running."
+  (run-or-raise "emacs" '(:class "Emacs")))
+
+(define-key *root-map* (kbd "C-E") "emacs")
+(define-key *root-map* (kbd "E") "emacs")
+
+(defcommand conkeror () ()
+  "Start Conkeror or switch to it, if it is already running."
+  (run-or-raise "conkeror" '(:class "Conkeror")))
+
+(define-key *root-map* (kbd "C-f") "conkeror")
+
+(defcommand iceweasel () ()
+  "Start Firefox or switch to it, if it is already running."
+  (run-or-raise "iceweasel" '(:class "Iceweasel")))
+
+(defcommand sql-workbench () ()
+  "Start sql-workbench or switch to it, if it is already running."
+  (run-or-raise "sqlworkbench" '(:class "workbench-WbStarter")))
+
+
+;; (defcommand sql-developer () ()
+;;   "Start sql-developer or switch to it, if it is already running."
+;;   (run-or-raise "sqldeveloper" '(:class "oracle-ide-boot-Launcher")))
+
+(define-key *root-map* (kbd "C-s") "sql-workbench")
+
+(defcommand skype () ()
+  "Start skype or switch to it, if it is already running."
+  (run-or-raise "skype" '(:class "Skype")))
+
+(defcommand pidgin () ()
+  "Start pidgin or switch to it, if it is already running."
+  (run-or-raise "pidgin" '(:class "Pidgin")))
+
+
+(defcommand terminal () ()
+  (create-terminal nil nil))
+
+(define-key *root-map* (kbd "C-T") "terminal")
+
+(defcommand terminal-on-current-screen () ()
+  "Start new gnome-terminal on current screen."
+  (run-shell-command "gnome-terminal"))
+
+(defcommand icedove () ()
+  "Start Icedove or switch to it, if it is already running."
+  (run-or-raise "icedove" '(:class "Icedove")))
+
+(define-key *root-map* (kbd "C-d") "icedove")
+
+(defcommand eclipse () ()
+  "Start eclipse or switch to it, if it is already running."
+  (run-or-raise "eclipse" '(:class "Eclipse")))
+
+(define-key *root-map* (kbd "C-e") "eclipse")
+
+;; (defcommand sql-developer () ()
+;;   "Start sqlDeveloper or switch to it, if it is already running."
+;;   (gnew "development")
+;;   (run-or-raise "/home/jmonetta/NonRepSoftware/sqldeveloper/sqldeveloper/bin/sqldeveloper" '(:class "SQLDeveloper"))
+;;   ;; For some reason SQL Developer gets class different from the assigned class
+;;   ;; and run-or-raise never finds it, so we patch it.
+;;   (setf (window-class (car (remove-if-not 
+;; 			    (lambda (w)
+;; 			      (string-match (window-title w) "Oracle"))
+;; 			    (screen-windows (current-screen)))))
+;; 	"SQLDeveloper"))
+
+;; (define-key *root-map* (kbd "C-q") "sql-developer")
+
+;; mixer
+;; XXX `m' conflicts with `lastmsg'
+(define-key *root-map* (kbd "m") "exec xterm -rv -e alsamixer")
+
+;; lock screen (x or L or l?)
+(define-key *root-map* (kbd "L") "exec xtrlock")
+
+(define-key *root-map* (kbd "M-l") "exec xset dpms force off")
+
+;; take a screenshot of the screen (using PrtSc)
+;; TODO Install `imagemagick' (for getting the `import' command)
+;; (define-key *root-map* (kbd "Print")
+;;   "exec import -window root png:$HOME/Desktop/screenshot_$(date +%F_%H-%M-%S).png")
+
+;; push the window in the adjacent frame
+(define-key *root-map* (kbd "C-Up") "move-window up")
+(define-key *root-map* (kbd "C-Left") "move-window left")
+(define-key *root-map* (kbd "C-Down") "move-window down")
+(define-key *root-map* (kbd "C-Right") "move-window right")
+
+(define-key *top-map* (kbd "C-M-p") "gnext")
+(define-key *top-map* (kbd "C-M-o") "gprev")
+
+(define-key *root-map* (kbd "Delete") "repack-window-numbers")
+
+(define-key *root-map* (kbd "I") "show-window-properties")
+
+(define-key *root-map* (kbd ".") "menu")
+(define-key *root-map* (kbd ",") "terminals-menu")
+(define-key *root-map* (kbd "s-s") "sync-menu")
+

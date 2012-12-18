@@ -1,0 +1,13 @@
+(("chats" 1 T T :CREATE NIL :RESTORE NIL :CLASS "Icedove")
+ ("chats" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Pidgin" :ROLE "conversation")
+ ("chats" 2 T T :CREATE NIL :RESTORE NIL :CLASS "Pidgin" :ROLE "buddy_list")
+ ("chats" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Skype" :ROLE
+  "ConversationsWindow")
+ ("chats" 3 T T :CREATE NIL :RESTORE NIL :CLASS "Pidgin" :INSTANCE "Pidgin")
+ ("chats" 3 T T :CREATE NIL :RESTORE NIL :CLASS "Skype" :ROLE "")
+ ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Iceweasel")
+ ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Conkeror")
+ ("browsers" 1 T T :CREATE NIL :RESTORE NIL :CLASS "Google-chrome")
+ ("development" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Eclipse")
+ ("development" 1 T T :CREATE NIL :RESTORE NIL :CLASS "workbench-WbStarter")
+ ("development" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Emacs"))
