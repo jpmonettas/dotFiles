@@ -100,9 +100,9 @@
 (defparameter *sync-menu*
   '(("Automotive Services" "automotive-services" "/home/jmonetta/proyectos")
     ("Usedcar Services" "usedcar-services" "/home/jmonetta/proyectos/")
-    ("Model" "model" "/home/jmonetta/proyectos/model")
-    ("Dao" "dao" "/home/jmonetta/proyectos/dao")
-    ("Util" "util" "/home/jmonetta/proyectos/util")))
+    ("Model" "model" "/home/jmonetta/proyectos/")
+    ("Dao" "dao" "/home/jmonetta/proyectos/")
+    ("Util" "util" "/home/jmonetta/proyectos/")))
 
 (defcommand sync-menu () ()
   "docstring"

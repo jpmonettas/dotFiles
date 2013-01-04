@@ -1,14 +1,8 @@
 ;; -*-lisp-*-
+
 (in-package :stumpwm)
 
 (set-prefix-key (kbd "C-q"))
-
-
-;; pacmd set-source-port 1 input-microphone-1
-;; sleep 0.1
-;; pacmd set-source-port 1 input-microphone-2
-;; echo "mic fixed"
-
 
 (defun load-file (file)
   (load (concatenate 'string "/home/jmonetta/.stump/" file ".lisp")))
@@ -16,17 +10,20 @@
 
 (run-shell-command "/home/jmonetta/bin/notify.py &")
 (run-shell-command "feh --bg-scale /home/jmonetta/Wallpapers/Debian_Steel__Dark_Mesh_by_monkeymagico.jpg &")
+(run-shell-command "xautolock -time 3 -locker 'i3lock --color 000000' &")
 
 (load-file "stump-colors-wombat")
 (load-file "swank")
 (load-file "utils")
 (load-file "menus")
 
-(load-module "notify")
+(load "/home/jmonetta/MyProjects/stumpish-notify/notify.lisp")
 (load-module "cpu")
 ;;(load-module "disk")
 (load-module "mem")
+(load-module "multimedia-keys")
 ;;(load-module "net")
+
 
 (setf *time-modeline-string* "%a %e ^4*^B%k:%M^b^n %p")
 
@@ -75,8 +72,37 @@
 ;; Commands and commands-keys
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 (define-key *root-map* (kbd "C-c") "gselect chats")
 (define-key *root-map* (kbd "C-t") "gselect terminals")
+
+(define-key *root-map* (kbd "C-l") "i3lock")
+(define-key *root-map* (kbd "C-L") "i3lock")
+
+(defvar *x-server-gamma-toggle* nil)
+
+(defcommand toggle-bright () ()
+  "Change monitor bright by changing X server gamma, creating for playing openarena"
+  (if *x-server-gamma-toggle*
+      (progn
+	(run-shell-command "xgamma -gamma 1.0")
+	(setq *x-server-gamma-toggle* nil))
+      (progn
+	(run-shell-command "xgamma -gamma 1.7")
+	(setq *x-server-gamma-toggle* t))))
+      
+(defcommand openarena () ()
+  "Openarena game"
+  (run-shell-command "openarena +set r_fullscreen 0"))
+
+(defcommand ib-vpn-connect () ()
+  "Connect to internet brands VPN using net extend client"
+  (gnew"Default")
+  (run-shell-command "gnome-terminal -e '/home/jmonetta/NonRepSoftware/netExtenderClient/netExtender -u jmonetta -d CARSDIRECT ibhq1vpn.internetbrands.com'"))
+
+(defcommand i3lock () ()
+  "Lock the screen and ask for password"
+  (run-shell-command "i3lock --color 000000"))
 
 (defcommand emacs () ()  ;! redefining emacs command
   "Start Emacs or switch to it, if it is already running."

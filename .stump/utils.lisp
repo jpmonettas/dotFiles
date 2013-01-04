@@ -32,6 +32,15 @@
 ;;                      (run-or-raise ,command ,props)
 ;;                      (place-existing-windows))))) ; needed if command was already run
 
+(defcommand code-review (revision) 
+    ((:string "Revision Number : "))
+  "Run meld against some ib carsdirect revision"
+  (let ((diff-command (concatenate 'string
+				   "svn diff http://svn.internetbrands.com/svn/rep/carsdirect/ --diff-cmd=meld -c "
+				   revision
+				   " &")))
+    (run-shell-command diff-command)))
+
 (defun get-heads-resolutions ()
   "Returns a list of pairs (head-width head-heght) for each monitor device
  connected"
