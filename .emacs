@@ -2,6 +2,8 @@
 (setq inferior-lisp-program "sbcl")
 
 (add-to-list 'load-path "~/.elisp")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/w3m/")
+(print load-path)
 (defvar backup-dir (expand-file-name "~/.ebackups/"))
 (setq backup-directory-alist (list (cons ".*" backup-dir)))
 (defvar autosave-dir (expand-file-name "~/.eautosave/"))
@@ -72,3 +74,57 @@
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'slime-repl-mode))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mew
+
+(autoload 'mew "mew" nil t)
+(autoload 'mew-send "mew" nil t)
+
+(require 'mew-w3m)
+
+(setq mew-use-w3m-minor-mode t)
+(add-hook 'mew-message-hook 'mew-w3m-minor-mode-setter)
+
+(define-key mew-summary-mode-map "T" 'mew-w3m-view-inline-image)
+
+;; Optional setup (Read Mail menu):
+(setq read-mail-command 'mew)
+
+;; Optional setup (e.g. C-xm for sending a message):
+(autoload 'mew-user-agent-compose "mew" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'mew-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'mew-user-agent
+      'mew-user-agent-compose
+      'mew-draft-send-message
+      'mew-draft-kill
+      'mew-send-hook))
+
+(setq mew-name "Juan Monetta")
+(setq mew-user "jmonetta") 
+(setq mew-mail-domain "internetbrands.com")
+
+;; (setq mew-mailbox-type 'mbox)
+;; (setq mew-mbox-command "incm")
+;; (setq mew-mbox-command-arg "-u -d /var/mail/jmonetta")
+
+;; (setq mew-proto "%")
+;; (setq mew-imap-user "CARSDIRECT\\jmonetta")  
+;; (setq mew-imap-server "mail.internetbrands.com")
+
+;; (setq mew-use-cached-passwd t)
+
+
+
+
+
+
+
+
+

@@ -102,6 +102,7 @@
     ("Usedcar Services" "usedcar-services" "/home/jmonetta/proyectos/")
     ("Model" "model" "/home/jmonetta/proyectos/")
     ("Dao" "dao" "/home/jmonetta/proyectos/")
+    ("Legacy" "legacy-www" "/home/jmonetta/proyectos/")
     ("Util" "util" "/home/jmonetta/proyectos/")))
 
 (defcommand sync-menu () ()

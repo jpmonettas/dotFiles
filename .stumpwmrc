@@ -72,6 +72,7 @@
 ;; Commands and commands-keys
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-key *top-map* (kbd "F12") "notify-chat-quick-answer")
 
 (define-key *root-map* (kbd "C-c") "gselect chats")
 (define-key *root-map* (kbd "C-t") "gselect terminals")
@@ -120,6 +121,10 @@
 (defcommand iceweasel () ()
   "Start Firefox or switch to it, if it is already running."
   (run-or-raise "iceweasel" '(:class "Iceweasel")))
+
+(defcommand google-chrome () ()
+  "Start Google-chrome or switch to it, if it is already running."
+  (run-or-raise "google-chrome" '(:class "Google-chrome")))
 
 (defcommand sql-workbench () ()
   "Start sql-workbench or switch to it, if it is already running."
