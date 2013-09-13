@@ -31,11 +31,13 @@
 
 (defparameter *terminals-menu*
   '(
-    ("gargola" "infuy-server" "ssh -l dolphin 192.168.1.4")
+    ("gargola" "infuy-server" "ssh -l root 192.168.1.4")
+    ("gargola(EXT)" "infuy-server" "ssh -l root 200.108.219.250")
+    ("raspberry" "infuy-server" "ssh -l juan 192.168.1.6")
 
     ("mavenbox" "ib-staging" "ssh -l jmonetta maven.internetbrands.com")
 
-     ("myVM" "ib-dev" "ssh -l jmonetta 172.16.132.89")
+     ("myVM" "ib-dev" "ssh -l jmonetta jmonetta.dev.internetbrands.com")
 
      ("dev 1" "ib-staging" "ssh -l jmonetta devapp1.internetbrands.com")
      ("dev 2" "ib-staging" "ssh -l jmonetta devapp2.internetbrands.com")
@@ -67,10 +69,12 @@
 
      ("used-car-services1" "ib-production" "ssh -l jmonetta used-car-services1.internetbrands.com")
      ("used-car-services2" "ib-production" "ssh -l jmonetta used-car-services2.internetbrands.com")
-     ("stg-used-car-services1" "ib-staging" "ssh -l jmonetta used-car-services1.internetbrands.com")
-     ("stg-used-car-services2" "ib-staging" "ssh -l jmonetta used-car-services2.internetbrands.com")
+     ("used-car-services3" "ib-production" "ssh -l jmonetta used-car-services3.internetbrands.com")
+     ("stg-used-car-services1" "ib-staging" "ssh -l jmonetta stg-used-car-services1.internetbrands.com")
+     ("stg-used-car-services2" "ib-staging" "ssh -l jmonetta stg-used-car-services2.internetbrands.com")
 
      ("eqtools" "ib-production" "ssh -l qa eqtools.internetbrands.com")
+     ("stg-eqtools" "ib-staging" "ssh -l jmonetta stg-tools1.internetbrands.com")
 
      ("eqapp6-1(autos)" "ib-production" "ssh -l qa eqapp6-1.internetbrands.com")
      ("eqapp6-2(autos)" "ib-production" "ssh -l qa eqapp6-2.internetbrands.com")
@@ -97,31 +101,46 @@
 	      (let ((choice (pick *terminals-menu*)))
 		       (create-terminal (first choice) (second choice)))))
 
-(defparameter *sync-menu*
-  '(("Automotive Services" "automotive-services" "/home/jmonetta/proyectos")
-    ("Usedcar Services" "usedcar-services" "/home/jmonetta/proyectos/")
-    ("Model" "model" "/home/jmonetta/proyectos/")
-    ("Dao" "dao" "/home/jmonetta/proyectos/")
-    ("Legacy" "legacy-www" "/home/jmonetta/proyectos/")
-    ("Util" "util" "/home/jmonetta/proyectos/")))
+;; (defparameter *sync-menu*
+;;   '(("Automotive Services" "automotive-services" "/home/jmonetta/proyectos")
+;;     ("Usedcar Services" "usedcar-services" "/home/jmonetta/proyectos/")
+;;     ("Model" "model" "/home/jmonetta/proyectos/")
+;;     ("Dao" "dao" "/home/jmonetta/proyectos/")
+;;     ("Legacy" "legacy-www" "/home/jmonetta/proyectos/")
+;;     ("Util" "util" "/home/jmonetta/proyectos/")))
 
-(defcommand sync-menu () ()
-  "docstring"
-  (labels ((pick (options)
-	     (let ((selection (stumpwm::select-from-menu
-			       (current-screen) options "")))
-	       (cond
-		 ((null selection)
-		  (throw 'stumpwm::error "Abort."))
-		 ((stringp (second selection))
-		  (rest selection))))))
-    (let ((choice (pick *sync-menu*)))
-      (let ((command (concatenate 'string
-				  "/home/jmonetta/bin/stump-syn.sh "
-				  (first choice)
-				  " "
-				  (second choice))))
-	(sb-thread:make-thread 
-	 (lambda () 
-	   (message-no-timeout
-	    (run-shell-command command t))))))))
+;; (defcommand sync-menu () ()
+;; 	    "docstring"
+;;   (labels ((pick (options)
+;; 	     (let ((selection (stumpwm::select-from-menu
+;; 			       (current-screen) options "")))
+;; 	       (cond
+;; 		 ((null selection)
+;; 		  (throw 'stumpwm::error "Abort."))
+;; 		 ((stringp (second selection))
+;; 		  (rest selection))))))
+;;     (let ((choice (pick *sync-menu*)))
+;;       (let ((command (concatenate 'string
+;; 				  "/home/jmonetta/bin/stump-syn.sh "
+;; 				  (first choice)
+;; 				  " "
+;; 				  (second choice))))
+;; 	(sb-thread:make-thread 
+;; 	 (lambda () 
+;; 	   (message-no-timeout
+;; 	    (run-shell-command command t))))))))
+
+(defcommand sync-all-sources () ()
+  "Synchronize /home/jmonetta/IBProyects to my dev box"
+  (sb-thread:make-thread 
+   (lambda ()
+     (let ((command-output (run-shell-command 
+			    "/home/jmonetta/bin/stump-syn.sh"       
+			    t)))
+       (if (< (length command-output) 30)
+	   (message-no-timeout command-output)
+	   (message-no-timeout 
+	    (concatenate 'string 
+			 (subseq command-output 0 30)
+			 "...")))))))
+

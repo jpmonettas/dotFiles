@@ -2,7 +2,7 @@
 
 (defvar *caps-swapped* nil)
 
-(defcommand swap-control () ()
+(defcommand toggle-caps () ()
   "Swaps caps locks key and ctrl key. For switching between HHKB and laptop keyboards"
     (if *caps-swapped*
 	(progn 
@@ -11,6 +11,19 @@
 	(progn 
 	  (run-shell-command "/usr/bin/setxkbmap -option ctrl:swapcaps")
 	  (setq *caps-swapped* t))))
+
+(defvar *lang-swapped* nil)
+
+(defcommand toggle-lang () ()
+  "Swaps caps locks key and ctrl key. For switching between HHKB and laptop keyboards"
+    (if *lang-swapped*
+	(progn 
+	  (run-shell-command "setxkbmap -layout us -variant altgr-intl -option nodeadkeys")
+	  (setq *caps-swapped* nil))
+	(progn 
+	  (run-shell-command "setxkbmap -layout es")
+	  (setq *caps-swapped* t))))
+
 
 (defmacro with-gensyms ((&rest names) &body body)
   `(let ,(loop for n in names collect `(,n (gensym)))

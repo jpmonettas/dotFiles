@@ -9,8 +9,9 @@
 
 
 (run-shell-command "/home/jmonetta/bin/notify.py &")
-(run-shell-command "feh --bg-scale /home/jmonetta/Wallpapers/Debian_Steel__Dark_Mesh_by_monkeymagico.jpg &")
-(run-shell-command "xautolock -time 3 -locker 'i3lock --color 000000' &")
+(run-shell-command "feh --bg-scale /home/jmonetta/Wallpapers/a_simple_plan.png &")
+(run-shell-command "xautolock -time 15 -locker 'i3lock --color 000000' &")
+(run-shell-command "setxkbmap -layout us -variant altgr-intl -option nodeadkeys")
 
 (load-file "stump-colors-wombat")
 (load-file "swank")
@@ -39,11 +40,6 @@
 (setq *startup-message* "^1*^BStumpWM^b: not powered by bee-ant AI yet."
       *suppress-frame-indicator* nil
       *mouse-focus-policy* :click)
-      ;; *debug-level* 0
-      ;; *input-completion-type* :fuzzy
-      ;; :sloppy is broken I think, causes windows to lose focus when moving
-       ; click, ignore, sloppy)
-
 
 (set-font "-xos4-terminus-bold-r-normal--14-140-72-72-c-80-iso8859-7")
 
@@ -74,11 +70,9 @@
 
 (define-key *top-map* (kbd "F12") "notify-chat-quick-answer")
 
-(define-key *root-map* (kbd "C-c") "gselect chats")
-(define-key *root-map* (kbd "C-t") "gselect terminals")
+(define-key *top-map* (kbd "s-t") "gselect terminals")
 
-(define-key *root-map* (kbd "C-l") "i3lock")
-(define-key *root-map* (kbd "C-L") "i3lock")
+(define-key *top-map* (kbd "s-ESC") "i3lock")
 
 (defvar *x-server-gamma-toggle* nil)
 
@@ -99,7 +93,7 @@
 (defcommand ib-vpn-connect () ()
   "Connect to internet brands VPN using net extend client"
   (gnew"Default")
-  (run-shell-command "gnome-terminal -e '/home/jmonetta/NonRepSoftware/netExtenderClient/netExtender -u jmonetta -d CARSDIRECT ibhq1vpn.internetbrands.com'"))
+  (run-shell-command "gnome-terminal -e '/home/jmonetta/NonRepSoftware/netExtenderClient/netExtender -u jmonetta -d CARSDIRECT ibhq1vpn.internetbrands.com"))
 
 (defcommand i3lock () ()
   "Lock the screen and ask for password"
@@ -109,33 +103,39 @@
   "Start Emacs or switch to it, if it is already running."
   (run-or-raise "emacs" '(:class "Emacs")))
 
-(define-key *root-map* (kbd "C-E") "emacs")
-(define-key *root-map* (kbd "E") "emacs")
+(define-key *top-map* (kbd "s-x") "emacs")
+
 
 (defcommand conkeror () ()
   "Start Conkeror or switch to it, if it is already running."
   (run-or-raise "conkeror" '(:class "Conkeror")))
 
-(define-key *root-map* (kbd "C-f") "conkeror")
+(define-key *top-map* (kbd "s-f") "firefox")
 
 (defcommand iceweasel () ()
   "Start Firefox or switch to it, if it is already running."
   (run-or-raise "iceweasel" '(:class "Iceweasel")))
 
+(defcommand firefox () ()
+  "Start Firefox or switch to it, if it is already running."
+  (run-or-raise "firefox" '(:class "Firefox")))
+
 (defcommand google-chrome () ()
   "Start Google-chrome or switch to it, if it is already running."
   (run-or-raise "google-chrome" '(:class "Google-chrome")))
+
+(define-key *top-map* (kbd "s-c") "google-chrome")
 
 (defcommand sql-workbench () ()
   "Start sql-workbench or switch to it, if it is already running."
   (run-or-raise "sqlworkbench" '(:class "workbench-WbStarter")))
 
 
-;; (defcommand sql-developer () ()
-;;   "Start sql-developer or switch to it, if it is already running."
-;;   (run-or-raise "sqldeveloper" '(:class "oracle-ide-boot-Launcher")))
+(defcommand sql-developer () ()
+  "Start sql-developer or switch to it, if it is already running."
+  (run-or-raise "sqldeveloper" '(:class "oracle-ide-boot-Launcher")))
 
-(define-key *root-map* (kbd "C-s") "sql-workbench")
+(define-key *top-map* (kbd "s-s") "sql-workbench")
 
 (defcommand skype () ()
   "Start skype or switch to it, if it is already running."
@@ -143,13 +143,18 @@
 
 (defcommand pidgin () ()
   "Start pidgin or switch to it, if it is already running."
-  (run-or-raise "pidgin" '(:class "Pidgin")))
+  (run-or-raise "pidgin" '(:class "Pidgin" :role "conversation")))
+
+(define-key *top-map* (kbd "s-p") "pidgin")
+
+(define-key *top-map* (kbd "s-T") "new-terminal")
 
 
-(defcommand terminal () ()
-  (create-terminal nil nil))
+(defcommand delete-window-and-frame () ()
+   "Kills the windows and delets the current frame"
+   (delete-window)
+   (run-commands "remove"))
 
-(define-key *root-map* (kbd "C-T") "terminal")
 
 (defcommand terminal-on-current-screen () ()
   "Start new gnome-terminal on current screen."
@@ -159,34 +164,86 @@
   "Start Icedove or switch to it, if it is already running."
   (run-or-raise "icedove" '(:class "Icedove")))
 
-(define-key *root-map* (kbd "C-d") "icedove")
+(define-key *top-map* (kbd "s-d") "icedove")
 
 (defcommand eclipse () ()
   "Start eclipse or switch to it, if it is already running."
   (run-or-raise "eclipse" '(:class "Eclipse")))
 
-(define-key *root-map* (kbd "C-e") "eclipse")
+(define-key *top-map* (kbd "s-e") "eclipse")
 
-;; (defcommand sql-developer () ()
-;;   "Start sqlDeveloper or switch to it, if it is already running."
-;;   (gnew "development")
-;;   (run-or-raise "/home/jmonetta/NonRepSoftware/sqldeveloper/sqldeveloper/bin/sqldeveloper" '(:class "SQLDeveloper"))
-;;   ;; For some reason SQL Developer gets class different from the assigned class
-;;   ;; and run-or-raise never finds it, so we patch it.
-;;   (setf (window-class (car (remove-if-not 
-;; 			    (lambda (w)
-;; 			      (string-match (window-title w) "Oracle"))
-;; 			    (screen-windows (current-screen)))))
-;; 	"SQLDeveloper"))
+(defcommand vsplit-move-new-frame () ()
+  "Does a vsplit and moves to the new frame"
+  (run-commands "vsplit" "fnext"))
 
-;; (define-key *root-map* (kbd "C-q") "sql-developer")
+(defcommand hsplit-move-new-frame () ()
+  "Does a vsplit and moves to the new frame"
+  (run-commands "hsplit" "fnext"))
+
+(defcommand new-terminal () ()
+  "If the current frame is empty, creates a new termina,
+   if not, move to the terminals group and create it there"
+   (let* ((frame (slot-value (current-group) 'current-frame))
+	 (current-group-frame-window (when frame (frame-window frame))))
+     (if current-group-frame-window
+	 (create-terminal nil nil)
+	 (run-shell-command "gnome-terminal"))))
+
+(defcommand windowlist-pull-wide () ()
+  (let ((windows '())
+	(fmt "%c %t"))
+	   (dolist (gr (screen-groups (current-screen)))
+	     (dolist (w (group-windows gr))
+	       (push w windows)))
+	   (if (null windows)
+	       (message "No Managed Windows")
+	       (let* ((group (current-group))
+		      (window (select-window-from-menu (sort1 
+							windows
+							'<
+							:key 'window-number)
+						       fmt)))
+		 (if window
+		     (if (eq (window-group window) (current-group))
+			 (pull-window window)
+			 (move-window-to-group window group))
+		     (throw 'error :abort))))))
+
+(defcommand windowlist-go-wide () ()
+  (let ((windows '())
+	(fmt "%c %t"))
+	   (dolist (gr (screen-groups (current-screen)))
+	     (dolist (w (group-windows gr))
+	       (push w windows)))
+	   (if (null windows)
+	       (message "No Managed Windows")
+	       (let* ((group (current-group))
+		      (window (select-window-from-menu (sort1 
+							windows
+							'<
+							:key 'window-number)
+						       fmt)))
+		 (if window
+		     (progn 
+		       (switch-to-group (window-group window))
+		       (group-focus-window (window-group window) window))
+		     (throw 'error :abort))))))
+
+
+(defcommand gmove-marked-here-wide () ()
+  "move the marked windows to the specified group. Wide version"
+    (dolist (g (sort-groups (current-screen)))
+      (dolist (i (marked-windows g))
+        (setf (window-marked i) nil)
+	(if (eq (window-group i) (current-group))
+	    (pull-window i)
+	    (move-window-to-group i (current-group))))))
+
+
 
 ;; mixer
 ;; XXX `m' conflicts with `lastmsg'
 (define-key *root-map* (kbd "m") "exec xterm -rv -e alsamixer")
-
-;; lock screen (x or L or l?)
-(define-key *root-map* (kbd "L") "exec xtrlock")
 
 (define-key *root-map* (kbd "M-l") "exec xset dpms force off")
 
@@ -196,10 +253,33 @@
 ;;   "exec import -window root png:$HOME/Desktop/screenshot_$(date +%F_%H-%M-%S).png")
 
 ;; push the window in the adjacent frame
-(define-key *root-map* (kbd "C-Up") "move-window up")
-(define-key *root-map* (kbd "C-Left") "move-window left")
-(define-key *root-map* (kbd "C-Down") "move-window down")
-(define-key *root-map* (kbd "C-Right") "move-window right")
+(define-key *top-map* (kbd "s-K") "move-window up")
+(define-key *top-map* (kbd "s-H") "move-window left")
+(define-key *top-map* (kbd "s-J") "move-window down")
+(define-key *top-map* (kbd "s-L") "move-window right")
+
+(define-key *top-map* (kbd "s-k") "move-focus up")
+(define-key *top-map* (kbd "s-h") "move-focus left")
+(define-key *top-map* (kbd "s-j") "move-focus down")
+(define-key *top-map* (kbd "s-l") "move-focus right")
+
+(define-key *top-map* (kbd "M-TAB") "windowlist-go-wide")
+
+(define-key *top-map* (kbd "s-'") "windowlist-pull-wide")
+
+
+(define-key *top-map* (kbd "s-SPC") "colon")
+
+(define-key *top-map* (kbd "s-m") "mark")
+(define-key *top-map* (kbd "s-n") "gmove-marked-here-wide")
+
+(define-key *top-map* (kbd "s-2") "vsplit-move-new-frame")
+(define-key *top-map* (kbd "s-3") "hsplit-move-new-frame")
+
+(define-key *top-map* (kbd "s-0") "delete-window-and-frame")
+
+(define-key *top-map* (kbd "s-1") "iresize")
+
 
 (define-key *top-map* (kbd "C-M-p") "gnext")
 (define-key *top-map* (kbd "C-M-o") "gprev")
@@ -208,7 +288,7 @@
 
 (define-key *root-map* (kbd "I") "show-window-properties")
 
-(define-key *root-map* (kbd ".") "menu")
-(define-key *root-map* (kbd ",") "terminals-menu")
-(define-key *root-map* (kbd "s-s") "sync-menu")
+(define-key *top-map* (kbd "s-.") "menu")
+(define-key *top-map* (kbd "s-,") "terminals-menu")
+;;(define-key *root-map* (kbd "s-s") "sync-menu")
 

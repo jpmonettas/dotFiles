@@ -1,3 +1,6 @@
+(load "/home/jmonetta/.emacs.d/nxhtml/autostart.el")
+
+
 (load (expand-file-name "/home/jmonetta/NonRepSoftware/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "sbcl")
 

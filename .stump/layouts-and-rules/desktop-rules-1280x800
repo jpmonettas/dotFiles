@@ -5,6 +5,7 @@
  ("chats" 1 T T :CREATE NIL :RESTORE NIL :CLASS "Pidgin" :INSTANCE "Pidgin")
  ("chats" 1 T T :CREATE NIL :RESTORE NIL :CLASS "Skype" :ROLE "")
  ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Iceweasel")
+ ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Firefox")
  ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Conkeror")
  ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Icedove")
  ("browsers" 0 T T :CREATE NIL :RESTORE NIL :CLASS "Google-chrome")

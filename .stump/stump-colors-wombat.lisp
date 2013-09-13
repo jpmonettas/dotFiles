@@ -51,12 +51,12 @@
  ;; "royalblue2"
  ;; "deep pink"
  ;; "yellow"
- ;; "red"
+  "red"
  ;; "gold"
  ;; "gold3"
  ;; "cyan"
  ;; "gray66"
- "MediumPurple3"
+;; "MediumPurple3"
  ;; "magenta"
  
  ;; (make-color-hex "#876cbe")
