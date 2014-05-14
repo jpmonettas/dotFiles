@@ -3,19 +3,30 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-file
-   "/home/jmonetta/.live-packs/jmonetta-pack/customizations.el")
- '(custom-safe-themes
-   (quote
-    ("ccba14aeee25adc49effe868f1820dfbf28b557353e4f69ca55de50642caf63f" "5bff694d9bd3791807c205d8adf96817ee1e572654f6ddc5e1e58b0488369f9d" default)))
- '(helm-buffer-max-length 100)
+ '(browse-url-browser-function (quote browse-url-chromium))
+ '(cider-repl-print-length 1)
+ '(custom-file "/home/jmonetta/.live-packs/jmonetta-pack/customizations.el")
+ '(custom-safe-themes (quote ("ccba14aeee25adc49effe868f1820dfbf28b557353e4f69ca55de50642caf63f" "5bff694d9bd3791807c205d8adf96817ee1e572654f6ddc5e1e58b0488369f9d" default)))
+ '(haskell-notify-p t)
+ '(haskell-process-type (quote ghci))
+ '(haskell-stylish-on-save t)
+ '(haskell-tags-on-save t)
+ '(helm-buffer-max-length 50)
  '(helm-ff-auto-update-initial-value nil)
  '(helm-ff-ido-style-backspace t)
  '(indent-tabs-mode nil)
+ '(initial-scratch-message nil)
+ '(notmuch-address-selection-function (quote notmuch-address-helm-select))
+ '(notmuch-always-prompt-for-sender t)
+ '(notmuch-hello-sections (quote (notmuch-hello-insert-saved-searches notmuch-hello-insert-alltags)))
+ '(notmuch-identities (quote ("juan.monetta@internetbrands.com" "jpmonettas@gmail.com" "juan@infuy.com")))
+ '(notmuch-saved-searches (quote ((:name "inbox" :query "tag:inbox") (:name "unread" :query "tag:unread") (:name "infuy" :query "tag:infuy") (:name "ib" :query "tag:ib") (:name "gmail" :query "tag:gmail"))))
+ '(notmuch-search-oldest-first nil)
  '(org-hide-leading-stars t)
  '(sclang-auto-scroll-post-buffer t)
  '(sclang-eval-line-forward nil)
-)
+ '(truncate-lines t)
+ '(truncate-partial-width-windows nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

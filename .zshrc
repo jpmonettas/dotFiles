@@ -54,8 +54,7 @@ plugins=(git mvn svn dircycle)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/home/jmonetta/bin:/home/jmonetta/NonRepSoftware/firefox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/jmonetta/.rvm/bin
+export PATH=$PATH:/home/jmonetta/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dawt.useSystemAAFontSettings=lcd'
 
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+eval `dircolors /home/jmonetta/non-rep-software/dircolors-solarized/dircolors.256dark`

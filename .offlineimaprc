@@ -1,0 +1,80 @@
+[general]
+accounts = Gmail,Infuy,Internetbrands
+maxsyncaccounts = 3
+
+[mbnames]
+enabled = yes
+filename = ~/.mutt/offlineimap-mboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+
+
+################################ Gmail ###################################
+[Account Gmail]
+
+autorefresh = 1
+postsynchook = ~/bin/offlineimap-postsync-gmail
+localrepository = GmailLocal
+remoterepository = GmailRemote
+
+[Repository GmailLocal]
+type = Maildir
+localfolders = ~/Mail/Gmail
+
+[Repository GmailRemote]
+type = Gmail
+remoteuser = jpmonettas@gmail.com
+
+folderfilter = lambda foldername: foldername in ['[Gmail]/All Mail', '[Gmail]/Sent Mail']
+
+nametrans = lambda foldername: re.sub('^\[Gmail\]/All Mail$', 'all',
+                               re.sub('^\[Gmail\]/Sent Mail$', 'sent', foldername))
+
+# Necessary as of OfflineIMAP 6.5.4
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+################################ Infyu  ###################################
+
+[Account Infuy]
+
+autorefresh = 1
+postsynchook = ~/bin/offlineimap-postsync-infuy
+localrepository = InfuyLocal
+remoterepository = InfuyRemote
+
+[Repository InfuyLocal]
+type = Maildir
+localfolders = ~/Mail/Infuy
+
+[Repository InfuyRemote]
+type = IMAP
+remoteuser = juan@infuy.com
+remotehost = secure.emailsrvr.com
+
+
+
+################################ InternetBrands ###################################
+[Account Internetbrands]
+
+autorefresh = 1
+postsynchook = ~/bin/offlineimap-postsync-ib
+localrepository = IBLocal
+remoterepository = IBRemote
+
+[Repository IBLocal]
+type = Maildir
+localfolders = ~/Mail/Internetbrands
+
+[Repository IBRemote]
+type = Gmail
+remoteuser = juan.monetta@internetbrands.com
+
+folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail']
+
+nametrans = lambda foldername: re.sub('^INBOX$', 'inbox',
+                               re.sub('^\[Gmail\]/Sent Mail$', 'sent', foldername))
+
+# Necessary as of OfflineIMAP 6.5.4
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt

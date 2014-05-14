@@ -13,7 +13,8 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
-font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+font pango:DejaVu Sans Mono, Awesome 9
+#font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
@@ -24,7 +25,7 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec gnome-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -109,8 +110,10 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym $mod+p [class="Pidgin" window_role="conversation"] scratchpad show
 bindsym $mod+o [class="Skype" window_role="ConversationsWindow"] scratchpad show
-bindsym $mod+t [class="Gnome-terminal"] scratchpad show
-bindsym $mod+q [class="workbench-WbStarter"] scratchpad show
+# bindsym $mod+t [class="Gnome-terminal"] scratchpad show
+bindsym $mod+t [title="EmacsTerminals"] scratchpad show
+
+
 
 
 # resize window (you can also use the mouse for that)
@@ -142,8 +145,9 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	output VGA-0
-        status_command i3status
+        font pango:DejaVu Sans Mono, Awesome 8
+	output LVDS-1
+        status_command py3status -c ~/.i3status.conf -i ~/.i3/py3status/
 	position top
         colors {
             # solarized
@@ -154,39 +158,51 @@ bar {
             inactive_workspace #b58900 #b58900 #eee8d5
         }
 }
-	#tray_output VGA1
 
-#bar{
-#	output LVDS-0
-#        status_command i3status
-#	position top
-#	tray_output LVDS-0
-#
-#}
+bar{
+        font pango:DejaVu Sans Mono, Awesome 9
+	output VGA-1
+	position top
+        colors {
+            # solarized
+            background #073642
+            statusline #eee8d5
+            focused_workspace #cb4b16 #cb4b16 #eee8d5
+            active_workspace #cb4b16 #cb4b16 #eee8d5
+            inactive_workspace #b58900 #b58900 #eee8d5
+        }
+}
 
 focus_follows_mouse no
 
-bindsym $mod+x [class="Emacs"] focus
-bindsym $mod+c [class="Google-chrome"] focus
-bindsym $mod+f [class="Conkeror"] focus
-bindsym $mod+d [class="Icedove"] focus
+bindsym $mod+x [title="emacs@debianThinkpad"] focus
+bindsym $mod+c [class="Chromium"] focus
+bindsym $mod+f [class="Firefox"] focus
+bindsym $mod+q [class="workbench-WbStarter"] focus
+bindsym $mod+m workspace "6:Email"
 bindsym $mod+e [class="jetbrains-idea-ce"] focus
 
 # pulse audio volume control
-bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume 0 -- '-5%'
-bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume 0 -- '+5%'
-bindsym XF86AudioMute exec /usr/bin/pactl set-sink-volume 0 0
+# bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume 8 -- '-5%'
+# bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume 8 -- '+5%'
+# bindsym XF86AudioMute exec /usr/bin/pactl set-sink-volume 8 0
 
 bindsym $mod+Escape exec i3lock --color 000000
 
 bindsym $mod+comma exec /home/jmonetta/bin/remotes-dmenu.sh
 bindsym $mod+period exec /home/jmonetta/bin/passmenu
+bindsym $mod+g exec /home/jmonetta/bin/i3-windows-switches
+bindsym $mod+Shift+g exec /home/jmonetta/bin/i3-windows-switches --move
+
 
 #bindsym $mod+Tab exec /usr/bin/quickswitch.py
 #bindsym $mod+apostrophe exec /usr/bin/quickswitch.py -m
 
 #exec mail-notification
-exec feh --bg-scale /home/jmonetta/Wallpapers/a_simple_plan.png &
+#exec feh --bg-scale /home/jmonetta/Wallpapers/a_simple_plan.png &
+exec xsetroot -solid "#586e75"
+exec --no-startup-id nm-applet
+exec pa-applet --disable-notifications
 
 for_window [class="Pidgin"] floating enable
 for_window [class="Skype" title="jpmonetta - Skype*"] floating enable
@@ -198,9 +214,10 @@ for_window [title="Ediff"] floating enable
 for_window [class="Emacs"] move workspace "7:Development"
 for_window [class="jetbrains-idea-ce"] move workspace "7:Development"
 for_window [class="workbench-WbStarter"] move workspace "7:Development"
-for_window [class="Icedove"] move workspace "6:Email"
+for_window [title="EmailClient"] move workspace "6:Email"
+for_window [title="offlineimap"] move workspace "6:Email"
 for_window [class="Firefox"] move workspace "8:Browsers"
-for_window [class="Google-chrome"] move workspace "8:Browsers"
+for_window [class="Chromium"] move workspace "8:Browsers"
 
 # class                 border  backgr. text    indicator
 client.focused          #859900 #859900 #fdf6e3 #2e9ef4
