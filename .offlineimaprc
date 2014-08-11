@@ -1,5 +1,5 @@
 [general]
-accounts = Gmail,Infuy,Internetbrands
+accounts = Gmail,Infuy
 maxsyncaccounts = 3
 
 [mbnames]
@@ -56,25 +56,25 @@ remotehost = secure.emailsrvr.com
 
 
 ################################ InternetBrands ###################################
-[Account Internetbrands]
+# [Account Internetbrands]
 
-autorefresh = 1
-postsynchook = ~/bin/offlineimap-postsync-ib
-localrepository = IBLocal
-remoterepository = IBRemote
+# autorefresh = 1
+# postsynchook = ~/bin/offlineimap-postsync-ib
+# localrepository = IBLocal
+# remoterepository = IBRemote
 
-[Repository IBLocal]
-type = Maildir
-localfolders = ~/Mail/Internetbrands
+# [Repository IBLocal]
+# type = Maildir
+# localfolders = ~/Mail/Internetbrands
 
-[Repository IBRemote]
-type = Gmail
-remoteuser = juan.monetta@internetbrands.com
+# [Repository IBRemote]
+# type = Gmail
+# remoteuser = juan.monetta@internetbrands.com
 
-folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail']
+# folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail']
 
-nametrans = lambda foldername: re.sub('^INBOX$', 'inbox',
-                               re.sub('^\[Gmail\]/Sent Mail$', 'sent', foldername))
+# nametrans = lambda foldername: re.sub('^INBOX$', 'inbox',
+#                                re.sub('^\[Gmail\]/Sent Mail$', 'sent', foldername))
 
-# Necessary as of OfflineIMAP 6.5.4
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+# # Necessary as of OfflineIMAP 6.5.4
+# sslcacertfile = /etc/ssl/certs/ca-certificates.crt

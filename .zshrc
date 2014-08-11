@@ -58,3 +58,5 @@ export PATH=$PATH:/home/jmonetta/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/gam
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dawt.useSystemAAFontSettings=lcd'
 
 eval `dircolors /home/jmonetta/non-rep-software/dircolors-solarized/dircolors.256dark`
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

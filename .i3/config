@@ -68,7 +68,7 @@ bindsym $mod+3 split h
 bindsym $mod+2 split v
 
 # enter fullscreen mode for the focused container
-#bindsym $mod+f fullscreen
+bindsym $mod+m fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -110,8 +110,8 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym $mod+p [class="Pidgin" window_role="conversation"] scratchpad show
 bindsym $mod+o [class="Skype" window_role="ConversationsWindow"] scratchpad show
-# bindsym $mod+t [class="Gnome-terminal"] scratchpad show
-bindsym $mod+t [title="EmacsTerminals"] scratchpad show
+bindsym $mod+t [class="Gnome-terminal"] scratchpad show
+# bindsym $mod+t [title="EmacsTerminals"] scratchpad show
 
 
 
@@ -179,13 +179,14 @@ bindsym $mod+x [title="emacs@debianThinkpad"] focus
 bindsym $mod+c [class="Chromium"] focus
 bindsym $mod+f [class="Firefox"] focus
 bindsym $mod+q [class="workbench-WbStarter"] focus
-bindsym $mod+m workspace "6:Email"
+#bindsym $mod+m workspace "6:Email"
 bindsym $mod+e [class="jetbrains-idea-ce"] focus
 
 # pulse audio volume control
 # bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume 8 -- '-5%'
 # bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume 8 -- '+5%'
 # bindsym XF86AudioMute exec /usr/bin/pactl set-sink-volume 8 0
+
 
 bindsym $mod+Escape exec i3lock --color 000000
 
@@ -211,13 +212,13 @@ for_window [class="Skype" window_role="CallWindow"] floating enable
 for_window [class="Wicd-client.py"] floating enable
 for_window [title="Ediff"] floating enable
 
-for_window [class="Emacs"] move workspace "7:Development"
-for_window [class="jetbrains-idea-ce"] move workspace "7:Development"
-for_window [class="workbench-WbStarter"] move workspace "7:Development"
-for_window [title="EmailClient"] move workspace "6:Email"
-for_window [title="offlineimap"] move workspace "6:Email"
-for_window [class="Firefox"] move workspace "8:Browsers"
-for_window [class="Chromium"] move workspace "8:Browsers"
+# for_window [class="Emacs"] move workspace "7:Development"
+# for_window [class="jetbrains-idea-ce"] move workspace "7:Development"
+# for_window [class="workbench-WbStarter"] move workspace "7:Development"
+# for_window [title="EmailClient"] move workspace "6:Email"
+# for_window [title="offlineimap"] move workspace "6:Email"
+# for_window [class="Firefox"] move workspace "8:Browsers"
+# for_window [class="Chromium"] move workspace "8:Browsers"
 
 # class                 border  backgr. text    indicator
 client.focused          #859900 #859900 #fdf6e3 #2e9ef4
