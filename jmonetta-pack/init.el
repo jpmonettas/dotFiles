@@ -1,12 +1,17 @@
+(setq custom-file "/home/jmonetta/.live-packs/jmonetta-pack/customizations.el")
+
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 
+(add-to-list 'package-archives
+             '("SC" . "http://joseito.republika.pl/sunrise-commander/"))
+
 (package-initialize)
 
-(setq custom-file "/home/jmonetta/.live-packs/jmonetta-pack/customizations.el")
+
 
 ;;(live-set-default-font "Inconsolata-10")
 ;;(live-set-default-font "DejaVu Sans Mono-12")
@@ -19,6 +24,7 @@
 (push '("*helm grep*" :height 0.5) popwin:special-display-config)
 (push '("*helm locate*" :height 0.5) popwin:special-display-config)
 (push '("*helm projectile*" :height 0.5) popwin:special-display-config)
+(push '("*helm projectile all*" :height 0.5) popwin:special-display-config)
 (push '("*helm etags*" :height 0.5) popwin:special-display-config)
 (push '("*helm M-x*" :height 0.5) popwin:special-display-config)
 ;; (defun popup-todos () (interactive)
@@ -340,44 +346,44 @@ Adapted from `flyspell-correct-word-before-point'."
 (require 'dirtree)
 
 
-(require 'powerline)
+;; (require 'powerline)
 
-(defun powerline-my-simple-theme ()
-  "jpmonettas powerline simple theme"
-  (interactive)
-  (setq-default mode-line-format
-                '("%e"
-                  (:eval
-                   (let* ((active (powerline-selected-window-active))
-                          (mode-line (if active 'mode-line 'mode-line-inactive))
-                          (face1 (if active 'powerline-active1 'powerline-inactive1))
-                          (face2 (if active 'powerline-active2 'powerline-inactive2))
-                          (separator-left (intern (format "powerline-%s-%s"
-                                                          powerline-default-separator
-                                                          (car powerline-default-separator-dir))))
-                          (separator-right (intern (format "powerline-%s-%s"
-                                                           powerline-default-separator
-                                                           (cdr powerline-default-separator-dir))))
-                          (lhs (list (powerline-buffer-id nil 'l)
-                                     (powerline-raw " ")
-                                     (powerline-narrow face1 'l)))
-                          (rhs (list (powerline-raw global-mode-string face1 'r)
-                                     (powerline-raw "%4l" face1 'r)
-                                     (powerline-raw ":" face1)
-                                     (powerline-raw "%3c" face1 'r)
-                                     (powerline-raw " ")
-                                     (powerline-raw "%6p" nil 'r)
-                                     (powerline-hud face2 face1)))
-                          (center (list (powerline-raw " " face1)
-                                        (powerline-major-mode face1 'l))))
-                     (concat
-                      (powerline-render lhs)
-                      (when active (powerline-fill-center face1 (/ (powerline-width center) 2.0)))
-                      (when active (powerline-render center))
-                      (when active (powerline-fill face1 (powerline-width rhs)))
-                      (when active (powerline-render rhs))))))))
+;; (defun powerline-my-simple-theme ()
+;;   "jpmonettas powerline simple theme"
+;;   (interactive)
+;;   (setq-default mode-line-format
+;;                 '("%e"
+;;                   (:eval
+;;                    (let* ((active (powerline-selected-window-active))
+;;                           (mode-line (if active 'mode-line 'mode-line-inactive))
+;;                           (face1 (if active 'powerline-active1 'powerline-inactive1))
+;;                           (face2 (if active 'powerline-active2 'powerline-inactive2))
+;;                           (separator-left (intern (format "powerline-%s-%s"
+;;                                                           powerline-default-separator
+;;                                                           (car powerline-default-separator-dir))))
+;;                           (separator-right (intern (format "powerline-%s-%s"
+;;                                                            powerline-default-separator
+;;                                                            (cdr powerline-default-separator-dir))))
+;;                           (lhs (list (powerline-buffer-id nil 'l)
+;;                                      (powerline-raw " ")
+;;                                      (powerline-narrow face1 'l)))
+;;                           (rhs (list (powerline-raw global-mode-string face1 'r)
+;;                                      (powerline-raw "%4l" face1 'r)
+;;                                      (powerline-raw ":" face1)
+;;                                      (powerline-raw "%3c" face1 'r)
+;;                                      (powerline-raw " ")
+;;                                      (powerline-raw "%6p" nil 'r)
+;;                                      (powerline-hud face2 face1)))
+;;                           (center (list (powerline-raw " " face1)
+;;                                         (powerline-major-mode face1 'l))))
+;;                      (concat
+;;                       (powerline-render lhs)
+;;                       (when active (powerline-fill-center face1 (/ (powerline-width center) 2.0)))
+;;                       (when active (powerline-render center))
+;;                       (when active (powerline-fill face1 (powerline-width rhs)))
+;;                       (when active (powerline-render rhs))))))))
 
-(powerline-my-simple-theme)
+;; (powerline-my-simple-theme)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Malabar
@@ -408,3 +414,35 @@ Adapted from `flyspell-correct-word-before-point'."
 (require 'persp-projectile)
 
 (projectile-persp-bridge helm-projectile)
+
+(require 'smart-mode-line)
+(sml/setup)
+
+(sml/apply-theme 'dark nil t)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; JSX
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'flycheck)
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+(defadvice web-mode-highlight-part (around tweak-jsx activate)
+  (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+    ad-do-it))
+
+(flycheck-define-checker jsxhint-checker
+  "A JSX syntax and style checker based on JSXHint."
+
+  :command ("jsxhint" source)
+  :error-patterns
+  ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+  :modes (web-mode))
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (equal web-mode-content-type "jsx")
+              ;; enable flycheck
+              (flycheck-select-checker 'jsxhint-checker)
+              (flycheck-mode))))

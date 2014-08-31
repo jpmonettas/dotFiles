@@ -11,7 +11,7 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-S-l") 'helm-locate)
-(global-set-key (kbd "C-S-g") 'projectile-grep)
+(global-set-key (kbd "C-S-g") 'projectile-ack)
 (global-set-key (kbd "C-S-n") 'helm-projectile)
 
 (global-unset-key (kbd "M-<down-mouse-1>"))

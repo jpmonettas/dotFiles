@@ -24,6 +24,8 @@ font pango:DejaVu Sans Mono, Awesome 9
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+new_window pixel 2
+
 # start a terminal
 bindsym $mod+Return exec gnome-terminal
 
@@ -31,9 +33,11 @@ bindsym $mod+Return exec gnome-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+space exec dmenu_run -fn '-*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*'
+#bindsym $mod+space exec dmenu_run -fn '-*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*'
+bindsym $mod+space exec "PATH=$PATH:~/bin rofi -rnow -switchers run,window"
 
-bindsym $mod+Tab focus mode_toggle
+bindsym $mod+Tab workspace back_and_forth
+bindsym Mod1+Tab workspace back_and_forth
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -86,18 +90,18 @@ bindsym $mod+a focus parent
 
 # switch to workspace
 
-bindsym $mod+6 workspace "6:Email"
-bindsym $mod+7 workspace "7:Development"
-bindsym $mod+8 workspace "8:Browsers"
-bindsym $mod+9 workspace "9:Terminals"
-bindsym $mod+0 workspace "0:Others"
+bindsym $mod+6 workspace "6"
+bindsym $mod+7 workspace "7"
+bindsym $mod+8 workspace "8"
+bindsym $mod+9 workspace "9"
+bindsym $mod+0 workspace "0"
 
 # move focused container to workspace
-bindsym $mod+Shift+6 move container to workspace "6:Email"
-bindsym $mod+Shift+7 move container to workspace "7:Development"
-bindsym $mod+Shift+8 move container to workspace "8:Browsers"
-bindsym $mod+Shift+9 move container to workspace "9:Terminals"
-bindsym $mod+Shift+0 move container to workspace "0:Others"
+bindsym $mod+Shift+6 move container to workspace "6"
+bindsym $mod+Shift+7 move container to workspace "7"
+bindsym $mod+Shift+8 move container to workspace "8"
+bindsym $mod+Shift+9 move container to workspace "9"
+bindsym $mod+Shift+0 move container to workspace "0"
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -124,16 +128,16 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym j resize shrink width 70 px or 70 ppt
+        bindsym k resize grow height 70 px or 70 ppt
+        bindsym l resize shrink height 70 px or 70 ppt
+        bindsym semicolon resize grow width 70 px or 70 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 70 px or 70 ppt
+        bindsym Down resize grow height 70 px or 70 ppt
+        bindsym Up resize shrink height 70 px or 70 ppt
+        bindsym Right resize grow width 70 px or 70 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -145,6 +149,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+        tray_output primary
         font pango:DejaVu Sans Mono, Awesome 8
 	output LVDS-1
         status_command py3status -c ~/.i3status.conf -i ~/.i3/py3status/
@@ -153,13 +158,15 @@ bar {
             # solarized
             background #073642
             statusline #eee8d5
-            focused_workspace #cb4b16 #cb4b16 #eee8d5
-            active_workspace #cb4b16 #cb4b16 #eee8d5
-            inactive_workspace #b58900 #b58900 #eee8d5
+            focused_workspace #268bd2 #268bd2 #fdf6e3 #484e50
+            active_workspace #333333 #93a1a1 #fdf6e3 #292d2e
+            inactive_workspace #333333 #93a1a1 #fdf6e3 #292d2e
         }
 }
 
+
 bar{
+        tray_output primary
         font pango:DejaVu Sans Mono, Awesome 9
 	output VGA-1
 	position top
@@ -167,9 +174,9 @@ bar{
             # solarized
             background #073642
             statusline #eee8d5
-            focused_workspace #cb4b16 #cb4b16 #eee8d5
-            active_workspace #cb4b16 #cb4b16 #eee8d5
-            inactive_workspace #b58900 #b58900 #eee8d5
+            focused_workspace #268bd2 #268bd2 #fdf6e3 #484e50
+            active_workspace #333333 #93a1a1 #fdf6e3 #292d2e
+            inactive_workspace #333333 #93a1a1 #fdf6e3 #292d2e
         }
 }
 
@@ -192,8 +199,8 @@ bindsym $mod+Escape exec i3lock --color 000000
 
 bindsym $mod+comma exec /home/jmonetta/bin/remotes-dmenu.sh
 bindsym $mod+period exec /home/jmonetta/bin/passmenu
-bindsym $mod+g exec /home/jmonetta/bin/i3-windows-switches
-bindsym $mod+Shift+g exec /home/jmonetta/bin/i3-windows-switches --move
+#bindsym $mod+g exec /home/jmonetta/bin/i3-windows-switches
+#bindsym $mod+Shift+g exec /home/jmonetta/bin/i3-windows-switches --move
 
 
 #bindsym $mod+Tab exec /usr/bin/quickswitch.py
@@ -221,6 +228,10 @@ for_window [title="Ediff"] floating enable
 # for_window [class="Chromium"] move workspace "8:Browsers"
 
 # class                 border  backgr. text    indicator
-client.focused          #859900 #859900 #fdf6e3 #2e9ef4
-client.focused_inactive #268bd2 #268bd2 #fdf6e3 #484e50
+client.focused          #dc322f #dc322f #fdf6e3 #484e50
+client.focused_inactive #333333 #93a1a1 #fdf6e3 #292d2e
 client.unfocused        #333333 #93a1a1 #fdf6e3 #292d2e
+
+bindsym --release $mod+1 exec --no-startup-id import /home/jmonetta/latest-screenshot.png
+
+floating_minimum_size 75 x 50
