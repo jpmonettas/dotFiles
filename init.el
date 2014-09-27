@@ -13,7 +13,15 @@
 (add-to-list 'package-archives
              '("SC" . "http://joseito.republika.pl/sunrise-commander/"))
 
+
 (package-initialize)
+
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+
 
 (defvar required-packages
   '(smartparens
@@ -49,17 +57,21 @@
     clojure-mode
     clojure-snippets
     clojurescript-mode
+    clj-refactor
     cider
     ac-cider
     ac-cider-compliment
     cider-browse-ns
     cider-decompile
-    cider-spy))
+    cider-spy
+    slamhound))
 
 ;; (dolist (p required-packages)
 ;;     (when (not (package-installed-p p))
 ;;       (package-install p)))
 
+(require 'helm)
+(helm-mode 1)
 (require 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
 
@@ -70,6 +82,7 @@
 (push '("*helm mini*" :height 0.5) popwin:special-display-config)
 (push '("*helm grep*" :height 0.5) popwin:special-display-config)
 (push '("*helm locate*" :height 0.5) popwin:special-display-config)
+(push '("*helm-mode-find-file*" :height 0.5) popwin:special-display-config)
 (push '("*helm projectile*" :height 0.5) popwin:special-display-config)
 (push '("*helm projectile all*" :height 0.5) popwin:special-display-config)
 (push '("*helm etags*" :height 0.5) popwin:special-display-config)
@@ -252,6 +265,8 @@ Adapted from `flyspell-correct-word-before-point'."
                                  poss word cursor-location start end opoint)))
           (ispell-pdict-save t)))))
 
+(add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
+
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Projectile
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -261,10 +276,13 @@ Adapted from `flyspell-correct-word-before-point'."
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-file-exists-remote-cache-expire nil)
 
-(add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
 
 (setq helm-swoop-split-direction 'split-window-horizontally)
 (setq helm-swoop-speed-or-color nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; HTML
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -272,19 +290,28 @@ Adapted from `flyspell-correct-word-before-point'."
 (add-hook 'css-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook 'flymake-css-load)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Clojure
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(require 'ac-cider)
+(add-hook 'cider-mode-hook 'ac-cider-setup)
+(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'cider-mode))
 
 (require 'ac-cider-compliment)
 (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
 (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
 ;;(add-hook 'cider-repl-mode-hook 'ac-cider-compliment-repl-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes cider-mode))
+
 
 (require 'ac-nrepl)
 (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
 (add-hook 'cider-mode-hook 'ac-nrepl-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'cider-repl-mode))
+
 (require 'cider)
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -327,42 +354,25 @@ Adapted from `flyspell-correct-word-before-point'."
   (interactive)
   (jpmonettas/camelize-method-region "_"))
 
-;; ;; (add-hook 'org-mode-hook (lambda ()
-;; ;;                            (setq buffer-face-mode-face '(:family "DejaVu Sans" :height 100 :widthtype semi-condensed))
-;; ;;                            (buffer-face-mode)))
-
-;; ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-
-;; (require 'multi-term)
-;; (setq multi-term-program "/usr/bin/zsh")
-
-;; (defun term-send-tab ()
-;;   "Send tab in term mode."
-;;   (interactive)
-;;   (term-send-raw-string "\t"))
-
-;; (add-to-list 'term-bind-key-alist '("C-c C-j" . term-line-mode))
-;; (add-to-list 'term-bind-key-alist '("C-c C-k" . term-char-mode))
-;; (add-to-list 'term-bind-key-alist '("<tab>" . term-send-tab))
 
 
-;; (defadvice term-send-input (before dirty-hack activate)
-;;   (end-of-line)
-;;   (set-marker (process-mark (get-buffer-process (current-buffer)))
-;;               (point)))
-
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Org
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq org-agenda-files (list "~/notes/projects.org"
                              "~/notes/pricing-insider-email-campaign.org"))
 
+;; (add-hook 'org-mode-hook (lambda ()
+;;                            (setq buffer-face-mode-face '(:family "DejaVu Sans" :height 100 :widthtype semi-condensed))
+;;                            (buffer-face-mode)))
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Dired
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Dired
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'dired)
 (defun dired-dotfiles-toggle ()
@@ -379,9 +389,9 @@ Adapted from `flyspell-correct-word-before-point'."
 	       (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Malabar
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Malabar
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
 ;;                                   global-semanticdb-minor-mode
@@ -399,9 +409,9 @@ Adapted from `flyspell-correct-word-before-point'."
 ;;        (add-hook 'after-save-hook 'malabar-compile-file-silently
 ;;                   nil t)))
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Perspective
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Perspective
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'perspective)
 (persp-mode)
@@ -409,15 +419,20 @@ Adapted from `flyspell-correct-word-before-point'."
 
 (projectile-persp-bridge helm-projectile)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Modeline
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 (require 'smart-mode-line)
 (sml/setup)
 
 (sml/apply-theme 'dark nil t)
 
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; JSX
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; JSX (javascript + react)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'flycheck)
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
@@ -442,86 +457,12 @@ Adapted from `flyspell-correct-word-before-point'."
               (flycheck-mode))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Bindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-(define-key global-map (kbd "C-+") 'text-scale-increase)
-(define-key global-map (kbd "C--") 'text-scale-decrease)
-
-(define-key global-map (kbd "C-x C-m") 'switch-to-mail-persp)
-(define-key global-map (kbd "C-x m") 'switch-to-mail-persp)
-
-(global-set-key (kbd "C-.") 'er/expand-region)
-(global-set-key (kbd "C-,") 'er/contract-region)
-
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-S-l") 'helm-locate)
-(global-set-key (kbd "C-S-g") 'projectile-ack)
-(global-set-key (kbd "C-S-n") 'helm-projectile)
-
-(global-unset-key (kbd "M-<down-mouse-1>"))
-(global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
-
-;; (define-key java-mode-map (kbd "M-,") 'pop-tag-mark)
-;; (define-key java-mode-map (kbd "M-.") 'helm-etags-select)
-
-(global-set-key (kbd "C-q") 'helm-swoop)
-(define-key isearch-mode-map (kbd "C-q") 'helm-swoop-from-isearch)
-
-(define-key notmuch-search-mode-map (kbd "g") 'notmuch-refresh-this-buffer)
-(define-key notmuch-hello-mode-map (kbd "g") 'notmuch-refresh-this-buffer)
-(define-key notmuch-search-mode-map "d" 'search-toggle-message-delete)
-(define-key notmuch-search-mode-map "u" 'search-toggle-message-unread)
-(define-key notmuch-show-mode-map "d" 'show-toggle-message-delete)
-(define-key notmuch-show-mode-map "u" 'show-toggle-message-unread)
-
-(define-key notmuch-search-mode-map "r" 'reply-to-thread-sender-search)
-(define-key notmuch-search-mode-map "R" 'reply-to-thread-search)
-
-(define-key notmuch-show-mode-map "r" 'reply-to-thread-sender-show)
-(define-key notmuch-show-mode-map "R" 'reply-to-thread-show)
-
-(define-key notmuch-search-mode-map "T" 'notmuch-jump-to-tag)
-
-(require 'flyspell)
-(define-key flyspell-mode-map (kbd "C-.") 'cofi/helm-flyspell-correct)
-
-(global-set-key [remap kill-ring-save] 'easy-kill)
-(global-set-key [remap mark-sexp] 'easy-mark)
-
-;; (defun create-ace-jump-word-mode-command (key)
-;;   (lexical-let ((k key))
-;;     (lambda ()
-;;       (interactive)
-;;       (ace-jump-word-mode k))))
-
-;; (let ((keys '(?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o
-;;                  ?p ?q ?r ?s ?t ?u ?v ?w ?x ?y ?z ?1 ?2 ?3
-;;                  ?4 ?5 ?6 ?7 ?8 ?9 ?0)))
-;;   (loop for k in keys do
-;;         (key-chord-define-global (string k k) (create-ace-jump-word-mode-command k))))
-
-(global-set-key (kbd "M-c") 'calendar)
-(global-set-key (kbd "C-<backspace>") 'kill-whole-line)
-(global-set-key (kbd "C-|") 'mc/mark-next-like-this)
-
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-(define-key dired-mode-map (kbd "h") 'dired-dotfiles-toggle)
-
-(global-set-key (kbd "C-x C-0") 'kill-buffer-and-window)
-
-(global-set-key (kbd "C-/") 'comment-or-uncomment-region)
-
-
 (defun enable-lisp-minors ()
-  (rainbow-delimiters-mode)
-  (smartparens-mode))
+  (rainbow-delimiters-mode))
+
 
 (add-hook 'clojure-mode-hook 'enable-lisp-minors)
+(add-hook 'emacs-lisp-mode-hook 'enable-lisp-minors)
 
 
 ;;window-number mode
@@ -530,3 +471,38 @@ Adapted from `flyspell-correct-word-before-point'."
 (window-number-meta-mode 1)
 
 (yas-global-mode)
+
+;; global
+(require 'smartparens-config)
+(smartparens-global-strict-mode t)
+
+;; highlights matching pairs
+(show-smartparens-global-mode t)
+(sp-use-paredit-bindings)
+
+(require 'auto-complete-config)
+(ac-config-default)
+
+(electric-indent-mode t)
+
+(require 'browse-kill-ring)
+(browse-kill-ring-default-keybindings)
+
+(global-undo-tree-mode t)
+
+(require 'clj-refactor)
+(add-hook 'clojure-mode-hook (lambda ()
+                               (clj-refactor-mode 1)
+                               (cljr-add-keybindings-with-prefix "C-c C-r")))
+
+(put 'dired-find-alternate-file 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+
+(global-pretty-mode t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Load Bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load "~/.emacs.d/bindings")
