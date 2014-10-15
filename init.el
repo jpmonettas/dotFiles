@@ -59,8 +59,9 @@
     clojurescript-mode
     clj-refactor
     cider
-    ac-cider
-    ac-cider-compliment
+    ;; ac-cider
+    ;; ac-cider-compliment
+    company
     cider-browse-ns
     cider-decompile
     cider-spy
@@ -87,6 +88,9 @@
 (push '("*helm projectile all*" :height 0.5) popwin:special-display-config)
 (push '("*helm etags*" :height 0.5) popwin:special-display-config)
 (push '("*helm M-x*" :height 0.5) popwin:special-display-config)
+
+(push '("*helm-mode-cider-repl-set-ns*" :height 0.5) popwin:special-display-config)
+(push '("*helm-mode-nil*" :height 0.5) popwin:special-display-config)
 ;; (defun popup-todos () (interactive)
 ;;        (popwin:popup-buffer "TODOS.org" :width 0.5 :position 'left))
 
@@ -202,6 +206,14 @@
     (notmuch-search (concat "tag:" selected-tag))))
 
 
+(defun show-email-externally ()
+  (interactive)
+  (notmuch-show-pipe-message nil "view-html.sh"))
+
+(defun show-email-externally-full-thread ()
+  (interactive)
+  (notmuch-show-pipe-message 't "view-html.sh"))
+
 (defun set-english-dictionary ()
   (interactive)
   (ispell-change-dictionary "english")
@@ -295,24 +307,29 @@ Adapted from `flyspell-correct-word-before-point'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(require 'ac-cider)
-(add-hook 'cider-mode-hook 'ac-cider-setup)
-(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+;; (require 'ac-cider)
+;; (add-hook 'cider-mode-hook 'ac-cider-setup)
+;; (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
 
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'cider-mode))
+;; (eval-after-load "auto-complete"
+;;   '(add-to-list 'ac-modes 'cider-mode))
 
-(require 'ac-cider-compliment)
-(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-(add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
-;;(add-hook 'cider-repl-mode-hook 'ac-cider-compliment-repl-setup)
+;; (require 'ac-cider-compliment)
+;; (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+;; (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
+;; ;;(add-hook 'cider-repl-mode-hook 'ac-cider-compliment-repl-setup)
 
 
-(require 'ac-nrepl)
-(add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
-(add-hook 'cider-mode-hook 'ac-nrepl-setup)
+;; (require 'ac-nrepl)
+;; (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
+;; (add-hook 'cider-mode-hook 'ac-nrepl-setup)
+
+(global-company-mode)
 
 (require 'cider)
+
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Utils
@@ -355,6 +372,20 @@ Adapted from `flyspell-correct-word-before-point'."
   (jpmonettas/camelize-method-region "_"))
 
 
+(defun jpmonettas/beautify-xml-region (begin end)
+  "Pretty format XML markup in region. You need to have nxml-mode
+http://www.emacswiki.org/cgi-bin/wiki/NxmlMode installed to do
+this.  The function inserts linebreaks to separate tags that have
+nothing but whitespace between them.  It then indents the markup
+by using nxml's indentation rules."
+  (interactive "r")
+  (save-excursion
+      (nxml-mode)
+      (goto-char begin)
+      (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+        (backward-char) (insert "\n"))
+      (indent-region begin end))
+    (message "Ah, much better!"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Org
@@ -480,8 +511,8 @@ Adapted from `flyspell-correct-word-before-point'."
 (show-smartparens-global-mode t)
 (sp-use-paredit-bindings)
 
-(require 'auto-complete-config)
-(ac-config-default)
+;; (require 'auto-complete-config)
+;; (ac-config-default)
 
 (electric-indent-mode t)
 
@@ -506,3 +537,37 @@ Adapted from `flyspell-correct-word-before-point'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load "~/.emacs.d/bindings")
+
+
+;; My version of slamhound
+;; It uses nrepl-sync-request:eval and nrepl-dict-get instead of the original ones
+
+;; (or (require 'nrepl-client nil t)
+;;     (require 'nrepl nil t)
+;;     (error "Please install either the nrepl.el or cider package."))
+
+;; (defun slamhound-clj-string (filename)
+;;   (format "%s" `(do (require 'slam.hound)
+;;                     (try (print (.trim (slam.hound/reconstruct
+;;                                         ,(format "\"%s\"" filename))))
+;;                      (catch Exception e
+;;                             (println :error (.getMessage e)))))))
+
+;; ;;;###autoload
+;; (defun slamhound ()
+;;   "Run slamhound on the current buffer.
+
+;;   Requires active nrepl or slime connection."
+;;   (interactive)
+;;   (let* ((code (slamhound-clj-string buffer-file-name))
+;;          (result (nrepl-dict-get (nrepl-sync-request:eval code) "out")))
+;;     (if (string-match "^:error \\(.*\\)" result)
+;;         (error (match-string 1 result))
+;;       (goto-char (point-min))
+;;       ;; skip any header comments before the ns
+;;       (forward-sexp)
+;;       (backward-kill-sexp)
+;;       (insert result))))
+
+;; (provide 'slamhound)
+;; ;;; slamhound.el ends here

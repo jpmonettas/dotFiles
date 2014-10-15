@@ -52,6 +52,8 @@ bindsym $mod+l focus right
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left move workspace to output left
 bindsym $mod+Right move workspace to output right
+bindsym $mod+Up move workspace to output up
+bindsym $mod+Down move workspace to output down
 
 # move focused window
 bindsym $mod+Shift+h move left  60 px
@@ -183,7 +185,7 @@ bar{
 focus_follows_mouse no
 
 bindsym $mod+x [title="emacs@debianThinkpad"] focus
-bindsym $mod+c [class="Chromium"] focus
+bindsym $mod+c [class="Google-chrome"] focus
 bindsym $mod+f [class="Firefox"] focus
 bindsym $mod+q [class="workbench-WbStarter"] focus
 #bindsym $mod+m workspace "6:Email"

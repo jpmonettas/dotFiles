@@ -8,7 +8,7 @@
             (lambda ()
                   (interactive)
                   (join-line -1)))
-
+(define-key cider-mode-map (kbd "C-c C-s") 'slamhound)
 (define-key global-map (kbd "M-n") 'forward-sexp)
 (define-key global-map (kbd "M-p") 'backward-sexp)
 
@@ -42,6 +42,8 @@
 (define-key notmuch-search-mode-map "u" 'search-toggle-message-unread)
 (define-key notmuch-show-mode-map "d" 'show-toggle-message-delete)
 (define-key notmuch-show-mode-map "u" 'show-toggle-message-unread)
+(define-key notmuch-show-mode-map "h" 'show-email-externally)
+(define-key notmuch-show-mode-map "H" 'show-email-externally-full-thread)
 
 (define-key notmuch-search-mode-map "r" 'reply-to-thread-sender-search)
 (define-key notmuch-search-mode-map "R" 'reply-to-thread-search)
@@ -76,3 +78,5 @@
 (define-key emacs-lisp-mode-map (kbd "M-n") 'sp-next-sexp)
 (define-key emacs-lisp-mode-map (kbd "M-p") 'sp-backward-sexp)
 (define-key emacs-lisp-mode-map (kbd "M-u") 'sp-backward-up-sexp)
+
+(global-set-key (kbd "C-<tab>") 'company-complete)
