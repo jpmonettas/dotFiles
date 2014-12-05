@@ -2,7 +2,7 @@
 (load custom-file)
 
 (set-face-attribute 'default nil :font "peep")
-;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-12")
+;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
 
 (require 'package)
 (add-to-list 'package-archives
@@ -65,14 +65,43 @@
     cider-browse-ns
     cider-decompile
     cider-spy
-    slamhound))
+    slamhound
+
+    flx
+    flx-ido
+    ido-vertical-mode
+    ido-at-point))
+
 
 ;; (dolist (p required-packages)
 ;;     (when (not (package-installed-p p))
 ;;       (package-install p)))
 
-(require 'helm)
-(helm-mode 1)
+(global-hl-line-mode)
+
+(require 'smex)
+
+
+(require 'ido-ubiquitous)
+(ido-ubiquitous-mode 1)
+
+
+(require 'ido-vertical-mode)
+(ido-mode 1)
+(ido-vertical-mode 1)
+
+
+(require 'flx-ido)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-enable-flex-matching t)
+
+
+
+
+;; (require 'helm)
+;; (helm-mode 1)
 (require 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
 
@@ -99,17 +128,17 @@
 
 
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Java
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;; Java
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'misc)
+;; (require 'misc)
 
-(add-hook 'java-mode-hook
- (lambda ()
-   (setq c-basic-offset 4)
-   (setq indent-tabs-mode t)
-   (setq tab-width 4)))
+;; (add-hook 'java-mode-hook
+;;  (lambda ()
+;;    (setq c-basic-offset 4)
+;;    (setq indent-tabs-mode t)
+;;    (setq tab-width 4)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Email
@@ -188,7 +217,8 @@
 
 (defun switch-to-mail-persp ()
   (interactive)
-  (persp-switch "mail"))
+  (persp-switch "mail")
+  (notmuch-search-unread))
 
 (defun notmuch-search-unread ()
   (interactive)
@@ -279,9 +309,9 @@ Adapted from `flyspell-correct-word-before-point'."
 
 (add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Projectile
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;; Projectile
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (projectile-global-mode)
 (setq projectile-enable-caching t)
@@ -292,9 +322,9 @@ Adapted from `flyspell-correct-word-before-point'."
 (setq helm-swoop-split-direction 'split-window-horizontally)
 (setq helm-swoop-speed-or-color nil)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; HTML
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; HTML
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -302,27 +332,9 @@ Adapted from `flyspell-correct-word-before-point'."
 (add-hook 'css-mode-hook  'emmet-mode)
 (add-hook 'css-mode-hook 'flymake-css-load)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Clojure
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;; (require 'ac-cider)
-;; (add-hook 'cider-mode-hook 'ac-cider-setup)
-;; (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-
-;; (eval-after-load "auto-complete"
-;;   '(add-to-list 'ac-modes 'cider-mode))
-
-;; (require 'ac-cider-compliment)
-;; (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-;; (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
-;; ;;(add-hook 'cider-repl-mode-hook 'ac-cider-compliment-repl-setup)
-
-
-;; (require 'ac-nrepl)
-;; (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
-;; (add-hook 'cider-mode-hook 'ac-nrepl-setup)
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Clojure
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-company-mode)
 
@@ -331,9 +343,9 @@ Adapted from `flyspell-correct-word-before-point'."
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;; Utils
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;; Utils
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun camelize (s c)
   "Convert c separated  string s to CamelCase string."
@@ -387,23 +399,23 @@ by using nxml's indentation rules."
       (indent-region begin end))
     (message "Ah, much better!"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Org
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Org
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq org-agenda-files (list "~/notes/projects.org"
-                             "~/notes/pricing-insider-email-campaign.org"))
+;; (setq org-agenda-files (list "~/notes/projects.org"
+;;                              "~/notes/pricing-insider-email-campaign.org"))
 
-;; (add-hook 'org-mode-hook (lambda ()
-;;                            (setq buffer-face-mode-face '(:family "DejaVu Sans" :height 100 :widthtype semi-condensed))
-;;                            (buffer-face-mode)))
+;; ;; (add-hook 'org-mode-hook (lambda ()
+;; ;;                            (setq buffer-face-mode-face '(:family "DejaVu Sans" :height 100 :widthtype semi-condensed))
+;; ;;                            (buffer-face-mode)))
 
-;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+;; ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Dired
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Dired
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'dired)
 (defun dired-dotfiles-toggle ()
@@ -420,29 +432,29 @@ by using nxml's indentation rules."
 	       (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Malabar
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Malabar
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
-;;                                   global-semanticdb-minor-mode
-;;                                   global-semantic-idle-summary-mode
-;;                                   global-semantic-mru-bookmark-mode))
+;; ;; (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
+;; ;;                                   global-semanticdb-minor-mode
+;; ;;                                   global-semantic-idle-summary-mode
+;; ;;                                   global-semantic-mru-bookmark-mode))
 
 
-;; (semantic-mode 1)
-;; (require 'malabar-mode)
-;; (setq malabar-groovy-lib-dir "/home/jmonetta/non-rep-software/malabar-mode-jar/target/")
-;; (add-to-list 'auto-mode-alist '("\\.java\\'" . malabar-mode))
+;; ;; (semantic-mode 1)
+;; ;; (require 'malabar-mode)
+;; ;; (setq malabar-groovy-lib-dir "/home/jmonetta/non-rep-software/malabar-mode-jar/target/")
+;; ;; (add-to-list 'auto-mode-alist '("\\.java\\'" . malabar-mode))
 
-;; (add-hook 'malabar-mode-hook
-;;      (lambda ()
-;;        (add-hook 'after-save-hook 'malabar-compile-file-silently
-;;                   nil t)))
+;; ;; (add-hook 'malabar-mode-hook
+;; ;;      (lambda ()
+;; ;;        (add-hook 'after-save-hook 'malabar-compile-file-silently
+;; ;;                   nil t)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Perspective
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Perspective
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'perspective)
 (persp-mode)
@@ -450,9 +462,9 @@ by using nxml's indentation rules."
 
 (projectile-persp-bridge helm-projectile)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Modeline
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Modeline
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (require 'smart-mode-line)
@@ -461,9 +473,9 @@ by using nxml's indentation rules."
 (sml/apply-theme 'dark nil t)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; JSX (javascript + react)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; JSX (javascript + react)
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'flycheck)
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
@@ -511,9 +523,6 @@ by using nxml's indentation rules."
 (show-smartparens-global-mode t)
 (sp-use-paredit-bindings)
 
-;; (require 'auto-complete-config)
-;; (ac-config-default)
-
 (electric-indent-mode t)
 
 (require 'browse-kill-ring)
@@ -531,6 +540,81 @@ by using nxml's indentation rules."
 
 
 (global-pretty-mode t)
+
+
+(require 'smooth-scrolling)
+
+;; Easily navigate sillycased words
+(global-subword-mode 1)
+
+(delete-selection-mode 1)
+
+;; Show keystrokes in progress
+(setq echo-keystrokes 0.1)
+
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Editing funcitons
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun split-window-right-and-move-there-dammit ()
+  (interactive)
+  (split-window-right)
+  (windmove-right))
+
+(defun open-line-below ()
+  (interactive)
+  (end-of-line)
+  (newline)
+  (indent-for-tab-command))
+
+(defun open-line-above ()
+  (interactive)
+  (beginning-of-line)
+  (newline)
+  (forward-line -1)
+  (indent-for-tab-command))
+
+(defun duplicate-region (&optional num start end)
+  "Duplicates the region bounded by START and END NUM times.
+If no START and END is provided, the current region-beginning and
+region-end is used."
+  (interactive "p")
+  (save-excursion
+   (let* ((start (or start (region-beginning)))
+          (end (or end (region-end)))
+          (region (buffer-substring start end)))
+     (goto-char end)
+     (dotimes (i num)
+       (insert region)))))
+
+(defun duplicate-current-line (&optional num)
+  "Duplicate the current line NUM times."
+  (interactive "p")
+  (save-excursion
+   (when (eq (point-at-eol) (point-max))
+     (goto-char (point-max))
+     (newline)
+     (forward-char -1))
+   (duplicate-region num (point-at-bol) (1+ (point-at-eol)))))
+
+(defun duplicate-current-line-or-region (arg)
+  "Duplicates the current line or region ARG times.
+If there's no region, the current line will be duplicated."
+  (interactive "p")
+  (if (region-active-p)
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (duplicate-region arg beg end)
+        (one-shot-keybinding "d" (λ (duplicate-region 1 beg end))))
+    (duplicate-current-line arg)
+    (one-shot-keybinding "d" 'duplicate-current-line)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Load Bindings
@@ -571,3 +655,169 @@ by using nxml's indentation rules."
 
 ;; (provide 'slamhound)
 ;; ;;; slamhound.el ends here
+
+
+(setq org-default-notes-file "~/notes/capture.org")
+(define-key global-map (kbd "C-0") 'org-capture)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; From magnar
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'recentf)
+(recentf-load-list)
+(defvar user-home-directory (concat (expand-file-name "~") "/"))
+
+(defun shorter-file-name (file-name)
+  (s-chop-prefix user-home-directory file-name))
+
+(defun recentf--file-cons (file-name)
+  (cons (shorter-file-name file-name) file-name))
+
+(defun recentf-ido-find-file ()
+  "Find a recent file using ido."
+  (interactive)
+  (let* ((recent-files (mapcar 'recentf--file-cons recentf-list))
+         (files (mapcar 'car recent-files))
+         (file (completing-read "Choose recent file: " files)))
+    (find-file (cdr (assoc file recent-files)))))
+
+(defun ido-imenu ()
+  "Update the imenu index and then use ido to select a symbol to navigate to.
+Symbols matching the text at point are put first in the completion list."
+  (interactive)
+  (imenu--make-index-alist)
+  (let ((name-and-pos '())
+        (symbol-names '()))
+    (flet ((addsymbols (symbol-list)
+                       (when (listp symbol-list)
+                         (dolist (symbol symbol-list)
+                           (let ((name nil) (position nil))
+                             (cond
+                              ((and (listp symbol) (imenu--subalist-p symbol))
+                               (addsymbols symbol))
+                              
+                              ((listp symbol)
+                               (setq name (car symbol))
+                               (setq position (cdr symbol)))
+                              
+                              ((stringp symbol)
+                               (setq name symbol)
+                               (setq position (get-text-property 1 'org-imenu-marker symbol))))
+                             
+                             (unless (or (null position) (null name))
+                               (add-to-list 'symbol-names name)
+                               (add-to-list 'name-and-pos (cons name position))))))))
+      (addsymbols imenu--index-alist))
+    ;; If there are matching symbols at point, put them at the beginning of `symbol-names'.
+    (let ((symbol-at-point (thing-at-point 'symbol)))
+      (when symbol-at-point
+        (let* ((regexp (concat (regexp-quote symbol-at-point) "$"))
+               (matching-symbols (delq nil (mapcar (lambda (symbol)
+                                                   (if (string-match regexp symbol) symbol))
+                                                 symbol-names))))
+          (when matching-symbols
+            (sort matching-symbols (lambda (a b) (> (length a) (length b))))
+            (mapc (lambda (symbol) (setq symbol-names (cons symbol (delete symbol symbol-names))))
+                  matching-symbols)))))
+    (let* ((selected-symbol (ido-completing-read "Symbol? " symbol-names))
+           (position (cdr (assoc selected-symbol name-and-pos))))
+      (goto-char position))))
+
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "/usr/bin/conkeror")
+
+(defun incs (s &optional num)
+  (let* ((inc (or num 1))
+         (new-number (number-to-string (+ inc (string-to-number s))))
+         (zero-padded? (s-starts-with? "0" s)))
+    (if zero-padded?
+        (s-pad-left (length s) "0" new-number)
+      new-number)))
+
+(defun change-number-at-point (arg)
+  (interactive "p")
+  (unless (or (looking-at "[0-9]")
+              (looking-back "[0-9]"))
+    (error "No number to change at point"))
+  (save-excursion
+    (while (looking-back "[0-9]")
+      (forward-char -1))
+    (re-search-forward "[0-9]+" nil)
+    (replace-match (incs (match-string 0) arg) nil nil)))
+
+(defun subtract-number-at-point (arg)
+  (interactive "p")
+  (change-number-at-point (- arg)))
+
+
+(add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
+
+
+(add-hook 'php-mode-hook
+          (lambda ()
+            (yas-minor-mode 1)
+            (define-key php-mode-map (kbd "C-.") 'er/expand-region)
+            (define-key php-mode-map (kbd "C-|") 'mc/mark-next-like-this)
+            (define-key php-mode-map (kbd "C-<tab>") 'yas/create-php-snippet)
+            ;; (define-key php-mode-map (kbd "M-j") 'jp-join-lines)
+            (c-set-style "bsd")
+            (setq c-basic-offset 4)
+            (setq indent-tabs-mode t)
+            (setq tab-width 4)
+            (setq comment-multi-line nil ;; maybe
+                  comment-start "// "
+                  comment-end ""
+                  comment-style 'indent
+                  comment-use-syntax t)
+            ))
+(put 'upcase-region 'disabled nil)
+
+
+(defun paredit--is-at-start-of-sexp ()
+  (and (looking-at "(\\|\\[\\|{")
+     (not (nth 3 (syntax-ppss)))     ;; inside string
+     (not (nth 4 (syntax-ppss)))))  ;; inside comment
+
+(defun paredit-duplicate-closest-sexp ()
+  (interactive)
+  ;; skips to start of current sexp
+  (while (not (paredit--is-at-start-of-sexp))
+    (paredit-backward))
+  (set-mark-command nil)
+  ;; while we find sexps we move forward on the line
+  (while (and (bounds-of-thing-at-point 'sexp)
+              (<= (point) (car (bounds-of-thing-at-point 'sexp)))
+              (not (= (point) (line-end-position))))
+    (forward-sexp)
+    (while (looking-at " ")
+      (forward-char)))
+  (kill-ring-save (mark) (point))
+  ;; go to the next line and copy the sexprs we encountered
+  (paredit-newline)
+  (yank)
+  (exchange-point-and-mark))
+
+(require 'diminish)
+(diminish'undo-tree-mode)
+(diminish 'yas-minor-mode)
+(diminish 'company-mode)
+(diminish 'projectile-mode)
+(diminish 'smartparens-mode)
+(diminish 'window-number-mode)
+
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-c p" "C-x x" ))
+(guide-key-mode 1)  ; Enable guide-key-mode
+
+
+(setq helm-external-programs-associations
+      '(("jpg" . "ristretto") ("jpeg" . "ristretto") ("png" . "ristretto") ("gif" . "ristretto") ("xls" . "libreoffice") ("doc" . "libreoffice") ("pdf" . "evince") ("html" . "conkeror")))
+
+(defun eshell-open-externally (file-name)
+  (interactive)
+  (helm-open-file-externally (concat (eshell/pwd) "/" file-name)))
+
+(defun dired-open-externally ()
+  (interactive)
+  (helm-open-file-externally (dired-get-file-for-visit)))

@@ -36,6 +36,7 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+space exec dmenu_run -fn '-*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*'
 bindsym $mod+space exec "PATH=$PATH:~/bin rofi -rnow -switchers run,window"
 
+
 bindsym $mod+Tab workspace back_and_forth
 bindsym Mod1+Tab workspace back_and_forth
 # There also is the (new) i3-dmenu-desktop which only displays applications
@@ -92,6 +93,8 @@ bindsym $mod+a focus parent
 
 # switch to workspace
 
+bindsym $mod+4 workspace "4"
+bindsym $mod+5 workspace "5"
 bindsym $mod+6 workspace "6"
 bindsym $mod+7 workspace "7"
 bindsym $mod+8 workspace "8"
@@ -99,6 +102,8 @@ bindsym $mod+9 workspace "9"
 bindsym $mod+0 workspace "0"
 
 # move focused container to workspace
+bindsym $mod+Shift+4 move container to workspace "4"
+bindsym $mod+Shift+5 move container to workspace "5"
 bindsym $mod+Shift+6 move container to workspace "6"
 bindsym $mod+Shift+7 move container to workspace "7"
 bindsym $mod+Shift+8 move container to workspace "8"
@@ -186,7 +191,7 @@ focus_follows_mouse no
 
 bindsym $mod+x [title="emacs@debianThinkpad"] focus
 bindsym $mod+c [class="Google-chrome"] focus
-bindsym $mod+f [class="Firefox"] focus
+bindsym $mod+f [class="Conkeror"] focus
 bindsym $mod+q [class="workbench-WbStarter"] focus
 #bindsym $mod+m workspace "6:Email"
 bindsym $mod+e [class="jetbrains-idea-ce"] focus
@@ -237,3 +242,5 @@ client.unfocused        #333333 #93a1a1 #fdf6e3 #292d2e
 bindsym --release $mod+1 exec --no-startup-id import /home/jmonetta/latest-screenshot.png
 
 floating_minimum_size 75 x 50
+
+exec --no-startup-id "btsync"

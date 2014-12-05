@@ -1,3 +1,18 @@
-url_completion_use_history = true;
-hint_digits="abcdefghijklmnopqrstuvwxyz";
+require("clicks-in-new-buffer.js")
 require("new-tabs.js");
+define_key(content_buffer_normal_keymap, "C-o", "follow");
+
+url_completion_use_history = true;
+// hint_digits="abcdefghijklmnopqrstuvwxyz";
+
+// require("new-tabs.js");
+require("favicon");
+read_buffer_show_icons = true;
+homepage=""
+
+require("grooveshark");
+page_activate_mode(grooveshark_mode);
+
+require("youtube");
+page_activate_mode(youtube_mode);
+

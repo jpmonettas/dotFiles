@@ -2,7 +2,35 @@
 ;; Bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'helm-files)
 
+;; Increase number at point (or other change based on prefix arg)
+(global-set-key (kbd "C-+") 'change-number-at-point)
+(global-set-key (kbd "C-=") 'change-number-at-point)
+(global-set-key (kbd "C--") 'subtract-number-at-point)
+
+(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
+
+(global-set-key (kbd "C-x 3") 'split-window-right-and-move-there-dammit)
+
+(global-set-key (kbd "<C-return>") 'open-line-below)
+(global-set-key (kbd "<C-S-return>") 'open-line-above)
+
+(global-set-key (kbd "C-M-g") 'webjump)
+
+
+;; Transpose stuff with M-t
+(global-unset-key (kbd "M-t")) ;; which used to be transpose-words
+(global-set-key (kbd "M-t l") 'transpose-lines)
+(global-set-key (kbd "M-t s") 'transpose-sexps)
+(global-set-key (kbd "M-t w") 'transpose-words)
+
+(define-key clojure-mode-map (kbd "C->") 'cljr-thread)
+(define-key clojure-mode-map (kbd "C-<down>") 'cljr-cycle-coll)
+(define-key clojure-mode-map (kbd "C-<up>") 'cljr-cycle-coll)
+(define-key clojure-mode-map (kbd "C-<") 'cljr-unwind)
+
+(global-set-key (kbd "C-2") 'duplicate-current-line-or-region)
 
 (global-set-key (kbd "M-j")
             (lambda ()
@@ -15,23 +43,37 @@
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
-(define-key global-map (kbd "C-x C-m") 'switch-to-mail-persp)
+(define-key global-map (kbd "C-x C-g") 'magit-status)
+(define-key global-map (kbd "C-x g") 'magit-status)
+
 (define-key global-map (kbd "C-x m") 'switch-to-mail-persp)
+
+(define-key global-map (kbd "C-x RET") 'eshell)
 
 (global-set-key (kbd "C-.") 'er/expand-region)
 (global-set-key (kbd "C-,") 'er/contract-region)
 
-;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;;(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "M-x") 'smex)
+
+;; Jump to a definition in the current file. (This is awesome)
+(global-set-key (kbd "C-x C-i") 'ido-imenu)
+
+
+;; toggle two most recent buffers
+(fset 'quick-switch-buffer [?\C-x ?b return])
+(global-set-key (kbd "s-b") 'quick-switch-buffer)
+
+
 (global-set-key (kbd "C-S-l") 'helm-locate)
 (global-set-key (kbd "C-S-g") 'projectile-ack)
-(global-set-key (kbd "C-S-n") 'helm-projectile)
+(global-set-key (kbd "C-S-m") 'helm-projectile)
+(global-set-key (kbd "C-S-n") 'projectile-find-file)
 
 (global-unset-key (kbd "M-<down-mouse-1>"))
 (global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
 
-(global-set-key (kbd "C-q") 'helm-swoop)
 (global-set-key (kbd "C-o") 'ace-jump-word-mode)
 
 (define-key isearch-mode-map (kbd "C-q") 'helm-swoop-from-isearch)
@@ -66,6 +108,8 @@
 
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 (define-key dired-mode-map (kbd "h") 'dired-dotfiles-toggle)
+(define-key dired-mode-map (kbd "f") 'find-name-dired)
+(define-key dired-mode-map (kbd "<C-return>") 'dired-open-externally)
 
 (global-set-key (kbd "C-x C-0") 'kill-buffer-and-window)
 
@@ -75,8 +119,20 @@
 (define-key clojure-mode-map (kbd "M-p") 'sp-backward-sexp)
 (define-key clojure-mode-map (kbd "M-u") 'sp-backward-up-sexp)
 
+
+
 (define-key emacs-lisp-mode-map (kbd "M-n") 'sp-next-sexp)
 (define-key emacs-lisp-mode-map (kbd "M-p") 'sp-backward-sexp)
 (define-key emacs-lisp-mode-map (kbd "M-u") 'sp-backward-up-sexp)
 
 (global-set-key (kbd "C-<tab>") 'company-complete)
+
+(cljr-add-keybindings-with-prefix "C-c C-r")
+
+(define-key emacs-lisp-mode-map (kbd "C-M-2")  'paredit-duplicate-closest-sexp)
+(define-key clojure-mode-map (kbd "C-M-2") 'paredit-duplicate-closest-sexp)
+
+(global-set-key (kbd "M-(") 'paredit-wrap-sexp)
+(global-set-key (kbd "M-U") 'paredit-splice-sexp-killing-backward)
+
+(define-key helm-find-files-map (kbd "<C-return>") 'helm-ff-run-open-file-externally)
