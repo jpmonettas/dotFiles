@@ -1,17 +1,14 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 (load custom-file)
 
-(set-face-attribute 'default nil :font "peep")
-;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
+;;(set-face-attribute 'default nil :font "peep")
+(set-face-attribute 'default nil :font "DejaVu Sans Mono-9")
 
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
-
-(add-to-list 'package-archives
-             '("SC" . "http://joseito.republika.pl/sunrise-commander/"))
 
 
 (package-initialize)
@@ -22,60 +19,109 @@
       `((".*" ,temporary-file-directory t)))
 
 
+(setq req-pack '(ace-jump-mode
+                 ac-cider
+                 ac-cider-compliment
+                 ac-nrepl
+                 ack
+                 ack-and-a-half
+                 apel
+                 async
+                 auto-complete
+                 browse-kill-ring
+                 cider
+                 cider-spy
+                 clj-refactor
+                 clojure-mode
+                 clojure-snippets
+                 clojurescript-mode
+                 company
+                 dash
+                 diminish
+                 dired-hacks-utils
+                 dired-open
+                 dired-rainbow
+                 dired-subtree
+                 dot-mode
+                 easy-kill
+                 easy-kill-extras
+                 emmet-mode
+                 epl
+                 expand-region
+                 f
+                 flim
+                 flx
+                 flx-ido
+                 flycheck
+                 flymake-easy
+                 flymake-sass
+                 git-commit-mode
+                 git-rebase-mode
+                 guide-key
+                 helm
+                 helm-projectile
+                 helm-swoop
+                 help-fns+
+                 highlight
+                 ido-at-point
+                 ido-ubiquitous
+                 ido-vertical-mode
+                 iedit
+                 javap-mode
+                 json-mode
+                 json-reformat
+                 json-snatcher
+                 let-alist
+                 lispy
+                 magit
+                 multi-term
+                 multiple-cursors
+                 neotree
+                 nm
+                 noflet
+                 notmuch
+                 notmuch-unread
+                 nrepl-eval-sexp-fu
+                 objc-font-lock
+                 org
+                 org-present
+                 paredit
+                 peg
+                 persp-projectile
+                 perspective
+                 php+-mode
+                 php-eldoc
+                 php-extras
+                 php-mode
+                 pkg-info
+                 popup
+                 popwin
+                 pretty-mode
+                 projectile
+                 queue
+                 rainbow-delimiters
+                 restclient
+                 rich-minority
+                 s
+                 scss-mode
+                 semi
+                 slamhound
+                 smart-mode-line
+                 smartparens
+                 smex
+                 smooth-scrolling
+                 solarized-theme
+                 undo-tree
+                 wanderlust
+                 web-beautify
+                 web-mode
+                 window-number
+                 yasnippet))
 
-(defvar required-packages
-  '(smartparens
-    ace-jump-mode
-    ack
-    ack-and-a-half
-    expand-region
-    popwin
-    undo-tree
-    multiple-cursors
-    easy-kill
-    easy-kill-extras
-    solarized-theme
-    web-mode
-    smart-mode-line
-    browse-kill-ring
-    flycheck
-    rainbow-delimiters
-    window-numbers
-    json-mode
 
-    magit
-    notmuch
-    projectile
-    perspective
-    persp-projectile
-    emmet-mode
-
-    helm
-    helm-swoop
-    helm-projectile
-
-    clojure-mode
-    clojure-snippets
-    clojurescript-mode
-    clj-refactor
-    cider
-    ;; ac-cider
-    ;; ac-cider-compliment
-    company
-    cider-browse-ns
-    cider-decompile
-    cider-spy
-    slamhound
-
-    flx
-    flx-ido
-    ido-vertical-mode
-    ido-at-point))
-
-
-;; (dolist (p required-packages)
-;;     (when (not (package-installed-p p))
-;;       (package-install p)))
+;; (dolist (p req-pack)
+;;      (when (not (package-installed-p p))
+;;        (package-install p)))
 
 (global-hl-line-mode)
 
@@ -102,8 +148,8 @@
 
 ;; (require 'helm)
 ;; (helm-mode 1)
-(require 'browse-kill-ring)
-(browse-kill-ring-default-keybindings)
+;; (require 'browse-kill-ring)
+;; (browse-kill-ring-default-keybindings)
 
 (require 'popwin)
 (popwin-mode 1)
@@ -128,17 +174,6 @@
 
 
 
-;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; ;;; Java
-;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (require 'misc)
-
-;; (add-hook 'java-mode-hook
-;;  (lambda ()
-;;    (setq c-basic-offset 4)
-;;    (setq indent-tabs-mode t)
-;;    (setq tab-width 4)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Email
@@ -341,6 +376,9 @@ Adapted from `flyspell-correct-word-before-point'."
 (require 'cider)
 
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(setq nrepl-log-messages t)
+(setq cider-prompt-save-file-on-load nil)
+(setq nrepl-hide-special-buffers t)
 (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
 
 ;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -542,7 +580,7 @@ by using nxml's indentation rules."
 (global-pretty-mode t)
 
 
-(require 'smooth-scrolling)
+;;(require 'smooth-scrolling)
 
 ;; Easily navigate sillycased words
 (global-subword-mode 1)
@@ -616,11 +654,6 @@ If there's no region, the current line will be duplicated."
     (duplicate-current-line arg)
     (one-shot-keybinding "d" 'duplicate-current-line)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Load Bindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(load "~/.emacs.d/bindings")
 
 
 ;; My version of slamhound
@@ -807,12 +840,19 @@ Symbols matching the text at point are put first in the completion list."
 (diminish 'window-number-mode)
 
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-c p" "C-x x" ))
+(setq guide-key/guide-key-sequence '("C-c p" "C-x x" "C-c C-r"))
 (guide-key-mode 1)  ; Enable guide-key-mode
 
 
 (setq helm-external-programs-associations
-      '(("jpg" . "ristretto") ("jpeg" . "ristretto") ("png" . "ristretto") ("gif" . "ristretto") ("xls" . "libreoffice") ("doc" . "libreoffice") ("pdf" . "evince") ("html" . "conkeror")))
+      '(("jpg" . "ristretto")
+        ("jpeg" . "ristretto")
+        ("png" . "ristretto")
+        ("gif" . "ristretto")
+        ("xls" . "libreoffice")
+        ("doc" . "libreoffice")
+        ("pdf" . "evince")
+        ("html" . "conkeror")))
 
 (defun eshell-open-externally (file-name)
   (interactive)
@@ -821,3 +861,82 @@ Symbols matching the text at point are put first in the completion list."
 (defun dired-open-externally ()
   (interactive)
   (helm-open-file-externally (dired-get-file-for-visit)))
+
+(defun smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; remap C-a to `smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'smarter-move-beginning-of-line)
+
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ;;; Java
+;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 's)
+(require 'eclim)
+(global-eclim-mode)
+(require 'eclimd)
+(custom-set-variables
+ '(eclim-eclipse-dirs '("~/non-rep-software/eclipse/"))
+ '(eclim-executable "~/non-rep-software/eclipse/eclim"))
+
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+
+;; (require 'misc)
+
+(defun jpmonettas/run-test-at-point ()
+  (interactive)
+  (let* ((class-name (eclim--java-current-class-name))
+        (method-name (cdr (eclim--java-identifier-at-point t)))
+        (mvn-command (concat "-Dtest=" class-name "#" method-name " test")))
+    (eclim-maven-run mvn-command)))
+
+(add-hook 'java-mode-hook
+          (lambda ()
+            (define-key java-mode-map (kbd "C-M-o") 'eclim-java-import-organize)
+            (define-key java-mode-map (kbd "C-M-3") 'eclim-java-find-references)
+            (define-key java-mode-map (kbd "M-.") 'eclim-java-find-declaration)
+            (define-key java-mode-map (kbd "C-c C-e t") 'jpmonettas/run-test-at-point) 
+            (setq c-basic-offset 4)
+            (setq indent-tabs-mode t)
+            (setq tab-width 4)))
+ 
+(add-to-list 'auto-mode-alist '("\\.jsp$" . web-mode))
+
+(require 'java-file-create)
+
+;; (ace-isearch-mode 1)
+;; (global-ace-isearch-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Load Bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load "~/.emacs.d/bindings")
+

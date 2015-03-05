@@ -244,3 +244,4 @@ bindsym --release $mod+1 exec --no-startup-id import /home/jmonetta/latest-scree
 floating_minimum_size 75 x 50
 
 exec --no-startup-id "btsync"
+exec --no-startup-id "redshift-gtk"

@@ -10,9 +10,24 @@ require("favicon");
 read_buffer_show_icons = true;
 homepage=""
 
-require("grooveshark");
-page_activate_mode(grooveshark_mode);
+// require("grooveshark");
+// page_activate_mode(grooveshark_mode);
 
-require("youtube");
-page_activate_mode(youtube_mode);
+// require("youtube");
+// page_activate_mode(youtube_mode);
 
+
+interactive("list-bookmarks",
+    "List all bookmarks",
+    function (I) {
+        var data = "", error = "";
+        var result = yield shell_command(
+            "conkeror-bookmarks.py --html",
+            $fds = [{ output: async_binary_string_writer("") },
+                    { input: async_binary_reader(function (s) data+=s||"") },
+                    { input: async_binary_reader(function (s) error+=s||"") }]);
+        if (result != 0 || error != "")
+            throw new interactive_error("status "+result+", "+error);
+        var uri = "data:text/html;charset=utf-8;base64,"+btoa(data);
+        browser_object_follow(I.buffer, OPEN_NEW_BUFFER, load_spec({ uri: uri }));
+    });

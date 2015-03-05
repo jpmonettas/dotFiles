@@ -4,6 +4,12 @@
 
 (require 'helm-files)
 
+(global-set-key (kbd "C-h a") 'helm-apropos)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-z") 'undo-tree-undo)
+(global-set-key (kbd "C-S-Z") 'undo-tree-redo)
+
+
 ;; Increase number at point (or other change based on prefix arg)
 (global-set-key (kbd "C-+") 'change-number-at-point)
 (global-set-key (kbd "C-=") 'change-number-at-point)
@@ -16,14 +22,18 @@
 (global-set-key (kbd "<C-return>") 'open-line-below)
 (global-set-key (kbd "<C-S-return>") 'open-line-above)
 
-(global-set-key (kbd "C-M-g") 'webjump)
+(global-set-key (kbd "C-M-g") 'helm-google-suggest)
 
+(global-set-key (kbd "M-k") 'kill-whole-line)
 
 ;; Transpose stuff with M-t
 (global-unset-key (kbd "M-t")) ;; which used to be transpose-words
 (global-set-key (kbd "M-t l") 'transpose-lines)
 (global-set-key (kbd "M-t s") 'transpose-sexps)
 (global-set-key (kbd "M-t w") 'transpose-words)
+
+(global-set-key (kbd "M-c") 'hippie-expand)
+
 
 (define-key clojure-mode-map (kbd "C->") 'cljr-thread)
 (define-key clojure-mode-map (kbd "C-<down>") 'cljr-cycle-coll)
@@ -58,7 +68,7 @@
 (global-set-key (kbd "M-x") 'smex)
 
 ;; Jump to a definition in the current file. (This is awesome)
-(global-set-key (kbd "C-x C-i") 'ido-imenu)
+(global-set-key (kbd "C-x C-i") 'helm-semantic-or-imenu)
 
 
 ;; toggle two most recent buffers
@@ -67,7 +77,7 @@
 
 
 (global-set-key (kbd "C-S-l") 'helm-locate)
-(global-set-key (kbd "C-S-g") 'projectile-ack)
+(global-set-key (kbd "C-S-g") 'helm-projectile-grep)
 (global-set-key (kbd "C-S-m") 'helm-projectile)
 (global-set-key (kbd "C-S-n") 'projectile-find-file)
 
@@ -102,7 +112,7 @@
 (global-set-key [remap kill-ring-save] 'easy-kill)
 (global-set-key [remap mark-sexp] 'easy-mark)
 
-(global-set-key (kbd "M-c") 'calendar)
+;; (global-set-key (kbd "M-c") 'calendar)
 (global-set-key (kbd "C-<backspace>") 'kill-whole-line)
 (global-set-key (kbd "C-|") 'mc/mark-next-like-this)
 
@@ -136,3 +146,4 @@
 (global-set-key (kbd "M-U") 'paredit-splice-sexp-killing-backward)
 
 (define-key helm-find-files-map (kbd "<C-return>") 'helm-ff-run-open-file-externally)
+
