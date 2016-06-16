@@ -9,6 +9,7 @@
 (global-set-key (kbd "C-z") 'undo-tree-undo)
 (global-set-key (kbd "C-S-Z") 'undo-tree-redo)
 
+(global-set-key (kbd "C-*") 'isearch-forward-symbol-at-point)
 
 ;; Increase number at point (or other change based on prefix arg)
 (global-set-key (kbd "C-+") 'change-number-at-point)
@@ -47,14 +48,15 @@
                   (interactive)
                   (join-line -1)))
 (define-key cider-mode-map (kbd "C-c C-s") 'slamhound)
-(define-key global-map (kbd "M-n") 'forward-sexp)
-(define-key global-map (kbd "M-p") 'backward-sexp)
+(define-key cider-mode-map (kbd "C-c C-<return>") 'cider-macroexpand-1)
+
+(define-key global-map (kbd "C-S-n") (lambda () (interactive) (next-line 5)))
+(define-key global-map (kbd "C-S-p") (lambda () (interactive) (previous-line 5)))
 
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
-(define-key global-map (kbd "C-x C-g") 'magit-status)
-(define-key global-map (kbd "C-x g") 'magit-status)
+(define-key global-map (kbd "<f12>") 'magit-status)
 
 (define-key global-map (kbd "C-x m") 'switch-to-mail-persp)
 
@@ -73,18 +75,18 @@
 
 ;; toggle two most recent buffers
 (fset 'quick-switch-buffer [?\C-x ?b return])
-(global-set-key (kbd "s-b") 'quick-switch-buffer)
-
+(global-set-key (kbd "M-o") 'quick-switch-buffer)
+(global-set-key (kbd "M-O") 'switch-to-last-persp)
 
 (global-set-key (kbd "C-S-l") 'helm-locate)
 (global-set-key (kbd "C-S-g") 'helm-projectile-grep)
 (global-set-key (kbd "C-S-m") 'helm-projectile)
-(global-set-key (kbd "C-S-n") 'projectile-find-file)
+(global-set-key (kbd "C-S-h") 'projectile-find-file)
 
 (global-unset-key (kbd "M-<down-mouse-1>"))
 (global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
 
-(global-set-key (kbd "C-o") 'ace-jump-word-mode)
+(global-set-key (kbd "C-o") 'avy-goto-word-1)
 
 (define-key isearch-mode-map (kbd "C-q") 'helm-swoop-from-isearch)
 
@@ -102,6 +104,8 @@
 
 (define-key notmuch-show-mode-map "r" 'reply-to-thread-sender-show)
 (define-key notmuch-show-mode-map "R" 'reply-to-thread-show)
+(define-key notmuch-show-mode-map "j" 'notmuch-show-next-button)
+(define-key notmuch-show-mode-map "k" 'notmuch-show-previous-button)
 
 (define-key notmuch-search-mode-map "T" 'notmuch-jump-to-tag)
 
@@ -121,7 +125,7 @@
 (define-key dired-mode-map (kbd "f") 'find-name-dired)
 (define-key dired-mode-map (kbd "<C-return>") 'dired-open-externally)
 
-(global-set-key (kbd "C-x C-0") 'kill-buffer-and-window)
+(global-set-key (kbd "C-x C-0") 'winner-undo)
 
 (global-set-key (kbd "M-/") 'comment-or-uncomment-region)
 
@@ -136,8 +140,11 @@
 (define-key emacs-lisp-mode-map (kbd "M-u") 'sp-backward-up-sexp)
 
 (global-set-key (kbd "C-<tab>") 'company-complete)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
 
-(cljr-add-keybindings-with-prefix "C-c C-r")
+
+;; (cljr-add-keybindings-with-prefix "C-c C-r")
 
 (define-key emacs-lisp-mode-map (kbd "C-M-2")  'paredit-duplicate-closest-sexp)
 (define-key clojure-mode-map (kbd "C-M-2") 'paredit-duplicate-closest-sexp)
@@ -147,3 +154,16 @@
 
 (define-key helm-find-files-map (kbd "<C-return>") 'helm-ff-run-open-file-externally)
 
+
+(define-key isearch-mode-map (kbd "<backspace>") 
+  #'isearch-delete-something)
+
+
+;; (global-set-key "\C-s" 'swiper)
+;; (global-set-key "\C-r" 'swiper)
+(global-set-key [f6] 'ivy-resume)
+(global-set-key [f11] 'diff-hl-mode)
+(define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
+(global-set-key (kbd "C-<escape>") 'hotspots)
+(global-set-key (kbd "C-M-h") 'highlight-lines-matching-regexp)
+(global-set-key (kbd "C-M-S-H") 'unhighlight-regexp)

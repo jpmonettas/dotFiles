@@ -14,6 +14,10 @@ ZSH_THEME="robbyrussell"
 export SUDO_EDITOR="emacsclient -nw"
 alias e="TERM=xterm-256color emacsclient -nw"
 alias E="sudo -e"
+alias t="tree -L 1"
+alias tt="tree -L 2"
+alias ttt="tree -L 3"
+alias tttt="tree -L 4"
 
 export MAMBOBOX_ENV=dev
 export MAMBOBOX_MUSIC_DIR=/home/jmonetta/temp/music/

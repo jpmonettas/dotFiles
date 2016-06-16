@@ -34,7 +34,8 @@ bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 #bindsym $mod+space exec dmenu_run -fn '-*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*'
-bindsym $mod+space exec "PATH=$PATH:~/bin rofi -rnow -switchers run,window"
+bindsym $mod+space exec "PATH=$PATH:~/bin rofi -show run -modi run"
+bindsym $mod+slash exec "rofi -show window"
 
 
 bindsym $mod+Tab workspace back_and_forth
@@ -158,9 +159,9 @@ bindsym $mod+r mode "resize"
 bar {
         tray_output primary
         font pango:DejaVu Sans Mono, Awesome 8
-	output LVDS-1
+     	output LVDS-1
         status_command py3status -c ~/.i3status.conf -i ~/.i3/py3status/
-	position top
+	    position top
         colors {
             # solarized
             background #073642
@@ -187,10 +188,25 @@ bar{
         }
 }
 
+bar{
+        tray_output primary
+        font pango:DejaVu Sans Mono, Awesome 9
+	    output DP-1
+    	position top
+        colors {
+            # solarized
+            background #073642
+            statusline #eee8d5
+            focused_workspace #268bd2 #268bd2 #fdf6e3 #484e50
+            active_workspace #333333 #93a1a1 #fdf6e3 #292d2e
+            inactive_workspace #333333 #93a1a1 #fdf6e3 #292d2e
+        }
+}
+
 focus_follows_mouse no
 
 bindsym $mod+x [title="emacs@debianThinkpad"] focus
-bindsym $mod+c [class="Google-chrome"] focus
+bindsym $mod+c [class="google-chrome"] focus
 bindsym $mod+f [class="Conkeror"] focus
 bindsym $mod+q [class="workbench-WbStarter"] focus
 #bindsym $mod+m workspace "6:Email"
@@ -203,6 +219,7 @@ bindsym $mod+e [class="jetbrains-idea-ce"] focus
 
 
 bindsym $mod+Escape exec i3lock --color 000000
+bindsym $mod+grave exec xfce4-popup-clipman
 
 bindsym $mod+comma exec /home/jmonetta/bin/remotes-dmenu.sh
 bindsym $mod+period exec /home/jmonetta/bin/passmenu
@@ -218,6 +235,7 @@ bindsym $mod+period exec /home/jmonetta/bin/passmenu
 exec xsetroot -solid "#586e75"
 exec --no-startup-id nm-applet
 exec pa-applet --disable-notifications
+
 
 for_window [class="Pidgin"] floating enable
 for_window [class="Skype" title="jpmonetta - Skype*"] floating enable
@@ -240,8 +258,11 @@ client.focused_inactive #333333 #93a1a1 #fdf6e3 #292d2e
 client.unfocused        #333333 #93a1a1 #fdf6e3 #292d2e
 
 bindsym --release $mod+1 exec --no-startup-id import /home/jmonetta/latest-screenshot.png
+bindsym --release Print exec --no-startup-id import /home/jmonetta/latest-screenshot.png
+
 
 floating_minimum_size 75 x 50
 
 exec --no-startup-id "btsync"
 exec --no-startup-id "redshift-gtk"
+exec --no-startup-id "xfce4-clipman"

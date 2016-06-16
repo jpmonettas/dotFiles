@@ -7,3 +7,7 @@ ignore=
 
 [search]
 exclude_tags=deleted;spam
+
+[user]
+primary_email=jpmonettas@gmail.com
+other_email=juan@infuy.com

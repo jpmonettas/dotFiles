@@ -2,6 +2,7 @@ require("clicks-in-new-buffer.js")
 require("new-tabs.js");
 define_key(content_buffer_normal_keymap, "C-o", "follow");
 
+hint_digits="asdfghjkl";
 url_completion_use_history = true;
 // hint_digits="abcdefghijklmnopqrstuvwxyz";
 
@@ -17,6 +18,19 @@ homepage=""
 // page_activate_mode(youtube_mode);
 
 
+function define_switch_buffer_key (key, buf_num) {
+    define_key(default_global_keymap, key,
+               function (I) {
+                   switch_to_buffer(I.window,
+                                    I.window.buffers.get_buffer(buf_num));
+               });
+}
+for (let i = 0; i < 10; ++i) {
+    define_switch_buffer_key(String((i+1)%10), i);
+}
+
+define_key(content_buffer_normal_keymap, "d", "follow-new-buffer");
+
 interactive("list-bookmarks",
     "List all bookmarks",
     function (I) {
@@ -31,3 +45,14 @@ interactive("list-bookmarks",
         var uri = "data:text/html;charset=utf-8;base64,"+btoa(data);
         browser_object_follow(I.buffer, OPEN_NEW_BUFFER, load_spec({ uri: uri }));
     });
+
+ register_user_stylesheet(
+    "data:text/css," +
+        escape(
+            "@namespace url(\"http://www.w3.org/1999/xhtml\");\n" +
+            "span.__conkeror_hint {\n"+
+            "  font-size: 18px !important;\n"+
+            "  color: black !important;\n"+
+            "  background-color: #00ffff !important;\n"+
+            "  line-height: 18px !important;\n"+
+            "}"));

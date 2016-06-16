@@ -1,15 +1,20 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 (load custom-file)
 
+
+
+(fset 'yes-or-no-p 'y-or-n-p)
 ;;(set-face-attribute 'default nil :font "peep")
-(set-face-attribute 'default nil :font "DejaVu Sans Mono-9")
+;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
+(set-face-attribute 'default nil :font "M+ 1mn-11")
+;;(set-face-attribute 'default nil :font "Source Code Pro-11")
 
 (require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
+(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 
 (package-initialize)
 
@@ -18,16 +23,25 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
+(setq paradox-github-token "b1e6d896b99fb3e084f73177bda16dbaf8805b28")
 
-(setq req-pack '(ace-jump-mode
+(require 'ediff)
+
+
+(setq req-pack '(
+
                  ac-cider
-                 ac-cider-compliment
+                 ;;ac-cider-compliment
                  ac-nrepl
+                 ace-isearch
+                 ace-jump-mode
+                 ace-window
                  ack
                  ack-and-a-half
                  apel
                  async
                  auto-complete
+                 avy
                  browse-kill-ring
                  cider
                  cider-spy
@@ -45,28 +59,36 @@
                  dot-mode
                  easy-kill
                  easy-kill-extras
+                 edn
+                 emacs-eclim
                  emmet-mode
                  epl
+                 eredis
                  expand-region
                  f
                  flim
                  flx
                  flx-ido
                  flycheck
+                 flycheck-clojure
+                 flycheck-pos-tip
                  flymake-easy
                  flymake-sass
-                 git-commit-mode
-                 git-rebase-mode
                  guide-key
                  helm
                  helm-projectile
                  helm-swoop
                  help-fns+
                  highlight
+                 hydra
                  ido-at-point
+                 ido-completing-read+
                  ido-ubiquitous
                  ido-vertical-mode
                  iedit
+                 ;; ivy
+                 java-file-create
+                 java-snippets
                  javap-mode
                  json-mode
                  json-reformat
@@ -111,22 +133,28 @@
                  smex
                  smooth-scrolling
                  solarized-theme
+                 swiper
                  undo-tree
                  wanderlust
                  web-beautify
                  web-mode
                  window-number
-                 yasnippet))
+                 yasnippet
 
 
-;; (dolist (p req-pack)
-;;      (when (not (package-installed-p p))
-;;        (package-install p)))
+                 ))
+
+(defun install-my-packages ()
+  (dolist (p req-pack)
+    (when (not (package-installed-p p))
+      (package-install p))))
+
 
 (global-hl-line-mode)
 
 (require 'smex)
 
+(require 'ace-window)
 
 (require 'ido-ubiquitous)
 (ido-ubiquitous-mode 1)
@@ -135,6 +163,7 @@
 (require 'ido-vertical-mode)
 (ido-mode 1)
 (ido-vertical-mode 1)
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
 
 (require 'flx-ido)
@@ -144,19 +173,30 @@
 (setq ido-enable-flex-matching t)
 
 
-
+(setq org-completion-use-ido t)
+(setq magit-completing-read-function 'magit-ido-completing-read)
 
 ;; (require 'helm)
 ;; (helm-mode 1)
 ;; (require 'browse-kill-ring)
 ;; (browse-kill-ring-default-keybindings)
 
+(defadvice pop-to-mark-command (around ensure-new-position activate)
+  (let ((p (point)))
+    (dotimes (i 10)
+      (when (= p (point)) ad-do-it))))
+
+(setq set-mark-command-repeat-pop t)
+
 (require 'popwin)
 (popwin-mode 1)
 (push '(" *undo-tree*" :width 0.3 :position right) popwin:special-display-config)
+(push '("*compilation*" :width 0.5 :position right) popwin:special-display-config)
 (push '("*Helm Find Files*" :height 0.5) popwin:special-display-config)
+(push '("*eclim: find" :height 0.5) popwin:special-display-config)
 (push '("*helm mini*" :height 0.5) popwin:special-display-config)
 (push '("*helm grep*" :height 0.5) popwin:special-display-config)
+(push '("*hotspots*" :height 0.5) popwin:special-display-config)
 (push '("*helm locate*" :height 0.5) popwin:special-display-config)
 (push '("*helm-mode-find-file*" :height 0.5) popwin:special-display-config)
 (push '("*helm projectile*" :height 0.5) popwin:special-display-config)
@@ -170,7 +210,13 @@
 ;;        (popwin:popup-buffer "TODOS.org" :width 0.5 :position 'left))
 
 
-(load-theme 'solarized-dark t)
+;;(load-theme 'solarized-light t)
+(load-theme 'sanityinc-tomorrow-eighties t)
+;;(load-theme 'solarized-dark t)
+;; (load-theme 'zenburn)
+
+
+
 
 
 
@@ -188,8 +234,8 @@
       message-sendmail-envelope-from 'header)
 
 (require 'notmuch-address)
-(setq notmuch-address-command "/home/jmonetta/non-rep-software/notmuch-addrlookup/addrlookup")
-(notmuch-address-message-insinuate)
+;; (setq notmuch-address-command "/home/jmonetta/non-rep-software/notmuch-addrlookup-c/notmuch-addrlookup")
+;; (notmuch-address-message-insinuate)
 
 (require 'notmuch)
 
@@ -254,6 +300,11 @@
   (interactive)
   (persp-switch "mail")
   (notmuch-search-unread))
+
+(defun switch-to-last-persp ()
+  "Switches back to the last perspective"
+  (interactive)
+  (persp-switch (persp-name persp-last)))
 
 (defun notmuch-search-unread ()
   (interactive)
@@ -371,15 +422,16 @@ Adapted from `flyspell-correct-word-before-point'."
 ;; ;;; Clojure
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-company-mode)
-
 (require 'cider)
 
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'eldoc-mode)
 (setq nrepl-log-messages t)
 (setq cider-prompt-save-file-on-load nil)
 (setq nrepl-hide-special-buffers t)
 (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
+
+(setq cider-refresh-before-fn "user/stop-system!"
+      cider-refresh-after-fn "user/start-system!")
 
 ;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; ;;; Utils
@@ -430,23 +482,35 @@ nothing but whitespace between them.  It then indents the markup
 by using nxml's indentation rules."
   (interactive "r")
   (save-excursion
-      (nxml-mode)
-      (goto-char begin)
-      (while (search-forward-regexp "\>[ \\t]*\<" nil t)
-        (backward-char) (insert "\n"))
-      (indent-region begin end))
-    (message "Ah, much better!"))
+    (nxml-mode)
+    (goto-char begin)
+    (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+      (backward-char) (insert "\n"))
+    (indent-region begin end))
+  (message "Ah, much better!"))
+
+(require 'dash)
+
+(defun jpmonettas/clojurize-camelized ()
+  (interactive)
+  (let* ((word (word-at-point))
+         (camelized (downcase (apply 'concat (-map (lambda (c)
+                                                     (if (and (>= c 65) (<= c 90))
+                                                         (format "-%s" (string c))
+                                                       (string c)))
+                                                   word)))))
+    (backward-word 1)
+    (kill-word 1)
+    (insert camelized)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Org
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (setq org-agenda-files (list "~/notes/projects.org"
-;;                              "~/notes/pricing-insider-email-campaign.org"))
 
-;; ;; (add-hook 'org-mode-hook (lambda ()
-;; ;;                            (setq buffer-face-mode-face '(:family "DejaVu Sans" :height 100 :widthtype semi-condensed))
-;; ;;                            (buffer-face-mode)))
+(setq org-agenda-files (list "~/notes/projects.org"))
+
+
 
 ;; ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
 
@@ -569,15 +633,21 @@ by using nxml's indentation rules."
 (global-undo-tree-mode t)
 
 (require 'clj-refactor)
-(add-hook 'clojure-mode-hook (lambda ()
-                               (clj-refactor-mode 1)
-                               (cljr-add-keybindings-with-prefix "C-c C-r")))
+
+(defun my-clojure-mode-hook ()
+    (clj-refactor-mode 1)
+    (yas-minor-mode 1) ; for adding require/use/import
+    (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+
 
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
 
-(global-pretty-mode t)
+;; (global-pretty-mode t)
+
 
 
 ;;(require 'smooth-scrolling)
@@ -784,9 +854,6 @@ Symbols matching the text at point are put first in the completion list."
   (change-number-at-point (- arg)))
 
 
-(add-hook 'nrepl-connected-hook #'cljr-update-artifact-cache)
-
-
 (add-hook 'php-mode-hook
           (lambda ()
             (yas-minor-mode 1)
@@ -831,16 +898,15 @@ Symbols matching the text at point are put first in the completion list."
   (yank)
   (exchange-point-and-mark))
 
-(require 'diminish)
-(diminish'undo-tree-mode)
-(diminish 'yas-minor-mode)
-(diminish 'company-mode)
-(diminish 'projectile-mode)
-(diminish 'smartparens-mode)
-(diminish 'window-number-mode)
-
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-c p" "C-x x" "C-c C-r"))
+
+(defun guide-key/my-hook-function-for-org-mode ()
+  (guide-key/add-local-guide-key-sequence "C-c")
+  (guide-key/add-local-guide-key-sequence "C-c C-x"))
+
+(add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
+
+(setq guide-key/guide-key-sequence '("C-c p" "C-x x" "C-c C-r" "C-x r"))
 (guide-key-mode 1)  ; Enable guide-key-mode
 
 
@@ -896,7 +962,9 @@ point reaches the beginning or end of the buffer, stop there."
 (require 's)
 (require 'eclim)
 (global-eclim-mode)
+
 (require 'eclimd)
+
 (custom-set-variables
  '(eclim-eclipse-dirs '("~/non-rep-software/eclipse/"))
  '(eclim-executable "~/non-rep-software/eclipse/eclim"))
@@ -905,8 +973,11 @@ point reaches the beginning or end of the buffer, stop there."
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
 
+(require 'company)
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
+
+(global-company-mode t)
 
 ;; (require 'misc)
 
@@ -917,12 +988,19 @@ point reaches the beginning or end of the buffer, stop there."
         (mvn-command (concat "-Dtest=" class-name "#" method-name " test")))
     (eclim-maven-run mvn-command)))
 
+(require 'projectile)
+
+(defun jpmonettas/run-current-proy-with-jetty ()
+  (interactive)
+  (eclim-maven-run (concat "-Denv=dev -DrunTasks=false jetty:run")))
+
 (add-hook 'java-mode-hook
           (lambda ()
             (define-key java-mode-map (kbd "C-M-o") 'eclim-java-import-organize)
             (define-key java-mode-map (kbd "C-M-3") 'eclim-java-find-references)
             (define-key java-mode-map (kbd "M-.") 'eclim-java-find-declaration)
             (define-key java-mode-map (kbd "C-c C-e t") 'jpmonettas/run-test-at-point) 
+            (define-key java-mode-map (kbd "C-c C-e R") 'jpmonettas/run-current-proy-with-jetty) 
             (setq c-basic-offset 4)
             (setq indent-tabs-mode t)
             (setq tab-width 4)))
@@ -934,9 +1012,200 @@ point reaches the beginning or end of the buffer, stop there."
 ;; (ace-isearch-mode 1)
 ;; (global-ace-isearch-mode)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Crazy stuff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'dash)
+
+(defun render-attributes (attrs)
+  (->> attrs
+     (-map (lambda (attr)
+             (format ":%s \"%s\"" (car attr) (cdr attr))))
+     (-interpose " ")
+     (apply 'concat)
+     (format "{%s}")))
+
+
+(defun render-element (el)
+  (if (listp el)
+      (let ((name-and-attrs (format "%s %s" (first el) (render-attributes (second el))))
+            (body (->> (cddr el)
+                     (-map 'render-element)
+                     (-interpose " ")
+                     (apply 'concat))))
+        (format "[%s %s%s]\n" name-and-attrs (if (> (length body) 100) "\n" "") body))
+    (format "\"%s\"" el)))
+
+(defun xml-to-hiccup-region ()
+  (interactive)
+  (let* ((parsed (libxml-parse-xml-region (region-beginning) (region-end))))
+    (end-of-buffer)
+    (insert (render-element parsed))))
+
+(defun isearch-delete-something ()
+  "Delete non-matching text or the last character."
+  ;; Mostly copied from `isearch-del-char' and Drew's answer on the page above
+  (interactive)
+  (if (= 0 (length isearch-string))
+      (ding)
+    (setq isearch-string
+          (substring isearch-string
+                     0
+                     (or (isearch-fail-pos) (1- (length isearch-string)))))
+    (setq isearch-message
+          (mapconcat #'isearch-text-char-description isearch-string "")))
+  (if isearch-other-end (goto-char isearch-other-end))
+  (isearch-search)
+  (isearch-push-state)
+  (isearch-update))
+
+;; (eval-after-load 'flycheck '(flycheck-clojure-setup))
+
+;; (add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; (eval-after-load 'flycheck
+;;   '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
+
+;; (render-element '(html ()
+;;                        (head ())
+;;                        (body ((width . "101"))
+;;                              (div ((class . "thing"))
+;;                                   "Foo"
+;;                                   (div ()
+;;                                        "Yes")))))
+
+;; <note>
+;; <to>Tove</to>
+;; <from>Jani</from>
+;; <heading>Reminder</heading>
+;; <body>Don't forget me this weekend!</body>
+;; </note>
+
+;; (ivy-mode 1)
+;; (setq ivy-use-virtual-buffers t)
+
+(require 'ivy)
+(winner-mode 1)
+
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+  ("k" text-scale-increase "in")
+  ("j" text-scale-decrease "out"))
+
+(require 'windmove)
+
+(defun hydra-move-splitter-left (arg)
+  "Move window splitter left."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'right))
+      (shrink-window-horizontally arg)
+    (enlarge-window-horizontally arg)))
+
+(defun hydra-move-splitter-right (arg)
+  "Move window splitter right."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'right))
+      (enlarge-window-horizontally arg)
+    (shrink-window-horizontally arg)))
+
+(defun hydra-move-splitter-up (arg)
+  "Move window splitter up."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (enlarge-window arg)
+    (shrink-window arg)))
+
+(defun hydra-move-splitter-down (arg)
+  "Move window splitter down."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (shrink-window arg)
+    (enlarge-window arg)))
+
+
+(defhydra hydra-splitter (global-map "C-M-s")
+  "splitter"
+  ("h" hydra-move-splitter-left)
+  ("j" hydra-move-splitter-down)
+  ("k" hydra-move-splitter-up)
+  ("l" hydra-move-splitter-right))
+
+(defhydra hydra-diff-hl (global-map "C-M-v"
+                                    :pre (diff-hl-mode)
+                                    :post (diff-hl-mode))
+  "diff-hl"
+  ("n" diff-hl-next-hunk)
+  ("p" diff-hl-previous-hunk)
+  ("v" diff-hl-diff-goto-hunk))
+
+(add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
+
+(require 'helm-projectile)
+
+(defvar helm-source-notmuch-search
+  '((name . "Search notmuch")
+    (dummy)
+    (action . notmuch-search)))
+
+
+(defun hotspots ()
+  "helm interface to my hotspots, which includes my locations,
+org-files and bookmarks"
+  (interactive)
+  (helm :sources `(((name . "Mail")
+                    (candidates . (("Mail" . (lambda () (switch-to-mail-persp)))))
+                    (action . (("Open" . (lambda (x) (funcall x))))))
+                   ((name . "My Locations")
+                    (candidates . (("HOME" . "~/")))
+                    (action . (("Open" . (lambda (x) (find-file x)))))) 
+                   helm-source-recentf
+                   helm-source-projectile-projects
+                   helm-source-bookmarks
+                   helm-source-bookmark-set
+                   helm-source-notmuch-search)
+        :buffer "*hotspots*"))
+
+
+(add-hook 'notmuch-search-hook (lambda ()
+                                 (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
+                                 (buffer-face-mode)))
+
+(add-hook 'dired-mode-hook (lambda ()
+                             (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
+                             (buffer-face-mode)
+                             (dired-hide-details-mode)
+                             (dired-omit-mode)))
+
+(require 'ob-shell)
+
+
+(setq lexical-binding t)
+(defun choose-and-insert (key pairs)
+  (global-set-key (kbd key) (lambda () (interactive)
+                              (insert (helm :sources `((name . "Choose : ")
+                                                       (candidates . ,pairs)
+                                                       (pattern-transformer . (lambda (pattern) (regexp-quote pattern)))
+                                                       (action . identity))
+                                            :buffer "*promos*"
+                                            :keymap helm-buffer-map)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Load Bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load "~/.emacs.d/bindings")
 
+(require 'diminish)
+(diminish'undo-tree-mode)
+(diminish 'yas-minor-mode)
+(diminish 'company-mode)
+(diminish 'projectile-mode)
+(diminish 'smartparens-mode)
+(diminish 'window-number-mode)
+(put 'narrow-to-region 'disabled nil)
