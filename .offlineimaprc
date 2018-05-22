@@ -21,7 +21,7 @@ remoterepository = GmailRemote
 
 [Repository GmailLocal]
 type = Maildir
-localfolders = ~/Mail/Gmail
+localfolders = /mnt/data/Mail/Gmail
 
 [Repository GmailRemote]
 type = Gmail
@@ -46,7 +46,7 @@ remoterepository = InfuyRemote
 
 [Repository InfuyLocal]
 type = Maildir
-localfolders = ~/Mail/Infuy
+localfolders = /mnt/data/Mail/Infuy
 
 [Repository InfuyRemote]
 type = IMAP
@@ -65,7 +65,7 @@ remotehost = secure.emailsrvr.com
 
 # [Repository IBLocal]
 # type = Maildir
-# localfolders = ~/Mail/Internetbrands
+# localfolders = /mnt/data/Mail/Internetbrands
 
 # [Repository IBRemote]
 # type = Gmail

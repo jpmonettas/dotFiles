@@ -37,8 +37,6 @@
 
 
 (define-key clojure-mode-map (kbd "C->") 'cljr-thread)
-(define-key clojure-mode-map (kbd "C-<down>") 'cljr-cycle-coll)
-(define-key clojure-mode-map (kbd "C-<up>") 'cljr-cycle-coll)
 (define-key clojure-mode-map (kbd "C-<") 'cljr-unwind)
 
 (global-set-key (kbd "C-2") 'duplicate-current-line-or-region)
@@ -162,8 +160,12 @@
 ;; (global-set-key "\C-s" 'swiper)
 ;; (global-set-key "\C-r" 'swiper)
 (global-set-key [f6] 'ivy-resume)
-(global-set-key [f11] 'diff-hl-mode)
+(global-set-key [f11] 'helm-bookmarks)
 (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
 (global-set-key (kbd "C-<escape>") 'hotspots)
 (global-set-key (kbd "C-M-h") 'highlight-lines-matching-regexp)
 (global-set-key (kbd "C-M-S-H") 'unhighlight-regexp)
+
+(define-key org-mode-map (kbd "M-+") 'jpmonettas/add-int-at-point)
+
+(define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)

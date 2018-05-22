@@ -1,5 +1,5 @@
 [database]
-path=/home/jmonetta/Mail
+path=/mnt/data/Mail
 
 [new]
 tags=unread;inbox

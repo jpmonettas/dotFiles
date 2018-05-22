@@ -1,22 +1,24 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 (load custom-file)
-
-
+(load "~/non-rep-software/debux.el")
 
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
-(set-face-attribute 'default nil :font "M+ 1mn-11")
-;;(set-face-attribute 'default nil :font "Source Code Pro-11")
+(set-face-attribute 'default nil :font "M+ 1mn-10")
+;;(set-face-attribute 'default nil :font "Source Code Pro-9")
 
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
-(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+;; (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+
 
 (package-initialize)
+
+;; (add-to-list 'load-path "~/my-projects/cider")
 
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -43,7 +45,6 @@
                  auto-complete
                  avy
                  browse-kill-ring
-                 cider
                  cider-spy
                  clj-refactor
                  clojure-mode
@@ -52,10 +53,10 @@
                  company
                  dash
                  diminish
-                 dired-hacks-utils
-                 dired-open
-                 dired-rainbow
-                 dired-subtree
+                 ;; dired-hacks-utils
+                 ;; dired-open
+                 ;; dired-rainbow
+                 ;; dired-subtree
                  dot-mode
                  easy-kill
                  easy-kill-extras
@@ -74,7 +75,6 @@
                  flycheck-pos-tip
                  flymake-easy
                  flymake-sass
-                 guide-key
                  helm
                  helm-projectile
                  helm-swoop
@@ -83,7 +83,7 @@
                  hydra
                  ido-at-point
                  ido-completing-read+
-                 ido-ubiquitous
+                 ;; ido-ubiquitous
                  ido-vertical-mode
                  iedit
                  ;; ivy
@@ -150,14 +150,19 @@
       (package-install p))))
 
 
+
+(require 'ido-completing-read+)
+(ido-ubiquitous-mode)
+
+
 (global-hl-line-mode)
 
 (require 'smex)
 
 (require 'ace-window)
 
-(require 'ido-ubiquitous)
-(ido-ubiquitous-mode 1)
+;; (require 'ido-ubiquitous)
+;; (ido-ubiquitous-mode 1)
 
 
 (require 'ido-vertical-mode)
@@ -203,6 +208,7 @@
 (push '("*helm projectile all*" :height 0.5) popwin:special-display-config)
 (push '("*helm etags*" :height 0.5) popwin:special-display-config)
 (push '("*helm M-x*" :height 0.5) popwin:special-display-config)
+(push '("*helm bookmarks*" :height 0.5) popwin:special-display-config)
 
 (push '("*helm-mode-cider-repl-set-ns*" :height 0.5) popwin:special-display-config)
 (push '("*helm-mode-nil*" :height 0.5) popwin:special-display-config)
@@ -211,7 +217,8 @@
 
 
 ;;(load-theme 'solarized-light t)
-(load-theme 'sanityinc-tomorrow-eighties t)
+;; (load-theme 'zenburn)
+(load-theme 'apropospriate-light)
 ;;(load-theme 'solarized-dark t)
 ;; (load-theme 'zenburn)
 
@@ -403,6 +410,8 @@ Adapted from `flyspell-correct-word-before-point'."
 (setq projectile-enable-caching t)
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-file-exists-remote-cache-expire nil)
+(add-to-list 'projectile-globally-ignored-directories "node_modules")
+(add-to-list 'projectile-globally-ignored-directories "android")
 
 
 (setq helm-swoop-split-direction 'split-window-horizontally)
@@ -421,7 +430,6 @@ Adapted from `flyspell-correct-word-before-point'."
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;;; Clojure
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (require 'cider)
 
 (add-hook 'cider-mode-hook 'eldoc-mode)
@@ -432,6 +440,9 @@ Adapted from `flyspell-correct-word-before-point'."
 
 (setq cider-refresh-before-fn "user/stop-system!"
       cider-refresh-after-fn "user/start-system!")
+
+(setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+;; (setq cider-cljs-lein-repl "(do (use 'inspectable.repl) (start-cljs) (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
 
 ;; ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; ;;; Utils
@@ -464,6 +475,15 @@ Adapted from `flyspell-correct-word-before-point'."
 (defun jpmonettas/camelize-region (separator-char)
   (interactive (list (read-string "Separator char :")))
   (transform-region (lambda (s) (camelize s separator-char))))
+
+(defun jpmonettas/add-int-at-point (add)
+  (interactive (list (string-to-int (read-string "How much :"))))
+  (let* ((added (-> (word-at-point)
+                    (string-to-int)
+                    (+ add)))
+         (num-bounds (bounds-of-thing-at-point 'word)))
+    (kill-region (car num-bounds) (cdr num-bounds))
+    (insert-string added)))
 
 (defun jpmonettas/camelize-method-region (separator-char)
   (interactive (list (read-string "Separator char :")))
@@ -525,13 +545,13 @@ by using nxml's indentation rules."
     (interactive)
     (when (equal major-mode 'dired-mode)
       (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
-	  (progn
-	    (set (make-local-variable 'dired-dotfiles-show-p) nil)
-	    (message "h")
-	    (dired-mark-files-regexp "^\\\.")
-	    (dired-do-kill-lines))
-	(progn (revert-buffer) ; otherwise just revert to re-show
-	       (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+      (progn
+        (set (make-local-variable 'dired-dotfiles-show-p) nil)
+        (message "h")
+        (dired-mark-files-regexp "^\\\.")
+        (dired-do-kill-lines))
+    (progn (revert-buffer) ; otherwise just revert to re-show
+           (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -572,7 +592,8 @@ by using nxml's indentation rules."
 (require 'smart-mode-line)
 (sml/setup)
 
-(sml/apply-theme 'dark nil t)
+;;(sml/apply-theme 'dark nil t)
+(sml/apply-theme 'respectful nil t)
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -603,12 +624,12 @@ by using nxml's indentation rules."
 
 
 (defun enable-lisp-minors ()
-  (rainbow-delimiters-mode))
+  ;;(rainbow-delimiters-mode)
+  )
 
 
 (add-hook 'clojure-mode-hook 'enable-lisp-minors)
 (add-hook 'emacs-lisp-mode-hook 'enable-lisp-minors)
-
 
 ;;window-number mode
 (require 'window-number)
@@ -633,7 +654,6 @@ by using nxml's indentation rules."
 (global-undo-tree-mode t)
 
 (require 'clj-refactor)
-
 (defun my-clojure-mode-hook ()
     (clj-refactor-mode 1)
     (yas-minor-mode 1) ; for adding require/use/import
@@ -799,15 +819,15 @@ Symbols matching the text at point are put first in the completion list."
                              (cond
                               ((and (listp symbol) (imenu--subalist-p symbol))
                                (addsymbols symbol))
-                              
+
                               ((listp symbol)
                                (setq name (car symbol))
                                (setq position (cdr symbol)))
-                              
+
                               ((stringp symbol)
                                (setq name symbol)
                                (setq position (get-text-property 1 'org-imenu-marker symbol))))
-                             
+
                              (unless (or (null position) (null name))
                                (add-to-list 'symbol-names name)
                                (add-to-list 'name-and-pos (cons name position))))))))
@@ -898,18 +918,6 @@ Symbols matching the text at point are put first in the completion list."
   (yank)
   (exchange-point-and-mark))
 
-(require 'guide-key)
-
-(defun guide-key/my-hook-function-for-org-mode ()
-  (guide-key/add-local-guide-key-sequence "C-c")
-  (guide-key/add-local-guide-key-sequence "C-c C-x"))
-
-(add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
-
-(setq guide-key/guide-key-sequence '("C-c p" "C-x x" "C-c C-r" "C-x r"))
-(guide-key-mode 1)  ; Enable guide-key-mode
-
-
 (setq helm-external-programs-associations
       '(("jpg" . "ristretto")
         ("jpeg" . "ristretto")
@@ -999,12 +1007,12 @@ point reaches the beginning or end of the buffer, stop there."
             (define-key java-mode-map (kbd "C-M-o") 'eclim-java-import-organize)
             (define-key java-mode-map (kbd "C-M-3") 'eclim-java-find-references)
             (define-key java-mode-map (kbd "M-.") 'eclim-java-find-declaration)
-            (define-key java-mode-map (kbd "C-c C-e t") 'jpmonettas/run-test-at-point) 
-            (define-key java-mode-map (kbd "C-c C-e R") 'jpmonettas/run-current-proy-with-jetty) 
+            (define-key java-mode-map (kbd "C-c C-e t") 'jpmonettas/run-test-at-point)
+            (define-key java-mode-map (kbd "C-c C-e R") 'jpmonettas/run-current-proy-with-jetty)
             (setq c-basic-offset 4)
             (setq indent-tabs-mode t)
             (setq tab-width 4)))
- 
+
 (add-to-list 'auto-mode-alist '("\\.jsp$" . web-mode))
 
 (require 'java-file-create)
@@ -1163,7 +1171,7 @@ org-files and bookmarks"
                     (action . (("Open" . (lambda (x) (funcall x))))))
                    ((name . "My Locations")
                     (candidates . (("HOME" . "~/")))
-                    (action . (("Open" . (lambda (x) (find-file x)))))) 
+                    (action . (("Open" . (lambda (x) (find-file x))))))
                    helm-source-recentf
                    helm-source-projectile-projects
                    helm-source-bookmarks
@@ -1176,11 +1184,11 @@ org-files and bookmarks"
                                  (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
                                  (buffer-face-mode)))
 
-(add-hook 'dired-mode-hook (lambda ()
-                             (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
-                             (buffer-face-mode)
-                             (dired-hide-details-mode)
-                             (dired-omit-mode)))
+;; (add-hook 'dired-mode-hook (lambda ()
+;;                              (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
+;;                              (buffer-face-mode)
+;;                              (dired-hide-details-mode)
+;;                              (dired-omit-mode)))
 
 (require 'ob-shell)
 
@@ -1209,3 +1217,36 @@ org-files and bookmarks"
 (diminish 'smartparens-mode)
 (diminish 'window-number-mode)
 (put 'narrow-to-region 'disabled nil)
+
+
+;;;;;;;;;
+;; AVR ;;
+;;;;;;;;;
+
+(defun avr-build () (interactive) (shell-command "make build"))
+(defun avr-flash () (interactive) (shell-command "make flash"))
+(defun avr-run-avarice () (interactive) (async-shell-command "make debug"))
+(defun avr-all () (interactive) (shell-command "make all"))
+
+(defun avr-datasheets ()
+  (interactive)
+  (let* ((helm-find-files-actions (helm-make-actions
+                                 "Open file externally `C-c C-x, C-u to choose'" 'helm-open-file-externally)))
+  (helm-find-files-1 "/home/jmonetta/datasheets/" )))
+
+(defhydra hydra-avr (:color blue)
+  ("a" avr-all "Build and flash")
+  ("b" avr-build "Build")
+  ("f" avr-flash "Flash into device")
+  ("r" avr-run-avarice "Run avarice server")
+  ("d" avr-datasheets "Datasheets"))
+
+(require 'cc-mode)
+(define-key c-mode-map (kbd "C-<return>") 'hydra-avr/body)
+(define-key c++-mode-map (kbd "C-<return>") 'hydra-avr/body)
+
+(require 'company-clang)
+
+;; (load "~/my-projects/district0x/indents/district0x.el")
+
+(define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
