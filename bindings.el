@@ -55,6 +55,7 @@
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
 (define-key global-map (kbd "<f12>") 'magit-status)
+(define-key clojure-mode-map (kbd "<f8>") 'cider-connection-browser)
 
 (define-key global-map (kbd "C-x m") 'switch-to-mail-persp)
 
@@ -169,3 +170,6 @@
 (define-key org-mode-map (kbd "M-+") 'jpmonettas/add-int-at-point)
 
 (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
+
+(global-set-key (kbd "C-9") 'sp-forward-barf-sexp)
+(global-set-key (kbd "C-0") 'sp-forward-slurp-sexp)

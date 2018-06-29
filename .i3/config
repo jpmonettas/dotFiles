@@ -120,8 +120,6 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
-bindsym $mod+p [class="Pidgin" window_role="conversation"] scratchpad show
-bindsym $mod+o [class="Skype" window_role="ConversationsWindow"] scratchpad show
 bindsym $mod+t [class="Gnome-terminal"] scratchpad show
 # bindsym $mod+t [title="EmacsTerminals"] scratchpad show
 
@@ -206,9 +204,7 @@ bar{
 focus_follows_mouse no
 
 bindsym $mod+x [title="emacs@debianThinkpad"] focus
-bindsym $mod+c [class="google-chrome"] focus
-bindsym $mod+f [class="Conkeror"] focus
-bindsym $mod+q [class="workbench-WbStarter"] focus
+bindsym $mod+c [class="Google-chrome"] focus
 bindsym $mod+g [title="Ganache"] scratchpad show
 #bindsym $mod+m workspace "6:Email"
 bindsym $mod+e [class="jetbrains-idea-ce"] focus
