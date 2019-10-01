@@ -165,7 +165,6 @@
   :bind
   ("C-x C-f" . helm-find-files)
   :config
-  (define-key helm-find-files-map (kbd "<C-return>") ')
   (setq helm-external-programs-associations
       '(("jpg" . "ristretto")
         ("jpeg" . "ristretto")
