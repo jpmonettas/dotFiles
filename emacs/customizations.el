@@ -16,23 +16,25 @@
  '(cider-clojure-parameters
    "-A:dev:test -e '(require (quote cider-nrepl.main)) (cider-nrepl.main/init [\"cider.nrepl/cider-middleware\"])'")
  '(cider-debug-use-overlays t)
- '(cider-default-cljs-repl "Figwheel")
- '(cider-lein-parameters "repl :headless :host ::")
+ '(cider-default-cljs-repl nil)
+ '(cider-inject-dependencies-at-jack-in t)
+ '(cider-lein-parameters "with-profile +dev repl :headless :host ::")
+ '(cider-repl-display-help-banner nil)
  '(cider-request-dispatch (quote dynamic))
  '(cider-show-error-buffer t)
  '(cider-stacktrace-print-length 5)
  '(cider-stacktrace-print-level 1)
+ '(column-number-mode t)
  '(company-dabbrev-code-ignore-case t)
- '(company-idle-delay 0)
+ '(company-idle-delay nil)
  '(confirm-kill-emacs (quote y-or-n-p))
  '(cursor-type (quote box))
- '(custom-enabled-themes (quote (sanityinc-solarized-light)))
  '(custom-file "/home/jmonetta/.emacs.d/customizations.el")
  '(custom-safe-themes
    (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" "96998f6f11ef9f551b427b8853d947a7857ea5a578c75aa9c4e7c73fe04d10b4" "3cd28471e80be3bd2657ca3f03fbb2884ab669662271794360866ab60b6cb6e6" "b3775ba758e7d31f3bb849e7c9e48ff60929a792961a2d536edec8f68c671ca5" "3d5ef3d7ed58c9ad321f05360ad8a6b24585b9c49abcee67bdcbb0fe583a6950" "e9776d12e4ccb722a2a732c6e80423331bcb93f02e089ba2a4b02e85de1cf00e" "e0d42a58c84161a0744ceab595370cbe290949968ab62273aed6212df0ea94b4" "58c6711a3b568437bab07a30385d34aacf64156cc5137ea20e799984f4227265" "c48551a5fb7b9fc019bf3f61ebf14cf7c9cdca79bcb2a4219195371c02268f11" "72a81c54c97b9e5efcc3ea214382615649ebb539cb4f2fe3a46cd12af72c7607" "9b59e147dbbde5e638ea1cde5ec0a358d5f269d27bd2b893a0947c4a867e14c1" "c3d4af771cbe0501d5a865656802788a9a0ff9cf10a7df704ec8b8ef69017c68" "e11569fd7e31321a33358ee4b232c2d3cf05caccd90f896e1df6cab228191109" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "2d16f85f22f1841390dfc1234bd5acfcce202d9bb1512aa8eabd0068051ac8c3" "8577da1641ed4bdf255341ca92e3d0e49c9f4d574458f09ce78159690442cade" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d" "b06aaf5cefc4043ba018ca497a9414141341cb5a2152db84a9a80020d35644d1" "05c3bc4eb1219953a4f182e10de1f7466d28987f48d647c01f1f0037ff35ab9a" "b8b5c353e73470377f2111fddb0ea652d35ce98e0a27a5c592d2ab9f66855106" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "e16a771a13a202ee6e276d06098bc77f008b73bbac4d526f160faa2d76c1dd0e" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "3a727bdc09a7a141e58925258b6e873c65ccf393b2240c51553098ca93957723" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "ccba14aeee25adc49effe868f1820dfbf28b557353e4f69ca55de50642caf63f" "5bff694d9bd3791807c205d8adf96817ee1e572654f6ddc5e1e58b0488369f9d" default)))
+    ("b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" "73c69e346ec1cb3d1508c2447f6518a6e582851792a8c0e57a22d6b9948071b4" "4ed6edbad2c19b775d5b22efcbd117b395e4194da2014e28c9e80f5f3fb93f36" "af4dc574b2f96f5345d55b98af024e2db9b9bbf1872b3132bc66dffbf5e1ba1d" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "7e78a1030293619094ea6ae80a7579a562068087080e01c2b8b503b27900165c" "6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "61ae193bf16ef5c18198fbb4516f0c61a88f7b55b693a3b32d261d8501c4a54b" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" "96998f6f11ef9f551b427b8853d947a7857ea5a578c75aa9c4e7c73fe04d10b4" "3cd28471e80be3bd2657ca3f03fbb2884ab669662271794360866ab60b6cb6e6" "b3775ba758e7d31f3bb849e7c9e48ff60929a792961a2d536edec8f68c671ca5" "3d5ef3d7ed58c9ad321f05360ad8a6b24585b9c49abcee67bdcbb0fe583a6950" "e9776d12e4ccb722a2a732c6e80423331bcb93f02e089ba2a4b02e85de1cf00e" "e0d42a58c84161a0744ceab595370cbe290949968ab62273aed6212df0ea94b4" "58c6711a3b568437bab07a30385d34aacf64156cc5137ea20e799984f4227265" "c48551a5fb7b9fc019bf3f61ebf14cf7c9cdca79bcb2a4219195371c02268f11" "72a81c54c97b9e5efcc3ea214382615649ebb539cb4f2fe3a46cd12af72c7607" "9b59e147dbbde5e638ea1cde5ec0a358d5f269d27bd2b893a0947c4a867e14c1" "c3d4af771cbe0501d5a865656802788a9a0ff9cf10a7df704ec8b8ef69017c68" "e11569fd7e31321a33358ee4b232c2d3cf05caccd90f896e1df6cab228191109" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "2d16f85f22f1841390dfc1234bd5acfcce202d9bb1512aa8eabd0068051ac8c3" "8577da1641ed4bdf255341ca92e3d0e49c9f4d574458f09ce78159690442cade" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d" "b06aaf5cefc4043ba018ca497a9414141341cb5a2152db84a9a80020d35644d1" "05c3bc4eb1219953a4f182e10de1f7466d28987f48d647c01f1f0037ff35ab9a" "b8b5c353e73470377f2111fddb0ea652d35ce98e0a27a5c592d2ab9f66855106" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "e16a771a13a202ee6e276d06098bc77f008b73bbac4d526f160faa2d76c1dd0e" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "3a727bdc09a7a141e58925258b6e873c65ccf393b2240c51553098ca93957723" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "ccba14aeee25adc49effe868f1820dfbf28b557353e4f69ca55de50642caf63f" "5bff694d9bd3791807c205d8adf96817ee1e572654f6ddc5e1e58b0488369f9d" default)))
  '(dired-hide-details-hide-information-lines t)
- '(dired-listing-switches "-al")
+ '(dired-listing-switches "-alg")
  '(dired-omit-files "^\\.?#\\|^\\..*$\\|^\\.\\.$")
  '(dired-recursive-deletes (quote always))
  '(eclim-eclipse-dirs (quote ("~/non-rep-software/eclipse/")))
@@ -54,9 +56,12 @@
  '(helm-buffer-max-length 50)
  '(helm-external-programs-associations
    (quote
-    (("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . ""))) t)
+    (("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . ""))))
  '(helm-ff-auto-update-initial-value nil)
  '(helm-ff-ido-style-backspace t)
+ '(helm-grep-ignored-directories
+   (quote
+    ("SCCS/" "RCS/" "CVS/" "MCVS/" ".svn/" ".git/" ".hg/" ".bzr/" "_MTN/" "_darcs/" "{arch}/" ".gvfs/" "resources/public/js/compiled/")))
  '(helm-projectile-sources-list
    (quote
     (helm-source-projectile-files-list helm-source-projectile-buffers-list helm-source-projectile-recentf-list)))
@@ -66,6 +71,8 @@
  '(initial-scratch-message nil)
  '(js-indent-level 2)
  '(json-reformat:indent-width 2)
+ '(magit-diff-section-arguments (quote ("--no-ext-diff")))
+ '(magit-display-buffer-function (quote magit-display-buffer-same-window-except-diff-v1))
  '(magit-merge-arguments (quote ("--ff-only")))
  '(magit-use-overlays nil)
  '(menu-bar-mode nil)
@@ -97,7 +104,7 @@
       (notmuch-apply-face tag
                           (quote
                            (:foreground "black" :background "red")))))))
- '(nrepl-sync-request-timeout 40)
+ '(nrepl-sync-request-timeout 120)
  '(org-columns-default-format "%80ITEM(Task) %10TODO(Todo) %10Time_Estimate{:} %CLOCKSUM")
  '(org-confirm-babel-evaluate nil)
  '(org-emphasis-alist
@@ -109,12 +116,13 @@
      ("+"
       (:strike-through t)))))
  '(org-export-babel-evaluate nil)
+ '(org-export-use-babel nil)
  '(org-hide-leading-stars t)
  '(org-html-postamble nil)
  '(org-src-fontify-natively t)
  '(package-selected-packages
    (quote
-    (spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode persp-projectile paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets clj-refactor cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider)))
+    (easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag persp-projectile perspective clj-refactor rust-mode cider clojure-mode elpy doom-themes projectile rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider)))
  '(paradox-automatically-star t)
  '(pretty-symbol-patterns
    (quote
@@ -145,7 +153,7 @@
  '(projectile-completion-system (quote ido))
  '(projectile-globally-ignored-directories
    (quote
-    ("android" "node_modules" ".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" ".cljs_node_repl")))
+    ("android" "node_modules" ".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" ".cljs_node_repl" ".shadow-cljs" ".cpcache")))
  '(projectile-switch-project-action (quote projectile-find-file))
  '(recentf-auto-cleanup (quote never))
  '(safe-local-variable-values
@@ -211,14 +219,13 @@
  '(ediff-odd-diff-A ((((class color) (background dark)) (:background "dark green"))))
  '(ediff-odd-diff-B ((((class color) (background dark)) (:background "dark red"))))
  '(eval-sexp-fu-flash ((((class color) (background dark)) (:background "grey15" :foreground "DeepPink3"))) t)
- '(magit-blame-date ((t (:foreground "magenta"))))
- '(magit-blame-hash ((t (:foreground "magenta"))))
+ '(magit-blame-date ((t (:foreground "magenta"))) t)
+ '(magit-blame-hash ((t (:foreground "magenta"))) t)
  '(magit-blame-heading ((t (:foreground "dim gray"))))
- '(magit-blame-name ((t (:background "dark magenta" :foreground "light gray"))))
+ '(magit-blame-name ((t (:background "dark magenta" :foreground "light gray"))) t)
  '(magit-diff-added-highlight ((t (:background "#C5E1A5" :foreground "#3a3a3a"))))
  '(magit-diff-removed-highlight ((t (:background "#E57373" :foreground "#3a3a3a"))))
  '(magit-diff-their-highlight ((t (:background "#C5E1A5" :foreground "#3a3a3a"))))
- '(mode-line ((t (:background "#073642" :foreground "white" :box nil :underline nil :slant normal :weight normal))))
  '(mumamo-background-chunk-major ((((class color) (background dark)) (:background "black"))) t)
  '(mumamo-background-chunk-submode1 ((((class color) (background dark)) (:background "black"))) t)
  '(notmuch-message-summary-face ((t (:background "#404040"))))
@@ -236,5 +243,4 @@
  '(persp-selected-face ((t (:foreground "#d33682" :weight bold))))
  '(powerline-active1 ((t (:inherit mode-line :background "grey22" :weight extra-bold))) t)
  '(powerline-inactive1 ((t (:inherit mode-line-inactive :background "grey11"))) t)
- '(powerline-inactive2 ((t (:inherit mode-line-inactive :background "grey11"))) t)
- '(secondary-selection ((t (:background "purple4")))))
+ '(powerline-inactive2 ((t (:inherit mode-line-inactive :background "grey11"))) t))

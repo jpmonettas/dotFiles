@@ -1,5 +1,4 @@
 require("clicks-in-new-buffer.js")
-require("new-tabs.js");
 define_key(content_buffer_normal_keymap, "C-o", "follow");
 
 hint_digits="asdfghjkl";
@@ -56,3 +55,11 @@ interactive("list-bookmarks",
             "  background-color: #00ffff !important;\n"+
             "  line-height: 18px !important;\n"+
             "}"));
+
+// Webjump oneliners
+define_webjump("y", "http://www.youtube.com/results?search_query=%s&search=Search");
+define_webjump("g", "http://www.google.com/search?q=%s");
+define_webjump("ghjb", "https://github.com/jpmonettas?tab=repositories&q=%s");
+define_webjump("ghd", "https://github.com/district0x?q=%s");
+define_webjump("ten", "http://translate.google.com/translate_t#auto|en|%s");
+define_webjump("tes", "http://translate.google.com/translate_t#auto|es|%s");
