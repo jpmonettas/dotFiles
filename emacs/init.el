@@ -1,6 +1,10 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 (load custom-file)
 
+;; Super hack for debian testing
+(setq package-check-signature nil)
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
@@ -75,6 +79,18 @@
 (use-package browse-kill-ring
   :ensure t)
 
+(add-to-list 'load-path "/home/jmonetta/my-projects/cider")
+(load "cider-autoloads" t t)
+
+;; (require 'cider)
+;; (setq nrepl-log-messages t)
+;; (setq cider-prompt-save-file-on-load nil)
+;; (setq nrepl-hide-special-buffers t)
+;; (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
+;; (setq cider-refresh-before-fn "user/stop-system!"
+;;       cider-refresh-after-fn "user/start-system!")
+;; (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
+;; (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
 (use-package cider
   :ensure t
   :config
@@ -84,7 +100,8 @@
   (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
   (setq cider-refresh-before-fn "user/stop-system!"
         cider-refresh-after-fn "user/start-system!")
-  (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input))
+  (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
+  (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer))
 
 (use-package clj-refactor
   :ensure t
@@ -112,7 +129,7 @@
 
 (use-package dired
   :config
-  (add-hook 'dired-after-readin-hook '(lambda () (dired-dotfiles-toggle)))
+  ;; (add-hook 'dired-after-readin-hook '(lambda () (dired-dotfiles-toggle)))
   (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
   (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
   (define-key dired-mode-map (kbd "f") 'find-name-dired)
@@ -208,11 +225,13 @@
   :ensure t)
 
 (use-package perspective
+  :pin "MELPA"
   :ensure t
   :config
   (persp-mode))
 
 (use-package persp-projectile
+  :pin "MELPA"
   :ensure t)
 
 (use-package popwin
@@ -239,6 +258,7 @@
   (push '("*helm-mode-nil*" :height 0.5) popwin:special-display-config))
 
 (use-package projectile
+  :pin "MELPA"
   :ensure t
   :bind
   ("C-S-h" . projectile-find-file)
@@ -248,6 +268,9 @@
   (setq projectile-file-exists-remote-cache-expire nil)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (add-to-list 'projectile-globally-ignored-directories "node_modules"))
+
+(use-package restclient
+  :ensure t)
 
 (use-package smart-mode-line
   :ensure t
@@ -271,8 +294,12 @@
   :config
   (global-undo-tree-mode t))
 
-(use-package use-package
+(use-package company-solidity
   :ensure t)
+
+(use-package solidity-mode
+  :ensure t
+  :init (setq solidity-solc-path "/home/jmonetta/bin/solc"))
 
 (use-package window-number
   :ensure t)
@@ -477,6 +504,17 @@ by using nxml's indentation rules."
     (progn (revert-buffer) ; otherwise just revert to re-show
            (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
+;; Cider enhancements
+
+(defconst cider-required-middleware-version "0.30.0"
+  "The CIDER nREPL version that's known to work properly with CIDER.")
+
+(defvar cider-jack-in-lein-plugins nil
+  "")
+(put 'cider-jack-in-lein-plugins 'risky-local-variable t)
+(cider-add-to-alist 'cider-jack-in-lein-plugins
+                    "cider/cider-nrepl" cider-required-middleware-version)
+
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
 ;;;;;;;;;;;;;;
@@ -541,3 +579,4 @@ by using nxml's indentation rules."
 (load "district0x.el")
 
 (load "avr.el")
+(put 'dired-find-alternate-file 'disabled nil)

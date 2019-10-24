@@ -13,12 +13,16 @@
    "(cemerick.piggieback/cljs-repl (cljs.repl.rhino/repl-env))" t)
  '(cider-cljs-repl
    "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
+ '(cider-clojure-cli-parameters "-A:profiler:dev:test -m nrepl.cmdline --middleware '%s'")
  '(cider-clojure-parameters
    "-A:dev:test -e '(require (quote cider-nrepl.main)) (cider-nrepl.main/init [\"cider.nrepl/cider-middleware\"])'")
  '(cider-debug-use-overlays t)
  '(cider-default-cljs-repl nil)
  '(cider-inject-dependencies-at-jack-in t)
+ '(cider-inspector-page-size 200)
+ '(cider-lein-command "lein")
  '(cider-lein-parameters "with-profile +dev repl :headless :host ::")
+ '(cider-print-options (quote (("length" 10) ("level" 7))))
  '(cider-repl-display-help-banner nil)
  '(cider-request-dispatch (quote dynamic))
  '(cider-show-error-buffer t)
@@ -56,7 +60,7 @@
  '(helm-buffer-max-length 50)
  '(helm-external-programs-associations
    (quote
-    (("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . ""))))
+    (("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . ""))) t)
  '(helm-ff-auto-update-initial-value nil)
  '(helm-ff-ido-style-backspace t)
  '(helm-grep-ignored-directories
@@ -71,6 +75,7 @@
  '(initial-scratch-message nil)
  '(js-indent-level 2)
  '(json-reformat:indent-width 2)
+ '(magit-diff-arguments (quote ("--ignore-all-space" "--no-ext-diff" "--stat")))
  '(magit-diff-section-arguments (quote ("--no-ext-diff")))
  '(magit-display-buffer-function (quote magit-display-buffer-same-window-except-diff-v1))
  '(magit-merge-arguments (quote ("--ff-only")))
@@ -122,7 +127,7 @@
  '(org-src-fontify-natively t)
  '(package-selected-packages
    (quote
-    (easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag persp-projectile perspective clj-refactor rust-mode cider clojure-mode elpy doom-themes projectile rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider)))
+    (company-solidity easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag clj-refactor rust-mode cider clojure-mode elpy doom-themes rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider)))
  '(paradox-automatically-star t)
  '(pretty-symbol-patterns
    (quote
