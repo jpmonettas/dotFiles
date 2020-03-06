@@ -140,10 +140,11 @@ mode "resize" {
         bindsym semicolon resize grow width 70 px or 70 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 70 px or 70 ppt
-        bindsym Down resize grow height 70 px or 70 ppt
-        bindsym Up resize shrink height 70 px or 70 ppt
-        bindsym Right resize grow width 70 px or 70 ppt
+         # same bindings, but for the arrow keys
+        bindcode 113 resize shrink width 10 px or 10 ppt
+        bindcode 116 resize grow height 10 px or 10 ppt
+        bindcode 111 resize shrink height 10 px or 10 ppt
+        bindcode 114 resize grow width 10 px or 10 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -158,7 +159,7 @@ bar {
         tray_output primary
         font pango:DejaVu Sans Mono, Awesome 8
         output LVDS-1
-        status_command py3status -c ~/.i3status.conf -i ~/.i3/py3status/
+        #status_command py3status -c ~/.i3status.conf -i ~/.i3/py3status/
         position top
         colors {
             # solarized
@@ -236,6 +237,7 @@ exec pa-applet --disable-notifications
 
 
 for_window [class="Pidgin"] floating enable
+for_window [class="java"] floating enable
 for_window [class="Skype" title="jpmonetta - Skype*"] floating enable
 for_window [class="Skype" window_role="ConversationsWindow"] floating enable
 for_window [class="Skype" window_role="CallWindow"] floating enable
@@ -260,16 +262,13 @@ client.focused          #ECCC87 #ECCC87 #fdf6e3 #484e50
 client.focused_inactive #333333 #93a1a1 #fdf6e3 #292d2e
 client.unfocused        #333333 #93a1a1 #fdf6e3 #292d2e
 
-bindsym --release $mod+1 exec --no-startup-id import /home/jmonetta/latest-screenshot.png
-bindsym --release Print exec --no-startup-id bash /home/jmonetta/bin/current-window-screenshot.sh
-
+bindsym --release $mod+1 exec --no-startup-id /home/jmonetta/bin/screen-shot.sh
 
 floating_minimum_size 75 x 50
 
 exec --no-startup-id "btsync"
 exec --no-startup-id "redshift-gtk"
 exec --no-startup-id "xfce4-clipman"
-exec --no-startup-id "xset r rate 250 60"
 
 ### i3-gaps stuff ###
 
@@ -280,11 +279,11 @@ for_window [class="^.*"] border pixel 1
 # smart_gaps on
 
 # Smart Borders
-smart_borders on
+# smart_borders on
 
 # Set inner/outer gaps
-gaps inner 14
-gaps outer 10
+# gaps inner 14
+# gaps outer 10
 
 # Gaps mode
 set $mode_gaps Gaps: (o) outer, (i) inner

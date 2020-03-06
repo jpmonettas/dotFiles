@@ -9,7 +9,7 @@
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
 (set-face-attribute 'default nil :font "M+ 1mn-10")
-;;(set-face-attribute 'default nil :font "Source Code Pro-9")
+;;(set-face-attribute 'default nil :font "Source Code Pro-10")
 
 ;; Define package repositories
 (require 'package)
@@ -133,6 +133,7 @@
   (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
   (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
   (define-key dired-mode-map (kbd "f") 'find-name-dired)
+  (define-key dired-mode-map (kbd "l") 'dired-up-directory)
   (define-key dired-mode-map (kbd "<C-return>") 'dired-open-externally))
 
 (use-package dired-x
@@ -216,10 +217,14 @@
   ("<f12>" . magit-status)
   :init (setq magit-completing-read-function 'magit-ido-completing-read))
 
+(use-package markdown-mode
+  :ensure t)
+
 (use-package multiple-cursors
   :ensure t
   :bind
-  ("C-|" . mc/mark-next-like-this))
+  ("C-<down>" . mc/mark-next-like-this)
+  ("C-<up>" . mc/mark-previous-like-this))
 
 (use-package paredit
   :ensure t)
@@ -293,9 +298,6 @@
   :ensure t
   :config
   (global-undo-tree-mode t))
-
-(use-package company-solidity
-  :ensure t)
 
 (use-package solidity-mode
   :ensure t
@@ -515,9 +517,40 @@ by using nxml's indentation rules."
 (cider-add-to-alist 'cider-jack-in-lein-plugins
                     "cider/cider-nrepl" cider-required-middleware-version)
 
+(defvar notes-last-opened nil)
+
+(defun notes-insert-latest-screenshot ()
+  (interactive)
+  ;; ensure we have a directory to store images
+  ;; if directory already exists this is a nop
+  (condition-case nil
+      (make-directory "./notes-images")
+    (error nil))
+  (let* ((last-screenshot (car (last (directory-files "~/screenshots" t)))))
+    (copy-file last-screenshot "./notes-images/")
+    (insert (format "[[./notes-images/%s]]" (file-name-nondirectory last-screenshot)))))
+
+(defun notes-open-last ()
+  (interactive)
+  (find-file notes-last-opened))
+
+(defun notes-open-note ()
+  (interactive)
+  (let* ((all-notes (cddr (directory-files "~/notes")))
+         (selected-note (helm :sources `((name . "Notes")
+                                        (candidates . ,all-notes)
+                                        (action . identity))
+                             :buffer "*My notes*"
+                             :keymap helm-buffer-map))
+         (note-path (format "~/notes/%s/notes.org" selected-note)))
+    (find-file note-path)
+    (setq notes-last-opened note-path)))
+
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
 ;;;;;;;;;;;;;;
+
+(global-set-key (kbd "<f5>") 'notes-open-last)
 
 (global-set-key (kbd "C-9") 'sp-forward-barf-sexp)
 (global-set-key (kbd "C-0") 'sp-forward-slurp-sexp)
@@ -530,6 +563,8 @@ by using nxml's indentation rules."
 (global-set-key (kbd "M-t s") 'transpose-sexps)
 (global-set-key (kbd "M-t w") 'transpose-words)
 
+(global-set-key (kbd "M-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "M-<right>") 'enlarge-window-horizontally)
 
 (global-set-key (kbd "M-/") 'comment-or-uncomment-region)
 
@@ -580,3 +615,4 @@ by using nxml's indentation rules."
 
 (load "avr.el")
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'downcase-region 'disabled nil)

@@ -22,7 +22,7 @@
  '(cider-inspector-page-size 200)
  '(cider-lein-command "lein")
  '(cider-lein-parameters "with-profile +dev repl :headless :host ::")
- '(cider-print-options (quote (("length" 10) ("level" 7))))
+ '(cider-print-options (quote (("length" 5) ("level" 5))))
  '(cider-repl-display-help-banner nil)
  '(cider-request-dispatch (quote dynamic))
  '(cider-show-error-buffer t)
@@ -60,7 +60,7 @@
  '(helm-buffer-max-length 50)
  '(helm-external-programs-associations
    (quote
-    (("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . ""))) t)
+    (("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . ""))))
  '(helm-ff-auto-update-initial-value nil)
  '(helm-ff-ido-style-backspace t)
  '(helm-grep-ignored-directories
