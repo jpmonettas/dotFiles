@@ -1,5 +1,6 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 (load custom-file)
+;; (load "~/my-projects/basic-theme.el")
 
 ;; Super hack for debian testing
 (setq package-check-signature nil)
@@ -11,6 +12,7 @@
 (set-face-attribute 'default nil :font "M+ 1mn-10")
 ;;(set-face-attribute 'default nil :font "Source Code Pro-10")
 
+(setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.cargo/bin"))
 ;; Define package repositories
 (require 'package)
 
@@ -40,6 +42,13 @@
 
 (eval-when-compile
   (require 'use-package))
+
+(defun on-frame-open (frame)
+  (unless (display-graphic-p frame)
+    (set-face-background 'default "unspecified-bg" frame)))
+
+(on-frame-open (selected-frame))
+(add-hook 'after-make-frame-functions 'on-frame-open)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; General configs ;;
@@ -149,9 +158,7 @@
   :ensure t)
 
 (use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-nord))
+  :ensure t)
 
 (use-package easy-kill
   :ensure t
@@ -307,7 +314,8 @@
   :ensure t)
 
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :config (yas-global-mode))
 
 (use-package window-number
   :config
@@ -328,6 +336,28 @@
   :ensure t
   :config
   (which-key-mode 1))
+
+(use-package racer
+  :ensure t
+  :requires rust-mode
+  :config
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
+  (setq racer-rust-src-path
+        (concat (string-trim (shell-command-to-string "rustc --print sysroot")) "/lib/rustlib/src/rust/src")))
+
+(use-package rainbow-mode
+  :ensure t)
+
+(use-package org-bullets
+  :ensure t
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "✸" "✿" "✜" "◆" "▶"))
+  (org-ellipsis "⤵")
+  :hook (org-mode . org-bullets-mode))
+
+(load-theme 'doom-nord)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom functions and utilities ;;
@@ -537,20 +567,28 @@ by using nxml's indentation rules."
 (defun notes-open-note ()
   (interactive)
   (let* ((all-notes (cddr (directory-files "~/notes")))
-         (selected-note (helm :sources `((name . "Notes")
-                                        (candidates . ,all-notes)
-                                        (action . identity))
-                             :buffer "*My notes*"
-                             :keymap helm-buffer-map))
+         (selected-note (ido-completing-read "Notes:" all-notes))
          (note-path (format "~/notes/%s/notes.org" selected-note)))
     (find-file note-path)
     (setq notes-last-opened note-path)))
+
+(defun eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
+
 
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
 ;;;;;;;;;;;;;;
 
 (global-set-key (kbd "<f5>") 'notes-open-last)
+(global-set-key (kbd "<f6>") 'eval-and-replace)
 
 (global-set-key (kbd "C-9") 'sp-forward-barf-sexp)
 (global-set-key (kbd "C-0") 'sp-forward-slurp-sexp)
@@ -593,6 +631,7 @@ by using nxml's indentation rules."
 (global-set-key (kbd "M-O") 'persp-switch-last)
 
 (global-set-key (kbd "C-<backspace>") 'kill-whole-line)
+(global-set-key (kbd "C-<return>") 'compile)
 
 (global-set-key (kbd "M-(") 'paredit-wrap-sexp)
 (global-set-key (kbd "M-U") 'paredit-splice-sexp-killing-backward)
@@ -616,3 +655,10 @@ by using nxml's indentation rules."
 (load "avr.el")
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+(defconst prettify-symbols-alist
+  '(("#+BEGIN_SRC"  . ?→)
+    ("#+END_SRC"  . ?←)
+    (":results silent"  .?¬)))
+
+(add-hook 'org-mode-hook 'prettify-symbols-mode)

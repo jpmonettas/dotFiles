@@ -11,18 +11,13 @@ ZSH_THEME="robbyrussell"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export SUDO_EDITOR="emacsclient -nw"
-alias e="TERM=xterm-256color emacsclient -nw"
+export SUDO_EDITOR="emacsclient"
+alias e="open-in-emacs"
 alias E="sudo -e"
 alias t="tree -L 1"
 alias tt="tree -L 2"
 alias ttt="tree -L 3"
 alias tttt="tree -L 4"
-
-export MAMBOBOX_ENV=dev
-export MAMBOBOX_MUSIC_DIR=/home/jmonetta/temp/music/
-
-alias cr="svn diff http://svn.internetbrands.com/svn/rep/carsdirect/ --diff-cmd=meld -c";
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -58,9 +53,39 @@ plugins=(git mvn svn dircycle)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
-export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dawt.useSystemAAFontSettings=lcd'
+#export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+# export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dawt.useSystemAAFontSettings=lcd'
 
 eval `dircolors /home/jmonetta/non-rep-software/dircolors-solarized/dircolors.256dark`
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+list-files(){
+    ls -l;
+}
+
+tree-files(){
+    tree -L 2
+}
+zle -N list-files
+zle -N tree-files
+
+bindkey "^j" list-files
+bindkey "^h" tree-files
+
+# starts one or multiple args as programs in background
+background() {
+  for ((i=2;i<=$#;i++)); do
+    ${@[1]} ${@[$i]} &> /dev/null &
+  done
+}
+
+alias -s {pdf,PDF}='background mupdf'
+alias -s {jpg,JPG,png,PNG}='background gpicview'
+alias -s {ods,ODS,odt,ODT,odp,ODP,doc,DOC,docx,DOCX,xls,XLS,xlsx,XLSX,xlsm,XLSM,ppt,PPT,pptx,PPTX,csv,CSV}='background libreoffice'
+alias -s {html,HTML}='background brave'
+alias -s {mp4,MP4,mov,MOV,mkv,MKV}='chromium vlc'
+alias -s {zip,ZIP,war,WAR}="unzip -l"
+alias -s {jar,JAR}="jar tf"
+alias -s gz="tar -tf"
+alias -s {tgz,TGZ}="tar -tf"
+
+source ~/.profile
