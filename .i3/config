@@ -257,6 +257,7 @@ for_window [title="Inspectable"] floating enable
 for_window [title="Spec browser"] floating enable
 for_window [title="New command"] floating enable
 for_window [title="Error"] floating enable
+for_window [class="java" title="Flow Storm debugger"] floating disable, move to workspace 5
 
 # for_window [class="Emacs"] move workspace "7:Development"
 # for_window [class="jetbrains-idea-ce"] move workspace "7:Development"

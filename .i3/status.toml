@@ -26,16 +26,6 @@ warning = 5.0
 alert = 1.0
 
 [[block]]
-block = "disk_space"
-path = "/mnt/data"
-alias = "/mnt/data"
-info_type = "available"
-unit = "GB"
-interval = 20
-warning = 5.0
-alert = 1.0
-
-[[block]]
 block = "memory"
 display_type = "memory"
 format_mem = "{Mup}%"
