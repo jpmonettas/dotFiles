@@ -1,12 +1,3 @@
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
-
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
@@ -18,7 +9,8 @@ alias t="tree -L 1"
 alias tt="tree -L 2"
 alias ttt="tree -L 3"
 alias tttt="tree -L 4"
-
+alias i="sxiv -t ."
+alias qn="query-notes"
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -44,13 +36,6 @@ DISABLE_AUTO_TITLE="true"
 # VCS as dirty. This makes repository status check for large repositories much,
 # much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git mvn svn dircycle)
-
-source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 #export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
@@ -79,7 +64,7 @@ background() {
 }
 
 alias -s {pdf,PDF}='background mupdf'
-alias -s {jpg,JPG,png,PNG}='background gpicview'
+alias -s {jpg,jpeg,JPG,png,PNG}='background sxiv'
 alias -s {ods,ODS,odt,ODT,odp,ODP,doc,DOC,docx,DOCX,xls,XLS,xlsx,XLSX,xlsm,XLSM,ppt,PPT,pptx,PPTX,csv,CSV}='background libreoffice'
 alias -s {html,HTML}='background brave'
 alias -s {mp4,MP4,mov,MOV,mkv,MKV}='chromium vlc'

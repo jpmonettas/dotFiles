@@ -1,6 +1,7 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 (load custom-file)
 
+(setq package-native-compile t)
 
 ;; Super hack for debian testing
 (setq package-check-signature nil)
@@ -9,24 +10,28 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
-(set-face-attribute 'default nil :font "M+ 1mn-10")
+;;(set-face-attribute 'default nil :font "M+ 1mn-11")
+;; (set-face-attribute 'default nil :font "Iosevka-19") ;; demo font
+(set-face-attribute 'default nil :font "Iosevka-12")
 ;;(set-face-attribute 'default nil :font "Source Code Pro-10")
 
-(setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.cargo/bin"))
+;; Replace the selection content when typing
+(delete-selection-mode 1)
+
 ;; Define package repositories
 (require 'package)
 
 (setq package-archives
 	  '(
 		("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-		("MELPA Stable" . "https://stable.melpa.org/packages/")
+		;; ("MELPA Stable" . "https://stable.melpa.org/packages/")
 		("MELPA"        . "https://melpa.org/packages/")
 		)
 	  ;; higher number is preffered
 	  package-archive-priorities
-	  '(
+	  '(		
 		("GNU ELPA"     . 5)
-		("MELPA Stable" . 10)
+		;; ("MELPA Stable" . 10)
 		("MELPA"        . 0)
 		))
 
@@ -37,25 +42,6 @@
 
 (setq backup-directory-alist
 	  `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-	  `((".*" ,temporary-file-directory t)))
-
-(eval-when-compile
-  (require 'use-package))
-
-(defun on-frame-open (frame)
-  (unless (display-graphic-p frame)
-	(set-face-background 'default "unspecified-bg" frame)))
-
-(on-frame-open (selected-frame))
-(add-hook 'after-make-frame-functions 'on-frame-open)
-
-;;;;;;;;;;;;;;;;;;;;;
-;; General configs ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(setq split-width-threshold 160)
-(delete-selection-mode 1)
 
 ;; Highlight current line
 (global-hl-line-mode 1)
@@ -83,6 +69,7 @@
 ;; Packages ;;
 ;;;;;;;;;;;;;;
 
+
 (use-package ag
   :ensure t)
 
@@ -97,10 +84,11 @@
 ;; (setq cider-prompt-save-file-on-load nil)
 ;; (setq nrepl-hide-special-buffers t)
 ;; (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
-(setq cider-refresh-before-fn "user/stop-system!"
-      cider-refresh-after-fn "user/start-system!")
+;; (setq cider-refresh-before-fn "user/stop-system!"
+;;       cider-refresh-after-fn "user/start-system!")
 ;; (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
 ;; (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
+
 (use-package cider
   :ensure t
   :config
@@ -111,7 +99,16 @@
   (setq cider-refresh-before-fn "user/stop-system!"
 		cider-refresh-after-fn "user/start-system!")
   (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
-  (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer))
+  (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
+  (setf (cadr (assoc 'krell cider-cljs-repl-types))
+		"(require '[clojure.edn :as edn]
+                '[clojure.java.io :as io]
+                '[cider.piggieback]
+                '[krell.api :as krell]
+                '[krell.repl])
+(def config (edn/read-string (slurp (io/file \"build.edn\"))))
+(apply cider.piggieback/cljs-repl (krell.repl/repl-env :host \"localhost\") (mapcat identity config))" ))
+
 
 ;; (add-to-list 'cider-jack-in-nrepl-middlewares "vlaaad.reveal.nrepl/middleware")
 
@@ -119,17 +116,23 @@
   :ensure t
   :config
   (defun my-clojure-mode-hook ()
-	(clj-refactor-mode 1)
+	(hi-lock-mode 1)
+    (clj-refactor-mode 1)
 	(yas-minor-mode 1) ; for adding require/use/import
 	(cljr-add-keybindings-with-prefix "C-c C-m"))
 
   (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
 
+(defun clojure-save-hook()
+  (when (or (eq major-mode 'clojurescript-mode) (eq major-mode 'clojure-mode))
+    (whitespace-cleanup)))
+
 (use-package clojure-mode
   :ensure t
   :config
   (define-key clojure-mode-map (kbd "C->") 'cljr-thread)
-  (define-key clojure-mode-map (kbd "C-<") 'cljr-unwind))
+  (define-key clojure-mode-map (kbd "C-<") 'cljr-unwind)
+  (add-hook 'before-save-hook 'clojure-save-hook))
 
 (use-package company
   :ensure t
@@ -215,6 +218,9 @@
   :bind
   ("C-S-g" . helm-projectile-ag))
 
+(use-package hydra
+  :ensure t)
+
 (use-package ido-completing-read+
   :ensure t
   :config
@@ -223,7 +229,8 @@
 (use-package ido-vertical-mode
   :ensure t
   :config
-  (ido-vertical-mode 1))
+  (ido-vertical-mode 1)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
 
 (use-package magit
   :ensure t
@@ -246,6 +253,13 @@
 (use-package perspective
   :pin "MELPA"
   :ensure t
+  
+  :bind
+  ("C-x C-b" . persp-list-buffers)
+  
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))
+  
   :config
   (persp-mode))
 
@@ -257,7 +271,6 @@
   :ensure t
   :config
   (popwin-mode 1)
-  (push '(" *undo-tree*" :width 0.3 :position right) popwin:special-display-config)
   (push '("*compilation*" :width 0.5 :position right) popwin:special-display-config)
   (push '("*helm find files*" :height 0.5) popwin:special-display-config)
   (push '("*eclim: find" :height 0.5) popwin:special-display-config)
@@ -272,7 +285,11 @@
   (push '("*helm etags*" :height 0.5) popwin:special-display-config)
   (push '("*helm M-x*" :height 0.5) popwin:special-display-config)
   (push '("*helm bookmarks*" :height 0.5) popwin:special-display-config)
-
+  
+  (push '("*cider-error*" :width 0.3 :position right) popwin:special-display-config)
+  
+  (push '("*Flycheck errors*" :height 0.2) popwin:special-display-config)
+  
   (push '("*helm-mode-cider-repl-set-ns*" :height 0.5) popwin:special-display-config)
   (push '("*helm-mode-nil*" :height 0.5) popwin:special-display-config))
 
@@ -306,16 +323,8 @@
   ("M-x" . smex))
 
 (use-package smooth-scrolling
-  :ensure t)
-
-(use-package undo-tree
   :ensure t
-  :config
-  (global-undo-tree-mode t))
-
-(use-package solidity-mode
-  :ensure t
-  :init (setq solidity-solc-path "/home/jmonetta/bin/solc"))
+  :config (smooth-scrolling-mode))
 
 (use-package window-number
   :ensure t)
@@ -344,15 +353,69 @@
   :config
   (which-key-mode 1))
 
-(use-package racer
-  :ensure t
-  :requires rust-mode
+(use-package rustic
+  :ensure
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
   :config
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode)
-  (add-hook 'racer-mode-hook #'company-mode)
-  (setq racer-rust-src-path
-		(concat (string-trim (shell-command-to-string "rustc --print sysroot")) "/lib/rustlib/src/rust/src")))
+  ;; uncomment for less flashiness  
+  (setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.cargo/bin"))
+  (setq exec-path (append exec-path '("/home/jmonetta/.cargo/bin")))
+  (setq flycheck-rust-cargo-executable "/home/jmonetta/.cargo/bin/cargo")
+
+  
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t)))
+
+(use-package lsp-mode
+  :ensure
+  :commands lsp
+  :custom ;; what to use when checking on-save. "check" is default, I prefer clippy  
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  :config
+  
+  (setq lsp-eldoc-hook nil)
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-signature-auto-activate nil)
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-ui-doc-show-with-cursor nil)
+  (setq lsp-ui-doc-show-with-mouse nil)
+  (setq lsp-lens-enable nil)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-ui-sideline-show-code-actions nil)
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-eldoc-enable-hover t)
+  ;;(lsp-eldoc-render-all t)
+  ;;(lsp-idle-delay 0.6)
+  ;;(lsp-rust-analyzer-server-display-inlay-hints t)
+  )
+
+;; (use-package lsp-ui
+;;   :ensure
+;;   :commands lsp-ui-mode
+;;   ;; :custom
+;;   ;; (lsp-ui-peek-always-show t)
+;;   ;; (lsp-ui-sideline-show-hover t)
+;;   ;; (lsp-ui-doc-enable nil)
+;;   )
+
+;; (use-package flycheck :ensure)
 
 (use-package rainbow-mode
   :ensure t)
@@ -369,14 +432,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-hook 'hi-lock-mode-hook
-	  (lambda nil
+	  (lambda ()
 		(highlight-regexp "FIXME:" (quote hi-red-b))
 		(highlight-regexp "TODO:" (quote hi-red-b))
-		(highlight-regexp "NOTE:" (quote hi-green-b))
-		)
+		(highlight-regexp "NOTE:" (quote hi-green-b)))
 	  t)
-
-(global-hi-lock-mode)
 
 (defun smarter-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
@@ -441,22 +501,6 @@ If there's no region, the current line will be duplicated."
 		(one-shot-keybinding "d" (λ (duplicate-region 1 beg end))))
 	(duplicate-current-line arg)
 	(one-shot-keybinding "d" 'duplicate-current-line)))
-
-(defun yank-github-link ()
-  "Quickly share a github link of what you are seeing in a buffer. Yanks
-a link you can paste in the browser."
-  (interactive)
-  (let* ((remote (or (magit-get-push-remote) "origin"))
-		 (url (magit-get "remote" remote "url"))
-		 (project (if (string-prefix-p "git" url)
-					  (substring  url 15 -4)   ;; git link
-					  (substring  url 19 -4))) ;; https link
-		 (link (format "https://github.com/%s/blob/%s/%s#L%d"
-					   project
-					   (magit-get-current-branch)
-					   (magit-current-file)
-					   (count-lines 1 (point)))))
-	(kill-new link)))
 
 (defun paredit-duplicate-closest-sexp ()
   (interactive)
@@ -611,12 +655,50 @@ by using nxml's indentation rules."
 		(delete-other-windows)
 		(setq maximize-window-maximized t)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Loading other files  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(put 'dired-find-alternate-file 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+(defconst prettify-symbols-alist
+  '(("#+BEGIN_SRC"  . ?→)
+	("#+END_SRC"  . ?←)
+	(":results silent"  .?¬)))
+
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
+
+(load-theme 'doom-nord)
+
+(defun visit-messages ()
+  (interactive)
+  (switch-to-buffer-other-window "*Messages*"))
+
+(global-set-key (kbd "<f10>") 'visit-messages)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; Dired copy paste ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(load "~/.emacs.d/non-elpa/dired-copy-paste.el")
+
+(require 'dired-copy-paste)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load projects utils ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load "/home/jmonetta/my-projects/elisp-utils/clojure.el")
+(load "/home/jmonetta/my-projects/elisp-utils/git.el")
+(load "/home/jmonetta/my-projects/flow-storm-debugger/editors/flow-storm.el")
+
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
 ;;;;;;;;;;;;;;
 
 (global-set-key (kbd "C-x m") 'maximize-restore-window)
-(global-set-key (kbd "<f5>") 'notes-open-last)
+(global-set-key (kbd "<f5>") 'flycheck-list-errors)
 (global-set-key (kbd "<f6>") 'eval-and-replace)
 
 (global-set-key (kbd "C-9") 'sp-forward-barf-sexp)
@@ -639,10 +721,9 @@ by using nxml's indentation rules."
 
 (global-set-key (kbd "C-2") 'duplicate-current-line-or-region)
 
-(global-set-key  (kbd "M-j")
-				 (lambda ()
-				   (interactive)
-				   (join-line -1)))
+;; Use join-line instead of the smartparens one that gets loaded everywhere
+(global-set-key  (kbd "M-j") (lambda () (interactive) (join-line -1)))
+(define-key smartparens-mode-map (kbd "M-j") (lambda () (interactive) (join-line -1)))
 
 (define-key emacs-lisp-mode-map (kbd "C-M-2")  'paredit-duplicate-closest-sexp)
 (define-key clojure-mode-map (kbd "C-M-2") 'paredit-duplicate-closest-sexp)
@@ -672,31 +753,3 @@ by using nxml's indentation rules."
 (global-set-key (kbd "C-<tab>") 'company-complete)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Loading other files  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-to-list 'load-path "~/.emacs.d/custom")
-
-(load "district0x.el")
-
-(load "avr.el")
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'downcase-region 'disabled nil)
-
-(defconst prettify-symbols-alist
-  '(("#+BEGIN_SRC"  . ?→)
-	("#+END_SRC"  . ?←)
-	(":results silent"  .?¬)))
-
-(add-hook 'org-mode-hook 'prettify-symbols-mode)
-
-;;(load "~/my-projects/basic-theme.el")
-(load-theme 'doom-nord)
-;; (load-theme 'spacemacs-theme)
-
-(defun refresh-ui ()
-  (interactive)
-  (cider-nrepl-sync-request:eval "(dev/ui-refresh)"))
-(define-key clojure-mode-map (kbd "<f5>") 'refresh-ui)

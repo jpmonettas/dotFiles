@@ -24,7 +24,8 @@ font pango:DejaVu Sans Mono, Awesome 9
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-new_window pixel 2
+#new_window pixel 2
+default_border pixel 2
 
 # start a terminal
 bindsym $mod+Return exec gnome-terminal
@@ -174,9 +175,9 @@ bar {
             # solarized
             background #2E3440
             statusline #eee8d5
-            focused_workspace #268bd2 #268bd2 #fdf6e3 #484e50
-            active_workspace #333333 #93a1a1 #fdf6e3 #292d2e
-            inactive_workspace #333333 #93a1a1 #fdf6e3 #292d2e
+            focused_workspace #268bd2 #268bd2 #fdf6e3
+            active_workspace #333333 #93a1a1 #fdf6e3
+            inactive_workspace #333333 #93a1a1 #fdf6e3
         }
 }
 
@@ -190,9 +191,9 @@ bar{
             # solarized
             background #2E3440
             statusline #eee8d5
-            focused_workspace #268bd2 #268bd2 #fdf6e3 #484e50
-            active_workspace #333333 #93a1a1 #fdf6e3 #292d2e
-            inactive_workspace #333333 #93a1a1 #fdf6e3 #292d2e
+            focused_workspace #268bd2 #268bd2 #fdf6e3
+            active_workspace #333333 #93a1a1 #fdf6e3
+            inactive_workspace #333333 #93a1a1 #fdf6e3
         }
 }
 
@@ -226,10 +227,10 @@ bindsym $mod+e [class="jetbrains-idea-ce"] focus
 
 
 # bindsym $mod+Escape exec i3lock --color 000000
-bindsym $mod+grave exec dm-tool switch-to-greeter
+#bindsym $mod+grave exec dm-tool switch-to-greeter
 
 
-bindsym $mod+comma exec /home/jmonetta/bin/remotes-dmenu.sh
+#bindsym $mod+comma exec /home/jmonetta/bin/remotes-dmenu.sh
 bindsym $mod+period exec /home/jmonetta/bin/passmenu
 #bindsym $mod+g exec /home/jmonetta/bin/i3-windows-switches
 #bindsym $mod+Shift+g exec /home/jmonetta/bin/i3-windows-switches --move
@@ -240,6 +241,8 @@ bindsym $mod+period exec /home/jmonetta/bin/passmenu
 
 #exec mail-notification
 exec feh --bg-scale /home/jmonetta/images/debian.png
+exec xset r rate 250 60
+exec setxkbmap -layout us -variant altgr-intl
 # exec xsetroot -solid "#586e75"
 exec --no-startup-id nm-applet
 exec pa-applet --disable-notifications
@@ -257,8 +260,13 @@ for_window [title="Inspectable"] floating enable
 for_window [title="Spec browser"] floating enable
 for_window [title="New command"] floating enable
 for_window [title="Error"] floating enable
-for_window [class="java" title="Flow Storm debugger"] floating disable, move to workspace 5
+for_window [class="org.scenicview.ScenicView"] floating disable, move to workspace 5
+for_window [title="Flowstorm debugger"] floating disable
+#for_window [title="Flowstorm debugger"] floating disable, move to workspace 5
 
+#assign [class="flowstorm"] output VGA-1
+
+for_window [title="PYTHON_IMG"] floating disable, move to workspace 7
 # for_window [class="Emacs"] move workspace "7:Development"
 # for_window [class="jetbrains-idea-ce"] move workspace "7:Development"
 # for_window [class="workbench-WbStarter"] move workspace "7:Development"
