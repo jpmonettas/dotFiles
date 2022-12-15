@@ -1,5 +1,4 @@
 (setq custom-file "~/.emacs.d/customizations.el")
-(load custom-file)
 
 (setq package-native-compile t)
 
@@ -11,7 +10,7 @@
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
 ;;(set-face-attribute 'default nil :font "M+ 1mn-11")
-;; (set-face-attribute 'default nil :font "Iosevka-19") ;; demo font
+;;(set-face-attribute 'default nil :font "Iosevka-17") ;; demo font
 (set-face-attribute 'default nil :font "Iosevka-12")
 ;;(set-face-attribute 'default nil :font "Source Code Pro-10")
 
@@ -69,6 +68,17 @@
 ;; Packages ;;
 ;;;;;;;;;;;;;;
 
+(use-package ef-themes
+  :ensure t
+  :config
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme 'modus-operandi t))
+
+;; (use-package smart-mode-line
+;;   :ensure t
+;;   :config
+;;   (setq sml/theme 'light)
+;;   (sml/setup))
 
 (use-package ag
   :ensure t)
@@ -145,26 +155,25 @@
 (use-package dired
   :config
   ;; (add-hook 'dired-after-readin-hook '(lambda () (dired-dotfiles-toggle)))
+  (setq dired-listing-switches "-la")
   (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
   (define-key dired-mode-map (kbd "h") 'dired-omit-mode)
   (define-key dired-mode-map (kbd "f") 'find-name-dired)
   (define-key dired-mode-map (kbd "l") 'dired-up-directory)
   (define-key dired-mode-map (kbd "<C-return>") 'dired-open-externally))
 
-(use-package dired-x
-  :config
-  (setq-default dired-omit-files-p t)
-  (add-hook 'dired-mode-hook
-			(lambda ()
-			  (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
-			  (buffer-face-mode)
-			  ;; (dired-hide-details-mode)
-			  )))
+;; (use-package dired-x
+;;   :config
+;;   (setq-default dired-omit-files-p t)
+;;   ;; (add-hook 'dired-mode-hook
+;;   ;; 			(lambda ()
+;;   ;; 			  (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
+;;   ;; 			  (buffer-face-mode)
+;;   ;; 			  ;; (dired-hide-details-mode)
+;;   ;; 			  ))
+;;   )
 
 (use-package diminish
-  :ensure t)
-
-(use-package doom-themes
   :ensure t)
 
 (use-package easy-kill
@@ -287,6 +296,8 @@
   (push '("*helm bookmarks*" :height 0.5) popwin:special-display-config)
   
   (push '("*cider-error*" :width 0.3 :position right) popwin:special-display-config)
+
+  (push '("*cider-repl" :width 0.5 :position right) popwin:special-display-config)
   
   (push '("*Flycheck errors*" :height 0.2) popwin:special-display-config)
   
@@ -308,12 +319,6 @@
 (use-package restclient
   :ensure t)
 
-(use-package smart-mode-line
-  :ensure t
-  :config
-  (setq sml/theme 'respectful)
-  (sml/setup))
-
 (use-package smartparens
   :ensure t)
 
@@ -326,9 +331,6 @@
   :ensure t
   :config (smooth-scrolling-mode))
 
-(use-package window-number
-  :ensure t)
-
 (use-package yasnippet
   :ensure t
   :config (yas-global-mode))
@@ -336,7 +338,8 @@
 (use-package window-number
   :config
   (window-number-mode 1)
-  (window-number-meta-mode 1))
+  (window-number-meta-mode 1)
+  )
 
 (use-package paredit)
 
@@ -669,14 +672,6 @@ by using nxml's indentation rules."
 
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 
-(load-theme 'doom-nord)
-
-(defun visit-messages ()
-  (interactive)
-  (switch-to-buffer-other-window "*Messages*"))
-
-(global-set-key (kbd "<f10>") 'visit-messages)
-
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Dired copy paste ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -689,9 +684,11 @@ by using nxml's indentation rules."
 ;; Load projects utils ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load custom-file)
+(load "/home/jmonetta/my-projects/flow-storm-debugger/editors/flow-storm.el")
+(load "/home/jmonetta/my-projects/elisp-utils/emacs.el")
 (load "/home/jmonetta/my-projects/elisp-utils/clojure.el")
 (load "/home/jmonetta/my-projects/elisp-utils/git.el")
-(load "/home/jmonetta/my-projects/flow-storm-debugger/editors/flow-storm.el")
 
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
@@ -753,3 +750,6 @@ by using nxml's indentation rules."
 (global-set-key (kbd "C-<tab>") 'company-complete)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
+
+(global-set-key (kbd "C-x x s") 'persp-switch)
+(global-set-key (kbd "M-_") 'undo-redo)

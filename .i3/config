@@ -127,7 +127,7 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym $mod+t [window_role="tmux-term"] scratchpad show
-bindsym $mod+x [window_role="wee-slack"] scratchpad show
+bindsym $mod+c [title="Flowstorm debugger"] scratchpad show
 
 
 
@@ -261,7 +261,7 @@ for_window [title="Spec browser"] floating enable
 for_window [title="New command"] floating enable
 for_window [title="Error"] floating enable
 for_window [class="org.scenicview.ScenicView"] floating disable, move to workspace 5
-for_window [title="Flowstorm debugger"] floating disable
+#for_window [title="Flowstorm debugger"] floating disable
 #for_window [title="Flowstorm debugger"] floating disable, move to workspace 5
 
 #assign [class="flowstorm"] output VGA-1
