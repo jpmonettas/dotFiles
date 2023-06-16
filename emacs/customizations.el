@@ -10,6 +10,10 @@
  '(auto-hscroll-mode t)
  '(browse-url-browser-function 'browse-url-firefox)
  '(browse-url-firefox-program "/home/jmonetta/bin/firefox-latest")
+ '(c-default-style
+   '((java-mode . "whitesmith")
+     (awk-mode . "awk")
+     (other . "gnu")))
  '(cider-cljs-lein-repl
    "(cemerick.piggieback/cljs-repl (cljs.repl.rhino/repl-env))" t)
  '(cider-cljs-repl
@@ -53,6 +57,7 @@
  '(fci-rule-color "#073642")
  '(flx-ido-threshold 5000)
  '(flycheck-c/c++-gcc-executable "avr-gcc")
+ '(flycheck-error-list-minimum-level 'error)
  '(flycheck-gcc-args '("-mmcu=atmega32"))
  '(flycheck-highlighting-mode nil)
  '(gud-gdb-command-name "avr-gdb -i=mi")
@@ -65,7 +70,7 @@
  '(helm-buffer-max-length 50)
  '(helm-external-programs-associations
    '(("pdf" . "evince")
-	 ("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . "")) t)
+     ("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . "")))
  '(helm-ff-auto-update-initial-value nil)
  '(helm-ff-ido-style-backspace t)
  '(helm-grep-ignored-directories
@@ -73,7 +78,7 @@
  '(helm-projectile-sources-list
    '(helm-source-projectile-files-list helm-source-projectile-buffers-list helm-source-projectile-recentf-list))
  '(ido-ignore-buffers '("\\` "))
- '(indent-tabs-mode t)
+ '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(js-indent-level 2)
@@ -95,61 +100,61 @@
  '(notmuch-identities '("jpmonettas@gmail.com" "juan@infuy.com"))
  '(notmuch-saved-searches
    '((:name "inbox" :query "tag:inbox")
-	 (:name "unread" :query "tag:unread")
-	 (:name "infuy" :query "tag:infuy")
-	 (:name "ib" :query "tag:ib")
-	 (:name "gmail" :query "tag:gmail")))
+     (:name "unread" :query "tag:unread")
+     (:name "infuy" :query "tag:infuy")
+     (:name "ib" :query "tag:ib")
+     (:name "gmail" :query "tag:gmail")))
  '(notmuch-search-oldest-first nil)
  '(notmuch-tag-added-formats
    '((".*"
-	  (notmuch-apply-face tag
-						  '(:underline "green")))
-	 ("important"
-	  (notmuch-apply-face tag
-						  '(:foreground "black" :background "red")))))
+      (notmuch-apply-face tag
+                          '(:underline "green")))
+     ("important"
+      (notmuch-apply-face tag
+                          '(:foreground "black" :background "red")))))
  '(nrepl-sync-request-timeout 120)
  '(org-columns-default-format "%80ITEM(Task) %10TODO(Todo) %10Time_Estimate{:} %CLOCKSUM")
  '(org-confirm-babel-evaluate nil)
  '(org-emphasis-alist
    '(("*" bold)
-	 ("_" underline)
-	 ("=" org-code verbatim)
-	 ("~" org-verbatim verbatim)
-	 ("+"
-	  (:strike-through t))))
+     ("_" underline)
+     ("=" org-code verbatim)
+     ("~" org-verbatim verbatim)
+     ("+"
+      (:strike-through t))))
  '(org-export-babel-evaluate nil)
  '(org-export-use-babel nil)
  '(org-hide-leading-stars t)
  '(org-html-postamble nil)
  '(org-src-fontify-natively t)
  '(package-selected-packages
-   '(ef-themes lsp-mode rustic cider html-to-hiccup org-bullets racer emacs-racer company-solidity easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag clj-refactor rust-mode clojure-mode elpy doom-themes rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider))
+   '(evil tree-sitter tree-sitter-ess-r tree-sitter-indent tree-sitter-ispell tree-sitter-langs flycheck lsp-java java-lsp ef-themes lsp-mode rustic cider html-to-hiccup org-bullets racer emacs-racer company-solidity easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag clj-refactor rust-mode clojure-mode elpy doom-themes rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider))
  '(paradox-automatically-star t)
  '(pretty-symbol-patterns
    '((955 lambda "\\<lambda\\>"
-		  (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode python-mode inferior-python-mode))
-	 (402 lambda "\\<function\\>"
-		  (js-mode))
-	 (8800 relational "!="
-		   (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode))
-	 (8800 relational "/="
-		   (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
-	 (8805 relational ">="
-		   (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
-	 (8804 relational "<="
-		   (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
-	 (8743 logical "&&"
-		   (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode))
-	 (8743 logical "\\<and\\>"
-		   (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
-	 (8744 logical "||"
-		   (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode))
-	 (8744 logical "\\<or\\>"
-		   (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
-	 (172 logical "\\<not\\>"
-		  (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
-	 (8709 nil "\\<nil\\>"
-		   (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode clojure-mode))))
+          (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode python-mode inferior-python-mode))
+     (402 lambda "\\<function\\>"
+          (js-mode))
+     (8800 relational "!="
+           (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode))
+     (8800 relational "/="
+           (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
+     (8805 relational ">="
+           (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
+     (8804 relational "<="
+           (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
+     (8743 logical "&&"
+           (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode))
+     (8743 logical "\\<and\\>"
+           (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
+     (8744 logical "||"
+           (c-mode c++-mode go-mode java-mode js-mode perl-mode cperl-mode ruby-mode python-mode inferior-python-mode))
+     (8744 logical "\\<or\\>"
+           (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
+     (172 logical "\\<not\\>"
+          (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode))
+     (8709 nil "\\<nil\\>"
+           (emacs-lisp-mode inferior-lisp-mode inferior-emacs-lisp-mode lisp-mode scheme-mode clojure-mode))))
  '(projectile-completion-system 'ido)
  '(projectile-globally-ignored-directories
    '("node_modules" ".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" ".cljs_node_repl" ".shadow-cljs" ".cpcache"))
@@ -158,41 +163,43 @@
  '(recentf-auto-cleanup 'never)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
-   '((clojure-dev-menu-name . "playground-dev-menu")
-	 (clojure-dev-menu-name . "clindex-dev-menu")
-	 (clojure-dev-menu-name . "hansel-dev-menu")
-	 (clojure-dev-menu-name . "flow-storm-dev-menu")
-	 (cider-ns-refresh-before-fn . "com.stuartsierra.component.repl/stop")
-	 (cider-ns-refresh-after-fn . "com.stuartsierra.component.repl/start")
-	 (cider-known-endpoints
-	  ("localhost" "9656"))
-	 (cider-path-translations
-	  ("/root" . "/home/jmonetta")
-	  ("/usr/src/app" . "/home/jmonetta/my-projects/clash-co/clash-backend"))
-	 (eval define-clojure-indent
-		   (animation/interpolate 0)
-		   (animation/start 0)
-		   (animation/parallel 0))
-	 (elisp-lint-indent-specs
-	  (if-let* . 2)
-	  (when-let* . 1)
-	  (let* . defun)
-	  (nrepl-dbind-response . 2)
-	  (cider-save-marker . 1)
-	  (cider-propertize-region . 1)
-	  (cider-map-repls . 1)
-	  (cider--jack-in . 1)
-	  (cider--make-result-overlay . 1)
-	  (insert-label . defun)
-	  (insert-align-label . defun)
-	  (insert-rect . defun)
-	  (cl-defun . 2)
-	  (with-parsed-tramp-file-name . 2)
-	  (thread-first . 1)
-	  (thread-last . 1))
-	 (cider-shadow-cljs-default-options . "app")
-	 (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")
-	 (checkdoc-package-keywords-flag)))
+   '((no-whitespace-cleanup quote t)
+     (clojure-dev-menu-name . "weather-alerts-dev-menu")
+     (clojure-dev-menu-name . "playground-dev-menu")
+     (clojure-dev-menu-name . "clindex-dev-menu")
+     (clojure-dev-menu-name . "hansel-dev-menu")
+     (clojure-dev-menu-name . "flow-storm-dev-menu")
+     (cider-ns-refresh-before-fn . "com.stuartsierra.component.repl/stop")
+     (cider-ns-refresh-after-fn . "com.stuartsierra.component.repl/start")
+     (cider-known-endpoints
+      ("localhost" "9656"))
+     (cider-path-translations
+      ("/root" . "/home/jmonetta")
+      ("/usr/src/app" . "/home/jmonetta/my-projects/clash-co/clash-backend"))
+     (eval define-clojure-indent
+           (animation/interpolate 0)
+           (animation/start 0)
+           (animation/parallel 0))
+     (elisp-lint-indent-specs
+      (if-let* . 2)
+      (when-let* . 1)
+      (let* . defun)
+      (nrepl-dbind-response . 2)
+      (cider-save-marker . 1)
+      (cider-propertize-region . 1)
+      (cider-map-repls . 1)
+      (cider--jack-in . 1)
+      (cider--make-result-overlay . 1)
+      (insert-label . defun)
+      (insert-align-label . defun)
+      (insert-rect . defun)
+      (cl-defun . 2)
+      (with-parsed-tramp-file-name . 2)
+      (thread-first . 1)
+      (thread-last . 1))
+     (cider-shadow-cljs-default-options . "app")
+     (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")
+     (checkdoc-package-keywords-flag)))
  '(sclang-auto-scroll-post-buffer t)
  '(sclang-eval-line-forward nil)
  '(scroll-bar-mode nil)
@@ -209,23 +216,23 @@
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    '((20 . "#dc322f")
-	 (40 . "#cb4b16")
-	 (60 . "#b58900")
-	 (80 . "#859900")
-	 (100 . "#2aa198")
-	 (120 . "#268bd2")
-	 (140 . "#d33682")
-	 (160 . "#6c71c4")
-	 (180 . "#dc322f")
-	 (200 . "#cb4b16")
-	 (220 . "#b58900")
-	 (240 . "#859900")
-	 (260 . "#2aa198")
-	 (280 . "#268bd2")
-	 (300 . "#d33682")
-	 (320 . "#6c71c4")
-	 (340 . "#dc322f")
-	 (360 . "#cb4b16")))
+     (40 . "#cb4b16")
+     (60 . "#b58900")
+     (80 . "#859900")
+     (100 . "#2aa198")
+     (120 . "#268bd2")
+     (140 . "#d33682")
+     (160 . "#6c71c4")
+     (180 . "#dc322f")
+     (200 . "#cb4b16")
+     (220 . "#b58900")
+     (240 . "#859900")
+     (260 . "#2aa198")
+     (280 . "#268bd2")
+     (300 . "#d33682")
+     (320 . "#6c71c4")
+     (340 . "#dc322f")
+     (360 . "#cb4b16")))
  '(vc-annotate-very-old-color nil)
  '(vc-follow-symlinks t)
  '(wdired-allow-to-change-permissions 'advanced)

@@ -24,6 +24,8 @@ font pango:DejaVu Sans Mono, Awesome 9
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+hide_edge_borders smart
+
 #new_window pixel 2
 default_border pixel 2
 
@@ -247,7 +249,7 @@ exec setxkbmap -layout us -variant altgr-intl
 exec --no-startup-id nm-applet
 exec pa-applet --disable-notifications
 
-
+for_window [class="gnome-calculator"] floating enable
 for_window [class="Pidgin"] floating enable
 for_window [class="java"] floating enable
 for_window [class="Skype" title="jpmonetta - Skype*"] floating enable
@@ -276,9 +278,9 @@ for_window [title="PYTHON_IMG"] floating disable, move to workspace 7
 # for_window [class="Chromium"] move workspace "8:Browsers"
 
 # class                 border  backgr. text    indicator
-client.focused          #ECCC87 #ECCC87 #fdf6e3 #484e50
-client.focused_inactive #333333 #93a1a1 #fdf6e3 #292d2e
-client.unfocused        #333333 #93a1a1 #fdf6e3 #292d2e
+client.focused          #ac84ad #ac84ad #fdf6e3 #484e50
+client.focused_inactive #242738 #242738 #fdf6e3 #292d2e
+client.unfocused        #242738 #242738 #fdf6e3 #292d2e
 
 bindsym --release $mod+1 exec --no-startup-id /home/jmonetta/bin/screen-shot.sh
 
@@ -288,56 +290,10 @@ exec --no-startup-id "btsync"
 exec --no-startup-id "redshift-gtk"
 exec --no-startup-id "xfce4-clipman"
 
-### i3-gaps stuff ###
+########
+# Gaps #
+########
 
-# Necessary for i3-gaps to work properly (pixel can be any value)
-for_window [class="^.*"] border pixel 1
-
-# Smart Gaps
-# smart_gaps on
-
-# Smart Borders
-# smart_borders on
-
-# Set inner/outer gaps
-# gaps inner 14
-# gaps outer 10
-
-# Gaps mode
-set $mode_gaps Gaps: (o) outer, (i) inner
-set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
-
-mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
-
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
-
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
+gaps inner 15px
+smart_gaps on
+# gaps outer 10px

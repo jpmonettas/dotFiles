@@ -1,5 +1,16 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 
+(defvar my-emacs-theme-style :dark)
+(defvar my-light-emacs-theme 'modus-operandi)
+(defvar my-dark-emacs-theme  'doom-nord)
+
+;; load the theme for the current style
+(progn
+  (mapc #'disable-theme custom-enabled-themes)
+  (if (equal my-emacs-theme-style :dark)
+      (load-theme my-dark-emacs-theme t)
+    (load-theme my-light-emacs-theme t)))
+
 (setq package-native-compile t)
 
 ;; Super hack for debian testing
@@ -10,7 +21,7 @@
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
 ;;(set-face-attribute 'default nil :font "M+ 1mn-11")
-;;(set-face-attribute 'default nil :font "Iosevka-17") ;; demo font
+;;(set-face-attribute 'default nil :font "Iosevka-15") ;; demo font
 (set-face-attribute 'default nil :font "Iosevka-12")
 ;;(set-face-attribute 'default nil :font "Source Code Pro-10")
 
@@ -21,18 +32,18 @@
 (require 'package)
 
 (setq package-archives
-	  '(
-		("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-		;; ("MELPA Stable" . "https://stable.melpa.org/packages/")
-		("MELPA"        . "https://melpa.org/packages/")
-		)
-	  ;; higher number is preffered
-	  package-archive-priorities
-	  '(		
-		("GNU ELPA"     . 5)
-		;; ("MELPA Stable" . 10)
-		("MELPA"        . 0)
-		))
+      '(
+        ("GNU ELPA"     . "https://elpa.gnu.org/packages/")
+        ;; ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA"        . "https://melpa.org/packages/")
+        )
+      ;; higher number is preffered
+      package-archive-priorities
+      '(        
+        ("GNU ELPA"     . 5)
+        ;; ("MELPA Stable" . 10)
+        ("MELPA"        . 0)
+        ))
 
 ;; Load and activate emacs packages. Do this first so that the
 ;; packages are loaded before you start trying to modify them.
@@ -40,7 +51,7 @@
 (package-initialize)
 
 (setq backup-directory-alist
-	  `((".*" . ,temporary-file-directory)))
+      `((".*" . ,temporary-file-directory)))
 
 ;; Highlight current line
 (global-hl-line-mode 1)
@@ -70,9 +81,7 @@
 
 (use-package ef-themes
   :ensure t
-  :config
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme 'modus-operandi t))
+  )
 
 ;; (use-package smart-mode-line
 ;;   :ensure t
@@ -107,11 +116,11 @@
   (setq nrepl-hide-special-buffers t)
   (setq cider-repl-history-file "/home/jmonetta/.emacs.d/cider-repl-history")
   (setq cider-refresh-before-fn "user/stop-system!"
-		cider-refresh-after-fn "user/start-system!")
+        cider-refresh-after-fn "user/start-system!")
   (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
   (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
   (setf (cadr (assoc 'krell cider-cljs-repl-types))
-		"(require '[clojure.edn :as edn]
+        "(require '[clojure.edn :as edn]
                 '[clojure.java.io :as io]
                 '[cider.piggieback]
                 '[krell.api :as krell]
@@ -126,15 +135,19 @@
   :ensure t
   :config
   (defun my-clojure-mode-hook ()
-	(hi-lock-mode 1)
+    (hi-lock-mode 1)
     (clj-refactor-mode 1)
-	(yas-minor-mode 1) ; for adding require/use/import
-	(cljr-add-keybindings-with-prefix "C-c C-m"))
+    (yas-minor-mode 1) ; for adding require/use/import
+    (cljr-add-keybindings-with-prefix "C-c C-m"))
 
   (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
 
+(defvar no-whitespace-cleanup nil)
+
 (defun clojure-save-hook()
-  (when (or (eq major-mode 'clojurescript-mode) (eq major-mode 'clojure-mode))
+  (message "Running clojure-save-hook no-whitespace-cleanup %s" no-whitespace-cleanup)
+  (when (and (not no-whitespace-cleanup)
+             (or (eq major-mode 'clojurescript-mode) (eq major-mode 'clojure-mode)))
     (whitespace-cleanup)))
 
 (use-package clojure-mode
@@ -142,7 +155,8 @@
   :config
   (define-key clojure-mode-map (kbd "C->") 'cljr-thread)
   (define-key clojure-mode-map (kbd "C-<") 'cljr-unwind)
-  (add-hook 'before-save-hook 'clojure-save-hook))
+  (add-hook 'before-save-hook 'clojure-save-hook)
+  )
 
 (use-package company
   :ensure t
@@ -166,11 +180,11 @@
 ;;   :config
 ;;   (setq-default dired-omit-files-p t)
 ;;   ;; (add-hook 'dired-mode-hook
-;;   ;; 			(lambda ()
-;;   ;; 			  (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
-;;   ;; 			  (buffer-face-mode)
-;;   ;; 			  ;; (dired-hide-details-mode)
-;;   ;; 			  ))
+;;   ;;             (lambda ()
+;;   ;;               (setq buffer-face-mode-face '(:family "Source Code Pro" :height 130))
+;;   ;;               (buffer-face-mode)
+;;   ;;               ;; (dired-hide-details-mode)
+;;   ;;               ))
 ;;   )
 
 (use-package diminish
@@ -191,8 +205,8 @@
 (use-package flx-ido
   :ensure t
   :init (progn
-		  (setq ido-enable-flex-matching t)
-		  (setq ido-use-faces nil))
+          (setq ido-enable-flex-matching t)
+          (setq ido-use-faces nil))
   :config
   (flx-ido-mode 1))
 
@@ -207,14 +221,14 @@
   ("C-x C-f" . helm-find-files)
   :config
   (setq helm-external-programs-associations
-	  '(("jpg" . "ristretto")
-		("jpeg" . "ristretto")
-		("png" . "ristretto")
-		("gif" . "ristretto")
-		("xls" . "libreoffice")
-		("doc" . "libreoffice")
-		("pdf" . "evince")
-		("html" . "conkeror"))))
+      '(("jpg" . "ristretto")
+        ("jpeg" . "ristretto")
+        ("png" . "ristretto")
+        ("gif" . "ristretto")
+        ("xls" . "libreoffice")
+        ("doc" . "libreoffice")
+        ("pdf" . "evince")
+        ("html" . "conkeror"))))
 
 (use-package helm-ag
   :ensure t)
@@ -356,41 +370,43 @@
   :config
   (which-key-mode 1))
 
-(use-package rustic
-  :ensure
-  :bind (:map rustic-mode-map
-              ("M-j" . lsp-ui-imenu)
-              ("M-?" . lsp-find-references)
-              ("C-c C-c l" . flycheck-list-errors)
-              ("C-c C-c a" . lsp-execute-code-action)
-              ("C-c C-c r" . lsp-rename)
-              ("C-c C-c q" . lsp-workspace-restart)
-              ("C-c C-c Q" . lsp-workspace-shutdown)
-              ("C-c C-c s" . lsp-rust-analyzer-status))
-  :config
-  ;; uncomment for less flashiness  
-  (setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.cargo/bin"))
-  (setq exec-path (append exec-path '("/home/jmonetta/.cargo/bin")))
-  (setq flycheck-rust-cargo-executable "/home/jmonetta/.cargo/bin/cargo")
+(use-package flycheck
+  :ensure t)
+
+;; (use-package rustic
+;;   :ensure
+;;   :bind (:map rustic-mode-map
+;;               ("M-j" . lsp-ui-imenu)
+;;               ("M-?" . lsp-find-references)
+;;               ("C-c C-c l" . flycheck-list-errors)
+;;               ("C-c C-c a" . lsp-execute-code-action)
+;;               ("C-c C-c r" . lsp-rename)
+;;               ("C-c C-c q" . lsp-workspace-restart)
+;;               ("C-c C-c Q" . lsp-workspace-shutdown)
+;;               ("C-c C-c s" . lsp-rust-analyzer-status))
+;;   :config
+;;   ;; uncomment for less flashiness  
+;;   (setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.cargo/bin"))
+;;   (setq exec-path (append exec-path '("/home/jmonetta/.cargo/bin")))
+;;   (setq flycheck-rust-cargo-executable "/home/jmonetta/.cargo/bin/cargo")
 
   
-  ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save t)
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+;;   ;; comment to disable rustfmt on save
+;;   (setq rustic-format-on-save t)
+;;   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
 
-(defun rk/rustic-mode-hook ()
-  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
-  ;; save rust buffers that are not file visiting. Once
-  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
-  ;; no longer be necessary.
-  (when buffer-file-name
-    (setq-local buffer-save-without-query t)))
+;; (defun rk/rustic-mode-hook ()
+;;   ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+;;   ;; save rust buffers that are not file visiting. Once
+;;   ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+;;   ;; no longer be necessary.
+;;   (when buffer-file-name
+;;     (setq-local buffer-save-without-query t)))
+
 
 (use-package lsp-mode
-  :ensure
+  :ensure t
   :commands lsp
-  :custom ;; what to use when checking on-save. "check" is default, I prefer clippy  
-  (lsp-rust-analyzer-cargo-watch-command "clippy")
   :config
   
   (setq lsp-eldoc-hook nil)
@@ -408,6 +424,21 @@
   ;;(lsp-idle-delay 0.6)
   ;;(lsp-rust-analyzer-server-display-inlay-hints t)
   )
+
+(use-package lsp-java
+  :ensure t
+  :config
+  ;;(add-to-list 'major-mode-remap-alist '(java-mode . java-ts-mode))
+  ;;(add-hook 'java-ts-mode-hook #'lsp)
+  (add-hook 'java-mode-hook #'lsp)
+  )
+
+;; (use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
+
+;; (use-package dap-java :ensure nil)
+
+;; (use-package lsp-treemacs
+;;   :ensure t)
 
 ;; (use-package lsp-ui
 ;;   :ensure
@@ -435,11 +466,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-hook 'hi-lock-mode-hook
-	  (lambda ()
-		(highlight-regexp "FIXME:" (quote hi-red-b))
-		(highlight-regexp "TODO:" (quote hi-red-b))
-		(highlight-regexp "NOTE:" (quote hi-green-b)))
-	  t)
+      (lambda ()
+        (highlight-regexp "FIXME:" (quote hi-red-b))
+        (highlight-regexp "TODO:" (quote hi-red-b))
+        (highlight-regexp "NOTE:" (quote hi-green-b)))
+      t)
 
 (defun smarter-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
@@ -456,13 +487,13 @@ point reaches the beginning or end of the buffer, stop there."
 
   ;; Move lines first
   (when (/= arg 1)
-	(let ((line-move-visual nil))
-	  (forward-line (1- arg))))
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
 
   (let ((orig-point (point)))
-	(back-to-indentation)
-	(when (= orig-point (point))
-	  (move-beginning-of-line 1))))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
 
 (defun split-window-right-and-move-there-dammit ()
   (interactive)
@@ -477,20 +508,20 @@ region-end is used."
   (interactive "p")
   (save-excursion
    (let* ((start (or start (region-beginning)))
-		  (end (or end (region-end)))
-		  (region (buffer-substring start end)))
-	 (goto-char end)
-	 (dotimes (i num)
-	   (insert region)))))
+          (end (or end (region-end)))
+          (region (buffer-substring start end)))
+     (goto-char end)
+     (dotimes (i num)
+       (insert region)))))
 
 (defun duplicate-current-line (&optional num)
   "Duplicate the current line NUM times."
   (interactive "p")
   (save-excursion
    (when (eq (point-at-eol) (point-max))
-	 (goto-char (point-max))
-	 (newline)
-	 (forward-char -1))
+     (goto-char (point-max))
+     (newline)
+     (forward-char -1))
    (duplicate-region num (point-at-bol) (1+ (point-at-eol)))))
 
 (defun duplicate-current-line-or-region (arg)
@@ -498,26 +529,26 @@ region-end is used."
 If there's no region, the current line will be duplicated."
   (interactive "p")
   (if (region-active-p)
-	  (let ((beg (region-beginning))
-			(end (region-end)))
-		(duplicate-region arg beg end)
-		(one-shot-keybinding "d" (λ (duplicate-region 1 beg end))))
-	(duplicate-current-line arg)
-	(one-shot-keybinding "d" 'duplicate-current-line)))
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (duplicate-region arg beg end)
+        (one-shot-keybinding "d" (λ (duplicate-region 1 beg end))))
+    (duplicate-current-line arg)
+    (one-shot-keybinding "d" 'duplicate-current-line)))
 
 (defun paredit-duplicate-closest-sexp ()
   (interactive)
   ;; skips to start of current sexp
   (while (not (paredit--is-at-start-of-sexp))
-	(paredit-backward))
+    (paredit-backward))
   (set-mark-command nil)
   ;; while we find sexps we move forward on the line
   (while (and (bounds-of-thing-at-point 'sexp)
-			  (<= (point) (car (bounds-of-thing-at-point 'sexp)))
-			  (not (= (point) (line-end-position))))
-	(forward-sexp)
-	(while (looking-at " ")
-	  (forward-char)))
+              (<= (point) (car (bounds-of-thing-at-point 'sexp)))
+              (not (= (point) (line-end-position))))
+    (forward-sexp)
+    (while (looking-at " ")
+      (forward-char)))
   (kill-ring-save (mark) (point))
   ;; go to the next line and copy the sexprs we encountered
   (paredit-newline)
@@ -527,26 +558,26 @@ If there's no region, the current line will be duplicated."
 (defun camelize (s c)
   "Convert c separated  string s to CamelCase string."
   (mapconcat 'identity (mapcar
-						'(lambda (word) (capitalize (downcase word)))
-						(split-string s c)) ""))
+                        '(lambda (word) (capitalize (downcase word)))
+                        (split-string s c)) ""))
 
 
 (defun camelize-method (s c)
   "Convert c separated string S to camelCase string."
   (let* ((camelized (camelize s c))
-		 (char-list (string-to-list camelized))
-		 (first-char (first char-list))
-		 (rest-chars (rest char-list)))
-	(concat (cons
-			 (downcase first-char)
-			 rest-chars))))
+         (char-list (string-to-list camelized))
+         (first-char (first char-list))
+         (rest-chars (rest char-list)))
+    (concat (cons
+             (downcase first-char)
+             rest-chars))))
 
 (defun transform-region (f)
   (let* ((region-text (buffer-substring-no-properties (region-beginning) (region-end)))
-		 (output (funcall f region-text)))
-	(save-excursion
-	  (delete-region (region-beginning) (region-end))
-	  (insert output))))
+         (output (funcall f region-text)))
+    (save-excursion
+      (delete-region (region-beginning) (region-end))
+      (insert output))))
 
 (defun jpmonettas/camelize-region (separator-char)
   (interactive (list (read-string "Separator char :")))
@@ -555,11 +586,11 @@ If there's no region, the current line will be duplicated."
 (defun jpmonettas/add-int-at-point (add)
   (interactive (list (string-to-int (read-string "How much :"))))
   (let* ((added (-> (word-at-point)
-					(string-to-int)
-					(+ add)))
-		 (num-bounds (bounds-of-thing-at-point 'word)))
-	(kill-region (car num-bounds) (cdr num-bounds))
-	(insert-string added)))
+                    (string-to-int)
+                    (+ add)))
+         (num-bounds (bounds-of-thing-at-point 'word)))
+    (kill-region (car num-bounds) (cdr num-bounds))
+    (insert-string added)))
 
 (defun jpmonettas/camelize-method-region (separator-char)
   (interactive (list (read-string "Separator char :")))
@@ -578,25 +609,25 @@ nothing but whitespace between them.  It then indents the markup
 by using nxml's indentation rules."
   (interactive "r")
   (save-excursion
-	(nxml-mode)
-	(goto-char begin)
-	(while (search-forward-regexp "\>[ \\t]*\<" nil t)
-	  (backward-char) (insert "\n"))
-	(indent-region begin end))
+    (nxml-mode)
+    (goto-char begin)
+    (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+      (backward-char) (insert "\n"))
+    (indent-region begin end))
   (message "Ah, much better!"))
 
 (defun dired-dotfiles-toggle ()
-	"Show/hide dot-files"
-	(interactive)
-	(when (equal major-mode 'dired-mode)
-	  (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
-	  (progn
-		(set (make-local-variable 'dired-dotfiles-show-p) nil)
-		(message "h")
-		(dired-mark-files-regexp "^\\\.")
-		(dired-do-kill-lines))
-	(progn (revert-buffer) ; otherwise just revert to re-show
-		   (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+    "Show/hide dot-files"
+    (interactive)
+    (when (equal major-mode 'dired-mode)
+      (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
+      (progn
+        (set (make-local-variable 'dired-dotfiles-show-p) nil)
+        (message "h")
+        (dired-mark-files-regexp "^\\\.")
+        (dired-do-kill-lines))
+    (progn (revert-buffer) ; otherwise just revert to re-show
+           (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
 ;; ;; Cider enhancements
 
@@ -616,11 +647,11 @@ by using nxml's indentation rules."
   ;; ensure we have a directory to store images
   ;; if directory already exists this is a nop
   (condition-case nil
-	  (make-directory "./notes-images")
-	(error nil))
+      (make-directory "./notes-images")
+    (error nil))
   (let* ((last-screenshot (car (last (directory-files "~/screenshots" t)))))
-	(copy-file last-screenshot "./notes-images/")
-	(insert (format "[[./notes-images/%s]]" (file-name-nondirectory last-screenshot)))))
+    (copy-file last-screenshot "./notes-images/")
+    (insert (format "[[./notes-images/%s]]" (file-name-nondirectory last-screenshot)))))
 
 (defun notes-open-last ()
   (interactive)
@@ -629,34 +660,34 @@ by using nxml's indentation rules."
 (defun notes-open-note ()
   (interactive)
   (let* ((all-notes (cddr (directory-files "~/notes")))
-		 (selected-note (ido-completing-read "Notes:" all-notes))
-		 (note-path (format "~/notes/%s/notes.org" selected-note)))
-	(find-file note-path)
-	(setq notes-last-opened note-path)))
+         (selected-note (ido-completing-read "Notes:" all-notes))
+         (note-path (format "~/notes/%s/notes.org" selected-note)))
+    (find-file note-path)
+    (setq notes-last-opened note-path)))
 
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
   (interactive)
   (backward-kill-sexp)
   (condition-case nil
-	  (prin1 (eval (read (current-kill 0)))
-			 (current-buffer))
-	(error (message "Invalid expression")
-		   (insert (current-kill 0)))))
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
 
 (defvar maximize-window-maximized nil)
 
 (defun maximize-restore-window ()
   (interactive)
   (let ((maximize-registry 5))
-	(if maximize-window-maximized
-		(progn
-		  (jump-to-register maximize-registry)
-		  (setq maximize-window-maximized nil))
-	  (progn
-		(window-configuration-to-register maximize-registry)
-		(delete-other-windows)
-		(setq maximize-window-maximized t)))))
+    (if maximize-window-maximized
+        (progn
+          (jump-to-register maximize-registry)
+          (setq maximize-window-maximized nil))
+      (progn
+        (window-configuration-to-register maximize-registry)
+        (delete-other-windows)
+        (setq maximize-window-maximized t)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading other files  ;;
@@ -667,8 +698,8 @@ by using nxml's indentation rules."
 
 (defconst prettify-symbols-alist
   '(("#+BEGIN_SRC"  . ?→)
-	("#+END_SRC"  . ?←)
-	(":results silent"  .?¬)))
+    ("#+END_SRC"  . ?←)
+    (":results silent"  .?¬)))
 
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 
@@ -685,10 +716,10 @@ by using nxml's indentation rules."
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load custom-file)
-(load "/home/jmonetta/my-projects/flow-storm-debugger/editors/flow-storm.el")
+(load "/home/jmonetta/my-projects/cider-storm/cider-storm.el")
 (load "/home/jmonetta/my-projects/elisp-utils/emacs.el")
 (load "/home/jmonetta/my-projects/elisp-utils/clojure.el")
-(load "/home/jmonetta/my-projects/elisp-utils/git.el")
+;; (load "/home/jmonetta/my-projects/elisp-utils/git.el")
 
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
@@ -745,7 +776,7 @@ by using nxml's indentation rules."
 
 ;; ;; remap C-a to `smarter-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
-				'smarter-move-beginning-of-line)
+                'smarter-move-beginning-of-line)
 
 (global-set-key (kbd "C-<tab>") 'company-complete)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
@@ -753,3 +784,14 @@ by using nxml's indentation rules."
 
 (global-set-key (kbd "C-x x s") 'persp-switch)
 (global-set-key (kbd "M-_") 'undo-redo)
+
+(define-key lsp-mode-map (kbd "M-.") 'lsp-goto-implementation)
+
+(unbind-key (kbd ";") java-mode-map)
+
+(defun refresh-firefox ()
+  (interactive)
+  (shell-command "xdotool search \"Mozilla Firefox\" windowactivate --sync key F5")
+  (shell-command "xdotool search \"emacs\" windowactivate"))
+
+(global-set-key (kbd "C-<f5>") 'refresh-firefox)
