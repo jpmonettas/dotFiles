@@ -18,11 +18,8 @@
    "(cemerick.piggieback/cljs-repl (cljs.repl.rhino/repl-env))" t)
  '(cider-cljs-repl
    "(do (require 'cljs.repl.node) (cemerick.piggieback/cljs-repl (cljs.repl.node/repl-env)))")
- '(cider-clojure-cli-aliases "")
+ '(cider-clojure-cli-aliases ":dev")
  '(cider-clojure-cli-command "clojure")
- '(cider-clojure-cli-parameters "-A:dev:jdk11:profiler -m nrepl.cmdline --middleware '%s'")
- '(cider-clojure-parameters
-   "-A:dev:test -e '(require (quote cider-nrepl.main)) (cider-nrepl.main/init [\"cider.nrepl/cider-middleware\"])'")
  '(cider-debug-use-overlays t)
  '(cider-inject-dependencies-at-jack-in t)
  '(cider-inspector-page-size 200)
@@ -35,6 +32,7 @@
  '(cider-stacktrace-print-length 5)
  '(cider-stacktrace-print-level 1)
  '(cider-test-defining-forms '("deftest" "defspec" "def-instrumentation-test"))
+ '(cider-use-tooltips nil)
  '(column-number-mode t)
  '(company-dabbrev-code-ignore-case t)
  '(company-idle-delay nil)
@@ -52,12 +50,13 @@
  '(eclim-executable "~/non-rep-software/eclipse/eclim")
  '(ediff-merge-split-window-function 'split-window-vertically)
  '(ediff-split-window-function 'split-window-horizontally)
+ '(ediff-window-setup-function 'ediff-setup-windows-plain)
  '(exec-path
-   '("/usr/lib/emacs/26.1/x86_64-linux-gnu" "/home/jmonetta/.nvm/versions/node/v11.14.0/bin" "/usr/local/bin" "/usr/bin" "/bin" "/usr/local/games" "/usr/games" "/home/jmonetta/bin"))
+   '("/usr/lib/emacs/26.1/x86_64-linux-gnu" "/home/jmonetta/.nvm/versions/node/v16.17.1/bin" "/usr/local/bin" "/usr/bin" "/bin" "/usr/local/games" "/usr/games" "/home/jmonetta/bin"))
  '(fci-rule-color "#073642")
  '(flx-ido-threshold 5000)
  '(flycheck-c/c++-gcc-executable "avr-gcc")
- '(flycheck-error-list-minimum-level 'error)
+ '(flycheck-error-list-minimum-level 'warning)
  '(flycheck-gcc-args '("-mmcu=atmega32"))
  '(flycheck-highlighting-mode nil)
  '(gud-gdb-command-name "avr-gdb -i=mi")
@@ -70,7 +69,7 @@
  '(helm-buffer-max-length 50)
  '(helm-external-programs-associations
    '(("pdf" . "evince")
-     ("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . "")))
+     ("'((\"jpg\" . \"ristretto\") (\"jpeg\" . \"ristretto\") (\"png\" . \"ristretto\") (\"gif\" . \"ristretto\") (\"xls\" . \"libreoffice\") (\"doc\" . \"libreoffice\") (\"pdf\" . \"evince\") (\"html\" . \"conkeror\"))" . "")) t)
  '(helm-ff-auto-update-initial-value nil)
  '(helm-ff-ido-style-backspace t)
  '(helm-grep-ignored-directories
@@ -122,13 +121,12 @@
      ("~" org-verbatim verbatim)
      ("+"
       (:strike-through t))))
- '(org-export-babel-evaluate nil)
  '(org-export-use-babel nil)
  '(org-hide-leading-stars t)
  '(org-html-postamble nil)
  '(org-src-fontify-natively t)
  '(package-selected-packages
-   '(evil tree-sitter tree-sitter-ess-r tree-sitter-indent tree-sitter-ispell tree-sitter-langs flycheck lsp-java java-lsp ef-themes lsp-mode rustic cider html-to-hiccup org-bullets racer emacs-racer company-solidity easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag clj-refactor rust-mode clojure-mode elpy doom-themes rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider))
+   '(google-c-style counsel zig-mode evil tree-sitter tree-sitter-ess-r tree-sitter-indent tree-sitter-ispell tree-sitter-langs flycheck lsp-java java-lsp ef-themes lsp-mode rustic cider html-to-hiccup org-bullets racer emacs-racer company-solidity easy-kill yasnippet use-package smartparens paredit multiple-cursors ido-completing-read+ helm doom-nord company spinner ag clj-refactor rust-mode clojure-mode elpy doom-themes rainbow-mode speed-type helm-ag anti-zenburn-theme spacemacs-theme solidity-mode apropospriate-theme edit-indirect sublime-themes monokai-theme forth-mode buttercup ztree zenburn-theme window-number which-key web-mode web-beautify wanderlust undo-tree solarized-theme smooth-scrolling smex smart-mode-line slamhound scss-mode restclient rainbow-delimiters pretty-mode popwin php-extras php-eldoc php+-mode paradox ox-reveal org-tree-slide org-present objc-font-lock nrepl-eval-sexp-fu notmuch-unread nm neotree multi-term mingus markdown-preview-eww markdown-mode magit lispy less-css-mode json-mode javap-mode java-snippets java-file-create ido-vertical-mode ido-ubiquitous ido-at-point htmlize hindent hide-lines help-fns+ helm-themes helm-projectile haskell-mode flymake-sass flycheck-pos-tip flycheck-clojure flx-ido fancy-narrow f expand-region eredis emmet-mode emacsql-mysql emacs-eclim easy-kill-extras dracula-theme dot-mode django-theme dired-subtree dired-rainbow dired-open diminish company-flx color-theme-sanityinc-tomorrow clojurescript-mode clojure-snippets cider-spy browse-kill-ring ack-and-a-half ack ace-isearch ac-nrepl ac-cider))
  '(paradox-automatically-star t)
  '(pretty-symbol-patterns
    '((955 lambda "\\<lambda\\>"
@@ -163,7 +161,10 @@
  '(recentf-auto-cleanup 'never)
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
-   '((no-whitespace-cleanup quote t)
+   '((clojure-indent-style 'always-indent)
+     (clojure-dev-menu-name . "magic-dev-menu")
+     (eval setq! cljr-clojure-test-declaration "[clojure.test :refer [deftest testing is]]\12                  [magic.script :refer [compile-python]]\12                  [magic.script.passes :refer [compile-sample compile-sample* conform]]\12                  [magic.script.util :refer [niceid]]\12                  [pattern :refer [ok]]")
+     (no-whitespace-cleanup quote t)
      (clojure-dev-menu-name . "weather-alerts-dev-menu")
      (clojure-dev-menu-name . "playground-dev-menu")
      (clojure-dev-menu-name . "clindex-dev-menu")

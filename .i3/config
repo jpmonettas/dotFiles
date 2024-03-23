@@ -241,14 +241,6 @@ bindsym $mod+period exec /home/jmonetta/bin/passmenu
 #bindsym $mod+Tab exec /usr/bin/quickswitch.py
 #bindsym $mod+apostrophe exec /usr/bin/quickswitch.py -m
 
-#exec mail-notification
-exec feh --bg-scale /home/jmonetta/images/debian.png
-exec xset r rate 250 60
-exec setxkbmap -layout us -variant altgr-intl
-# exec xsetroot -solid "#586e75"
-exec --no-startup-id nm-applet
-exec pa-applet --disable-notifications
-
 for_window [class="gnome-calculator"] floating enable
 for_window [class="Pidgin"] floating enable
 for_window [class="java"] floating enable
@@ -286,9 +278,22 @@ bindsym --release $mod+1 exec --no-startup-id /home/jmonetta/bin/screen-shot.sh
 
 floating_minimum_size 75 x 50
 
-exec --no-startup-id "btsync"
-exec --no-startup-id "redshift-gtk"
-exec --no-startup-id "xfce4-clipman"
+#################
+# Exec at start #
+#################
+
+exec --no-startup-id "feh --bg-scale /home/jmonetta/images/debian.png"
+exec --no-startup-id "xset r rate 250 60"
+exec --no-startup-id "setxkbmap -layout us -variant altgr-intl"
+exec --no-startup-id "nm-applet"
+exec --no-startup-id "/usr/local/bin/pa-applet"
+# exec mail-notification
+# exec xsetroot -solid "#586e75"
+# exec --disable-notifications pa-applet 
+# exec --no-startup-id "btsync"
+# exec --no-startup-id "redshift-gtk"
+# exec --no-startup-id "xfce4-clipman"
+
 
 ########
 # Gaps #

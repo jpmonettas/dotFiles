@@ -12,10 +12,14 @@
     (load-theme my-light-emacs-theme t)))
 
 (setq package-native-compile t)
-
+(setq flycheck-emacs-lisp-load-path 'inherit)
 ;; Super hack for debian testing
 (setq package-check-signature nil)
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
+
+;; so we scroll one line at a time with keyboard
+(setq scroll-conservatively 101)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;(set-face-attribute 'default nil :font "peep")
@@ -83,6 +87,16 @@
   :ensure t
   )
 
+(use-package zig-mode
+  :ensure t
+  )
+
+(use-package emmet-mode
+  :ensure t
+  :config
+  (add-hook 'sgml-mode-hook 'emmet-mode) 
+  (add-hook 'css-mode-hook  'emmet-mode))
+
 ;; (use-package smart-mode-line
 ;;   :ensure t
 ;;   :config
@@ -119,14 +133,7 @@
         cider-refresh-after-fn "user/start-system!")
   (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
   (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
-  (setf (cadr (assoc 'krell cider-cljs-repl-types))
-        "(require '[clojure.edn :as edn]
-                '[clojure.java.io :as io]
-                '[cider.piggieback]
-                '[krell.api :as krell]
-                '[krell.repl])
-(def config (edn/read-string (slurp (io/file \"build.edn\"))))
-(apply cider.piggieback/cljs-repl (krell.repl/repl-env :host \"localhost\") (mapcat identity config))" ))
+  )
 
 
 ;; (add-to-list 'cider-jack-in-nrepl-middlewares "vlaaad.reveal.nrepl/middleware")
@@ -341,9 +348,9 @@
   :bind
   ("M-x" . smex))
 
-(use-package smooth-scrolling
-  :ensure t
-  :config (smooth-scrolling-mode))
+;; (use-package smooth-scrolling
+;;   :ensure t
+;;   :config (smooth-scrolling-mode))
 
 (use-package yasnippet
   :ensure t
@@ -716,10 +723,17 @@ by using nxml's indentation rules."
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load custom-file)
-(load "/home/jmonetta/my-projects/cider-storm/cider-storm.el")
+
+(add-to-list 'load-path "/home/jmonetta/my-projects/cider-storm")
+(require 'cider-storm)
+;;(add-to-list 'cider-jack-in-nrepl-middlewares "flow-storm.nrepl.middleware/wrap-flow-storm")
+(define-key cider-mode-map (kbd "C-c C-f") 'cider-storm-map)
+
 (load "/home/jmonetta/my-projects/elisp-utils/emacs.el")
 (load "/home/jmonetta/my-projects/elisp-utils/clojure.el")
 ;; (load "/home/jmonetta/my-projects/elisp-utils/git.el")
+
+(load "/home/jmonetta/other-sources/llvm-mode/llvm-mode.el")
 
 ;;;;;;;;;;;;;;
 ;; Bindings ;;
@@ -795,3 +809,4 @@ by using nxml's indentation rules."
   (shell-command "xdotool search \"emacs\" windowactivate"))
 
 (global-set-key (kbd "C-<f5>") 'refresh-firefox)
+(put 'upcase-region 'disabled nil)
