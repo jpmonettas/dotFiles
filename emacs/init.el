@@ -1,5 +1,7 @@
 (setq custom-file "~/.emacs.d/customizations.el")
 
+(server-start)
+
 (defvar my-emacs-theme-style :dark)
 (defvar my-light-emacs-theme 'modus-operandi)
 (defvar my-dark-emacs-theme  'doom-nord)
@@ -10,6 +12,7 @@
   (if (equal my-emacs-theme-style :dark)
       (load-theme my-dark-emacs-theme t)
     (load-theme my-light-emacs-theme t)))
+
 
 (setq package-native-compile t)
 (setq flycheck-emacs-lisp-load-path 'inherit)
@@ -25,8 +28,8 @@
 ;;(set-face-attribute 'default nil :font "peep")
 ;;(set-face-attribute 'default nil :font "DejaVu Sans Mono-10")
 ;;(set-face-attribute 'default nil :font "M+ 1mn-11")
-;;(set-face-attribute 'default nil :font "Iosevka-15") ;; demo font
-(set-face-attribute 'default nil :font "Iosevka-12")
+;;(set-face-attribute 'default nil :font "Iosevka-17") ;; demo font
+(set-face-attribute 'default nil :font "Iosevka-13")
 ;;(set-face-attribute 'default nil :font "Source Code Pro-10")
 
 ;; Replace the selection content when typing
@@ -122,6 +125,13 @@
 ;; (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
 ;; (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
 
+(defun cider-clear-repl-buffer-with-shift ()
+  "Needed to side-step https://github.com/clojure-emacs/cider/issues/2595."
+  (interactive)
+  (cider-repl-clear-buffer)
+  (insert "(symbol \"\")")
+  (cider-repl-return))
+
 (use-package cider
   :ensure t
   :config
@@ -132,11 +142,9 @@
   (setq cider-refresh-before-fn "user/stop-system!"
         cider-refresh-after-fn "user/start-system!")
   (define-key cider-repl-mode-map (kbd "C-`") 'cider-repl-previous-matching-input)
-  (define-key cider-repl-mode-map (kbd "C-l") 'cider-repl-clear-buffer)
+  (define-key cider-repl-mode-map (kbd "C-l") 'cider-clear-repl-buffer-with-shift)
   )
 
-
-;; (add-to-list 'cider-jack-in-nrepl-middlewares "vlaaad.reveal.nrepl/middleware")
 
 (use-package clj-refactor
   :ensure t
@@ -209,6 +217,34 @@
   ("C-." . er/expand-region)
   ("C-," . er/contract-region))
 
+;; (use-package ivy
+;;   :ensure t
+;;   :config
+;;   (ivy-mode)
+;;   (setq ivy-use-virtual-buffers t)
+;;   (setq enable-recursive-minibuffers t))
+
+(use-package ido
+  :ensure t
+  :config
+  (ido-mode 1)
+  (ido-everywhere 1))
+
+(use-package ido-vertical-mode
+  :ensure t
+  :config
+  (ido-vertical-mode)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+
+(use-package ido-completing-read+
+  :config
+  (setq ido-ubiquitous-max-items 50000
+        ido-cr+-max-items 50000)
+  (ido-ubiquitous-mode +1))
+
+(use-package flx
+  :ensure t)
+
 (use-package flx-ido
   :ensure t
   :init (progn
@@ -216,11 +252,6 @@
           (setq ido-use-faces nil))
   :config
   (flx-ido-mode 1))
-
-(use-package ido
-  :config
-  (ido-mode 1)
-  (ido-everywhere 1))
 
 (use-package helm
   :ensure t
@@ -251,22 +282,23 @@
 (use-package hydra
   :ensure t)
 
-(use-package ido-completing-read+
-  :ensure t
-  :config
-  (ido-ubiquitous-mode 1))
+;; (use-package ido-completing-read+
+;;   :ensure t
+;;   :config
+;;   (ido-ubiquitous-mode 1))
 
-(use-package ido-vertical-mode
-  :ensure t
-  :config
-  (ido-vertical-mode 1)
-  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+;; (use-package ido-vertical-mode
+;;   :ensure t
+;;   :config
+;;   (ido-vertical-mode 1)
+;;   (setq ido-vertical-define-keys 'C-n-and-C-p-only))
 
 (use-package magit
   :ensure t
   :bind
   ("<f12>" . magit-status)
-  :init (setq magit-completing-read-function 'magit-ido-completing-read))
+  ;;:init (setq magit-completing-read-function 'magit-ido-completing-read)
+  )
 
 (use-package markdown-mode
   :ensure t)
@@ -280,13 +312,22 @@
 (use-package paredit
   :ensure t)
 
+(use-package projectile
+  :pin "MELPA"
+  :ensure t
+  :bind
+  ("C-S-h" . projectile-find-file)
+  :config
+  (projectile-global-mode)
+  (setq projectile-enable-caching t)
+  (setq projectile-file-exists-remote-cache-expire nil)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (add-to-list 'projectile-globally-ignored-directories "node_modules"))
+
 (use-package perspective
   :pin "MELPA"
   :ensure t
-  
-  :bind
-  ("C-x C-b" . persp-list-buffers)
-  
+    
   :custom
   (persp-mode-prefix-key (kbd "C-c M-p"))
   
@@ -317,25 +358,16 @@
   (push '("*helm bookmarks*" :height 0.5) popwin:special-display-config)
   
   (push '("*cider-error*" :width 0.3 :position right) popwin:special-display-config)
-
+  (push '("*cider-log*" :width 0.5 :position right) popwin:special-display-config)
   (push '("*cider-repl" :width 0.5 :position right) popwin:special-display-config)
   
   (push '("*Flycheck errors*" :height 0.2) popwin:special-display-config)
   
   (push '("*helm-mode-cider-repl-set-ns*" :height 0.5) popwin:special-display-config)
-  (push '("*helm-mode-nil*" :height 0.5) popwin:special-display-config))
+  (push '("*helm-mode-nil*" :height 0.5) popwin:special-display-config)
+  )
 
-(use-package projectile
-  :pin "MELPA"
-  :ensure t
-  :bind
-  ("C-S-h" . projectile-find-file)
-  :config
-  (projectile-global-mode)
-  (setq projectile-enable-caching t)
-  (setq projectile-file-exists-remote-cache-expire nil)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (add-to-list 'projectile-globally-ignored-directories "node_modules"))
+
 
 (use-package restclient
   :ensure t)
@@ -395,9 +427,7 @@
 ;;   ;; uncomment for less flashiness  
 ;;   (setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.cargo/bin"))
 ;;   (setq exec-path (append exec-path '("/home/jmonetta/.cargo/bin")))
-;;   (setq flycheck-rust-cargo-executable "/home/jmonetta/.cargo/bin/cargo")
-
-  
+;;   (setq flycheck-rust-cargo-executable "/home/jmonetta/.cargo/bin/cargo")  
 ;;   ;; comment to disable rustfmt on save
 ;;   (setq rustic-format-on-save t)
 ;;   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
@@ -799,7 +829,7 @@ by using nxml's indentation rules."
 (global-set-key (kbd "C-x x s") 'persp-switch)
 (global-set-key (kbd "M-_") 'undo-redo)
 
-(define-key lsp-mode-map (kbd "M-.") 'lsp-goto-implementation)
+;; (define-key lsp-mode-map (kbd "M-.") 'lsp-goto-implementation)
 
 (unbind-key (kbd ";") java-mode-map)
 
@@ -810,3 +840,8 @@ by using nxml's indentation rules."
 
 (global-set-key (kbd "C-<f5>") 'refresh-firefox)
 (put 'upcase-region 'disabled nil)
+
+
+
+(setq exec-path (append exec-path '("/home/jmonetta/.nvm/versions/node/v18.20.4/bin/")))
+(setenv "PATH" (concat (getenv "PATH") ":/home/jmonetta/.nvm/versions/node/v18.20.4/bin/"))
